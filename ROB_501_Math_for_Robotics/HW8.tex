@@ -1,0 +1,455 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[parfill]{parskip} % no newline indent
+\usepackage{enumitem} % enumerate / ordered list
+\usepackage{booktabs} % three-line table
+\usepackage{array}   % for \newcolumntype macro
+\usepackage{listings} % MATLAB code block
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\theoremstyle{definition} % difinition
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+
+
+\lstset{
+  language=Matlab,  %代码语言使用的是matlab
+  frame=shadowbox, %把代码用带有阴影的框圈起来
+  numbers=left, % 显示行号
+  breaklines=true
+}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ROB 501 HW8}
+\author{Yulun Zhuang \\ \href{mailto:yulunz@umich.edu}{yulunz@umich.edu}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+
+Recall the formulas of Best Linear Unbiased Estimate (BLUE).
+
+Given $y\in \RR^m$, $x\in \RR^n$, $y = Cx+\epsilon$, $E(\epsilon)=0$, $Var(\epsilon) = Q > 0$, and $rank(C)=n$.
+
+\begin{align*}
+    \hat K &= (C^TQ^{-1}C)^{-1}C^TQ^{-1}\\
+    \hat x &= \hat K y\\
+    Var(\hat x) &= E\{(\hat x-x)(\hat x - x)^T\} = (C^TQ^{-1}C)^{-1}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        0.6194\\
+        0.4591
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        4.0000&-2.7500\\
+        -2.7500&2.0000
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.4303\\
+        1.8791
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.0679&-0.0260\\
+        -0.0260&0.1129
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.2201\\
+        1.5368
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.0487&0.0054\\
+        0.0054&0.0618
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+Given jointly Guassian Random Variables (X, Y, Z) with mean and covariance
+
+$$
+\mu = 
+\begin{bmatrix}
+    -1\\ 0\\ 1   
+\end{bmatrix},
+\ 
+\Sigma = 
+\begin{bmatrix}
+    2 & 2 & 1\\
+    2 & 4 & 2\\
+    1 & 2 & 2
+\end{bmatrix}
+$$
+
+\subsection{}\label{sec-2-1}
+
+Conditional distribution of $\left[\begin{array}{c}x \\ y\end{array}\right] \mid\{Z=z\}$.
+
+Let $P=\left[\begin{array}{l}X \\ Y\end{array}\right], Q=z$.
+
+\begin{align*}
+    \Sigma_{P Q}=\operatorname{Cov}(P, Q)&=\operatorname{Cov}\left(\left[\begin{array}{l}
+    X \\
+    Y
+    \end{array}\right], Z\right)=\left[\begin{array}{l}
+    \operatorname{Cov}(X, Z) \\
+    \operatorname{Cov}(Y, Z)
+    \end{array}\right]=\left[\begin{array}{l}
+    1 \\
+    2
+    \end{array}\right]=\Sigma_{Q P}^T\\
+    \mu_{\{P \mid Q=z\}}&=\mu_P+\Sigma_{P Q} \Sigma_Q^{-1}\left(z-\mu_Q\right)\\
+    &=\left[\begin{array}{c}
+    -1\\
+    0
+    \end{array}\right]+\left[\begin{array}{l}
+    1 \\
+    2
+    \end{array}\right] \frac{1}{2}(z-1)\\
+    &=\left[\begin{array}{c}
+    \frac{z-3}{2} \\
+    z-1
+    \end{array}\right]\\
+    \Sigma_{\{P \mid Q=z\}}&=\Sigma_P-\Sigma_{P Q} \Sigma_Q^{-1} \Sigma_{Q P}\\
+    &=\left[\begin{array}{ll}
+    2 & 2 \\
+    2 & 4
+    \end{array}\right]-\left[\begin{array}{l}
+    1 \\
+    2
+    \end{array}\right] \frac{1}{2}\left[\begin{array}{ll}
+    1 & 2
+    \end{array}\right]\\
+    &=\left[\begin{array}{cc}
+    \frac{3}{2} & 1 \\
+    1 & 2
+    \end{array}\right]
+\end{align*}
+
+\subsection{}
+Distribution of $\left.X\right|_{\{Z=z\}}$ conditioned on $\left.Y\right|_{\{Z=z\}}=y$.
+
+Let $P=\left.X\right|_{\{Z=z\}}, Q=\left.Y\right|_{\{Z=z\}}$. Compute the conditional distribution of $P$ given $Q=y$.
+
+From \ref{sec-2-1}, $\mu_p=\frac{z-3}{2}, \  \mu_Q=z-1$
+    and $\Sigma_{P Q}=1, \  \Sigma_P=\frac{3}{2}, \  \Sigma_Q=2$.
+
+\begin{align*}
+    \mu_{\{P \mid Q=y\}}&=\mu_P+\Sigma_{P Q} \Sigma_Q^{-1}\left(y-\mu_Q\right)\\
+    &=\frac{z-3}{2}+\frac{1}{2}(y-z+1)\\
+    &=\frac{1}{2} y-1\\
+    \Sigma_{\{P \mid Q=y\}}&=\Sigma_P-\Sigma_{P Q} \Sigma_Q^{-1} \Sigma_{Q P}\\
+    &=\frac{3}{2}-1 \times \frac{1}{2} \times 1\\
+    &=1
+\end{align*}
+
+\subsection{}
+
+Distribution of $X \mid _{\{Y=y, Z=z\}}$.
+
+Let $P=X$, $Q = \begin{bmatrix}
+    Y\\Z
+\end{bmatrix}$ and $q=\begin{bmatrix}
+    y\\z
+\end{bmatrix}$.
+
+\begin{align*}
+    \Sigma_{P Q}=\operatorname{Cov}\left(X,\left[\begin{array}{l}
+    Y \\
+    Z
+    \end{array}\right]\right)&=\left[\operatorname{Cov}(X, Y), \operatorname{Cov}(X, Z)\right]=\left[\begin{array}{ll}
+    2 & 1
+    \end{array}\right]\\
+    \mu_{\{P \mid Q=q\}}&=\mu_P+\Sigma_{P Q} \Sigma_Q^{-1}\left(\left[\begin{array}{l}
+    y \\
+    z
+    \end{array}\right]-\mu_Q\right)\\
+    &=-1+\left[\begin{array}{ll}
+    2 & 1
+    \end{array}\right]\left[\begin{array}{ll}
+    4 & 2 \\
+    2 & 2
+    \end{array}\right]^{-1}\left(\left[\begin{array}{l}
+    y \\
+    z
+    \end{array}\right]-\left[\begin{array}{l}
+    0 \\
+    1
+    \end{array}\right]\right)\\
+    &=\frac{1}{2} y-1\\
+    \Sigma_{\{P\mid Q=q\}} &= \Sigma_P - \Sigma_{PQ}\Sigma_Q^{-1}\Sigma_{QP}\\
+    &=2-\left[\begin{array}{ll}
+    2 & 1
+    \end{array}\right]\left[\begin{array}{ll}
+    4 & 2 \\
+    2 & 2
+    \end{array}\right]^{-1}\left[\begin{array}{l}
+    2 \\
+    1
+    \end{array}\right]\\
+    &=1
+\end{align*}
+
+\subsection{}
+They are the same.
+If we have jointly distributed normal random vectors, when we condition one block of vectors on another, we always obtain either a jointly distributed normal random vector or, if only a scalar quantity is left, a normally distributed random variable.
+
+\section{}
+
+\subsection{}\label{sec-3-1}
+
+Let $G_k$ be the Gram matrix for $M_k$ and $G_{k+1}$ be the Gram matrix for $M_{k+1}$. Using $y_{k+1}\perp M_k$, we have
+
+$$
+G_{k+1} = 
+\begin{bmatrix}
+    G_k & 0_{k\times 1}\\
+    0_{1\times k} & <y_{k+1}, y_{k+1}>
+\end{bmatrix}
+$$
+
+Apply the Normal equations $G^T\alpha = \beta$.
+
+\begin{align*}
+    \alpha &= G_{k+1}^{-T} \beta\\
+    &=\left[\begin{array}{cc}
+    G_k^{-1} & 0_{k \times 1} \\
+    0_{1\times k} & \left< y_{k+1}, y_{k+1}\right>
+    \end{array}\right]
+    \left[\begin{array}{c}
+    \left\langle x, y_1\right\rangle \\
+    \vdots \\
+    \left\langle x, y_k\right\rangle \\
+    \left\langle x, y_{k+1}\right\rangle
+    \end{array}\right]\\
+    &=\left[\begin{array}{c}
+    \alpha_1 \\
+    \vdots \\
+    \alpha_k \\
+    \left\langle x, y_{k+1}\right\rangle \\
+    \hline\left\langle y_{k+1}, y_{k+1}\right\rangle
+    \end{array}\right]\\
+    \hat{x}_{k+1}&=\sum_{i=1}^{k+1} \alpha_i x_i=\hat{x}_k+\frac{\left\langle x, y_{k+1}\right\rangle}{\left\langle y_{k+1}, y_{k+1}\right\rangle} y_{k+1}\\
+    \Rightarrow \beta &= \frac{\left\langle x, y_{k+1}\right\rangle}{\left\langle y_{k+1}, y_{k+1}\right\rangle}
+\end{align*}
+
+\subsection{}
+From the Projection Theorem, $y_{k+1}-\hat{y}_{k+1\mid k}$ is orthogonal to $M_k$, such that $\forall v \in M_k$
+
+$$
+M_{k+1} = M_k \oplus span\{y_{k+1}\}, \ M_k\perp (y_{k+1} - v)
+$$
+
+Since $\hat{y}_{k+1\mid k}\in M_k$, we have 
+
+$$
+M_{k+1} = M_k \oplus span\{y_{k+1}-\hat{y}_{k+1\mid k}\}, \ M_k\perp (y_{k+1} -\hat{y}_{k+1\mid k})
+$$
+
+Apply the result in \ref{sec-3-1}, 
+
+\begin{align*}
+    \hat{x}_{k+1} &= 
+    \hat{x}_k + 
+    \frac{\left\langle x, y_{k+1}-\hat{y}_{k+1 \mid k}\right\rangle}
+    {\left\langle y_{k+1}-\hat{y}_{k+1 \mid k}, y_{k+1}-\hat{y}_{k+1 \mid k}\right\rangle}\left(y_{k+1}-\hat{y}_{k+1\mid k}\right) \\
+    \Rightarrow \beta &= 
+    \frac{\left\langle x, y_{k+1}-\hat{y}_{k+1\mid k}\right\rangle}
+    {\left\langle y_{k+1}-\hat{y}_{k+1\mid k}, y_{k+1}-\hat{y}_{k+1\mid k}\right\rangle}
+\end{align*}
+
+\section{}
+Recall the formulas of Minimum Variance Estimate (MVE).
+
+Given $y\in \RR^m$, $x\in \RR^n$, $y = Cx+\epsilon$, $E(X) = 0$, $Var(X)=P>0$, $E(\epsilon)=0$, $Var(\epsilon) = Q > 0$, and $rank(C)=n$.
+
+\begin{align*}
+    \hat K &= [C^TQ^{-1}C + P^{-1}]^{-1}C^TQ^{-1}\\
+    \hat x &= \hat K y\\
+    Var(\hat x) &= E\{(\hat x-x)(\hat x - x)^T\} = P - PC^T(CPC^T + Q)^{-1}CP
+\end{align*}
+
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        0.3417\\
+        0.4271
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.2778&-0.0278\\
+        -0.0278&0.1528
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        0.4504\\
+        0.4963
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.1938&-0.0812\\
+        -0.0812&0.1188
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.0134\\
+        1.2402
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.0545&-0.0105\\
+        -0.0105&0.0828
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.0296\\
+        1.2667
+    \end{bmatrix}\\
+    Var(\hat x) &=
+    \begin{bmatrix}
+        0.0437&0.0072\\
+        0.0072&0.0538
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+
+\subsection{}
+Standard least squares approximation:
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.3169\\
+        1.4368
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+BLUE estimation:
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.3169\\
+        1.4368
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+MVE estimation of x when $P=100I$:
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.3163\\
+        1.4365
+    \end{bmatrix}
+\end{align*}
+
+MVE estimation of x when $P=10^6I$:
+
+\begin{align*}
+    \hat x &= 
+    \begin{bmatrix}
+        -1.3169\\
+        1.4368
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+\begin{enumerate}
+    \item 
+    BLUE equals to standard least squares when the inverse of the covariance of the noise is identity.
+    \item
+    MVE reduces to BLUE when the covariance of the x approaches infinity.
+\end{enumerate}
+
+\section{}
+Recall 
+$$\widehat{x}=\bar{x}+P C^{\top}\left(C P C^{\top}+Q\right)^{-1}(y-\bar{y})$$ 
+and 
+$$E\left\{(x-\hat{x})(x-\hat{x})^{\top}\right\}=P-P C^{\top}\left(C P C^{\top}+Q\right)^{-1} C P$$ 
+
+where $\bar{x}=E\{x\}, \bar{\epsilon}=E\{\epsilon\}$ and $\bar{y}=C \bar{x}+\bar{\epsilon}$. 
+
+Given
+$$
+\bar{x}=\left[\begin{array}{r}
+1 \\
+-1
+\end{array}\right] \text { and } \bar{\epsilon}=0,
+$$
+
+We have 
+
+\begin{align*}
+    \hat x =
+    \begin{bmatrix}
+        -0.8836\\
+        1.0802
+    \end{bmatrix}
+\end{align*}
+
+\end{document}

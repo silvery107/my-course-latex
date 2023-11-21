@@ -1,0 +1,268 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[parfill]{parskip} % no newline indent
+\usepackage{enumitem} % enumerate / ordered list
+\usepackage{booktabs} % three-line table
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\theoremstyle{definition} % difinition
+\newtheorem{definition}{Definition}[section]
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ROB 501 HW2}
+\author{Yulun Zhuang \\ \href{mailto:yulunz@umich.edu}{yulunz@umich.edu}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+
+\begin{table}[H]%[htb]
+        \begin{center}
+            % \caption{}\label{table:action_space}
+            \begin{tabular}{CCCC}
+                \toprule
+                P & Q & P \land Q & P \lor Q \\
+                \midrule
+                T & T & T       & T      \\
+                T & F & F       & T      \\
+                F & T & F       & T      \\
+                F & F & F       & F     \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+\end{table}
+
+
+\subsection{}
+$$
+\neg (P\land Q) = \neg P \lor \neg Q
+$$
+
+\begin{table}[H]%[htb]
+        \begin{center}
+            % \caption{}\label{table:action_space}
+            \begin{tabular}{CCC}
+                \toprule
+                \neg P & \neg Q & \neg P \lor \neg Q\\
+                \midrule
+                F & F & F       \\
+                F & T & T       \\
+                T & F & T       \\
+                T & T & T       \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+\end{table}
+
+\subsection{}
+$$
+\neg (P\lor Q) = \neg P \land \neg Q
+$$
+
+\begin{table}[H]%[htb]
+        \begin{center}
+            % \caption{}\label{table:action_space}
+            \begin{tabular}{CCC}
+                \toprule
+                \neg P & \neg Q & \neg P \lor \neg Q\\
+                \midrule
+                F & F & F       \\
+                F & T & F       \\
+                T & F & F       \\
+                T & T & T       \\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+\end{table}
+
+\section{}
+
+\begin{enumerate}[label=(\alph*)]
+    \item There exist an interger $n$, $2n+1$ is even.
+    \item For every interger $n$, $2^n + 1$ is composite.
+    \item $\forall v \in \RR^n, v\neq 0$ s.t. $Av\neq \lambda v$
+    \item $\exists \eta > 0, \forall \delta> 0$ s.t. $|x|\le \delta \Rightarrow |f(x)|>\eta |x|$
+\end{enumerate}
+
+\section{}
+Prove that $\sqrt{7}$ is irrational.
+
+\begin{proof}
+    
+Assum $\sqrt{7}$ is rational.
+Then there exist natural numbers $m$ and $n$ such that $m$ and $n$ have no common factor, $n\neq 0$ and 
+\begin{equation}
+    \sqrt{7} = \frac{m}{n}
+    \label{eq:3-1}
+\end{equation}
+
+Square both sides of \eqref{eq:3-1}
+
+\begin{equation}
+    (7n^2 = m^2)\label{eq:3-2}
+\end{equation}
+
+This implies 7 divides $m^2$, so 7 also divides $m$.
+
+Let $m = 7k, k\in\NN$,
+\begin{align*}
+    7n^2 =& (7k)^2\\
+    n^2 =& 7k^2
+\end{align*}
+This implies 7 divides $n^2$, so 7 also divides $n$.
+
+Therefore, $m$ and $n$ both have a common factor 7, which leads to a contradiction.
+
+Hence, $\sqrt{7}$ is irrational.
+
+\end{proof}
+
+\section{}
+Let $A$ be a square matrix. Prove that if $det(A)=0$, then $A$ is not invertible.
+
+
+\begin{definition}
+    A square matrix $A$ has an inverse $A^{-1}$ iff $AA^{-1} = A^{-1}A=I$.
+\end{definition}
+
+\begin{proof}
+
+p: $det(A)=0$, q: $A$ is not invertible
+
+Now we prove its contrapositive, $\neg q\implies\neg p$.
+
+We have $A$ is invertible,
+
+\begin{align*}
+    det(AA^{-1}) = &det(A) det(A^{-1}) = det(I) = 1\\
+    \Rightarrow \quad &det(A) \neq 0
+\end{align*}
+
+\end{proof}
+
+\section{}
+Prove that for all integers $n\ge 1$, $\sum^n_{k=1}\frac{1}{k(k+1)}=\frac{n}{n+1}$.
+
+\begin{proof}
+$P(n) = \sum^n_{k=1}\frac{1}{k(k+1)}=\frac{n}{n+1}$
+
+When $n=1$, $P(1) = \frac{1}{1+1} = \frac{1}{2}$
+
+When $n=m$, assum $P(m) = \sum^m_{k=1}\frac{1}{k(k+1)}=\frac{m}{m+1}$ is true.
+
+When $n=m+1$,
+
+\begin{align*}
+    P(m+1) =& P(m) + \frac{1}{(m+1)(m+2)}\\
+    =& \frac{m}{m+1} + \frac{1}{(m+1)(m+2)}\\
+    =& \frac{(m+1)^2}{(m+1)(m+2)}\\
+    =& \frac{m+1}{(m+1)+1}
+\end{align*}
+
+\end{proof}
+
+\section{}
+
+$P(n): \forall n\in \ZZ ,n\ge 12, \exists k_1, k_2 \in \ZZ, k_1, k_2 \ge 0, s.t.\ n=4k_1+5k_2$
+
+\begin{proof}
+If $n =12$, $k_1 = 3$ and $ k_2 = 0$.
+If $n =13$, $k_1 = 2$ and $ k_2 = 1$.
+If $n =14$, $k_1 = 1$ and $ k_2 = 2$.
+If $n =15$, $k_1 = 0$ and $ k_2 = 3$.
+
+Induction: Assume $P(n)$ is true for $12\le n\le k$, show that $P(k+1)$ is true.
+
+Start with $k+1\ge 16$,
+
+$$ (k+1)-4 \ge 12$$
+
+By inductive hypothesis,
+
+$$ (k+1)-4 = 4u+5v$$
+where $u$ and $v$ are non-negtive integers.
+
+Therefore,
+
+$$ k+1 = 4(u+1) + 5v$$
+\end{proof}
+
+$P(n)$ is not true for $ n\ge 8$, since no combinations of '4' and '5' can add up to 11.
+
+\subsection{}
+$P(n): \forall n=2m, m\in \ZZ , n\ge 6, \exists k_1, k_2 \in \ZZ, k_1, k_2 \ge 0, s.t.\ n=3k_1+5k_2$
+
+\begin{proof}
+    If $n =6$, $k_1 = 2$ and $ k_2 = 0$.
+    If $n =8$, $k_1 = 1$ and $ k_2 = 1$.
+    If $n =10$, $k_1 = 0$ and $ k_2 = 2$.
+    If $n =12$, $k_1 = 4$ and $ k_2 = 0$.
+    
+    Induction: Assume $P(n)$ is true for $6\le n\le k$, show that $P(k+1)$ is true.
+    
+    Start with $k+1\ge 12$,
+    
+    $$ (k+1)-6 \ge 6$$
+    
+    By inductive hypothesis,
+    
+    $$ (k+1)-6 = 3u+5v$$
+    where $u$ and $v$ are non-negtive integers.
+    
+    Therefore,
+    
+    $$ k+1 = 3(u+2) + 5v$$
+\end{proof}
+
+\section{}
+Given $M$ is an $n\times n$ real symmetric matrix. $f(x) = x^TMx$, subject to the constraint $x^Tx =1$.
+
+Let $L(x, \lambda) = f(x) -\lambda (x^Tx-1) = x^TMx - \lambda x^Tx - \lambda$, and $\lambda > 0$.
+
+$$\nabla L = \frac{dL}{dx} = 2Mx - 2\lambda x$$
+
+Solve $\nabla L = 0$, we have $Mx = \lambda x$.
+
+Therefore, $\lambda$ is the eigenvalue of $M$ and $x$ is the corresponding eigenvector.
+
+$$
+f(x) = x^TMx = x^T(\lambda x) = \lambda x^T x = \lambda
+$$
+
+Solve $det(M-\lambda I)=0$. Since the eigenvalues are real and finite in number, there exists a largest eigenvalue, denoted $\lambda_{max}$,
+and a smallest eigenvalue, denoted  $\lambda_{min}$, i.e. $\boldsymbol \lambda = [\lambda_{max}, \dots, \lambda_{min}]^T$
+
+\subsection{}
+
+$max(f(x)) = \lambda_{max}$ and $x_{max}$ is its corresponding eigenvector given by $(M - \lambda_{max}I)x=0$.
+
+\subsection{}
+
+
+$min(f(x)) = \lambda_{min}$ and $x_{min}$ is its corresponding eigenvector given by $(M - \lambda_{min}I)x=0$.
+
+
+\end{document}

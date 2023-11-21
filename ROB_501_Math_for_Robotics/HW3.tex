@@ -1,0 +1,181 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[parfill]{parskip} % no newline indent
+\usepackage{enumitem} % enumerate / ordered list
+\usepackage{booktabs} % three-line table
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\theoremstyle{definition} % difinition
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ROB 501 HW3}
+\author{Yulun Zhuang \\ \href{mailto:yulunz@umich.edu}{yulunz@umich.edu}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Not a subspace. Reason: Not closed under multiplication by a constant, such as -1.
+    \item A subspace. Reason: Closed under vector addition and scalar multiplication.
+    \item Not a subspace. Reason: Not closed under addition, such as $[0, 1]^T + [1, 0]^T = [1, 1]^T$.
+    \item A subspace. Reason: Closed under vector addition and scalar multiplication.
+    \item Not a subspace. Reason: Zero vector is not included.
+    \item Not a subspace. Reason: Zero vector is not included.
+\end{enumerate}
+
+\section{}
+
+\begin{definition}
+    Let $\mathcal S$ be a subset of a vector space($X$, $\mathcal{F})$. The span of $\mathcal S$ is the set of all linear combinations of elements of $\mathcal S$. That is
+    $$span\{\mathcal{S}\}:=\left\{x \in X \mid \exists n \geq 1, \alpha_1, \ldots, \alpha_n \in \mathcal{F}, v_1, \ldots, v_n \in \mathcal{S}, \text { s.t. } x=\alpha_1 v_1+\cdots+\alpha_n v_n\right\}$$
+\end{definition}
+
+\begin{theorem}
+    Given a finite set $\mathcal S$ in a vector space $X$, $span\{\mathcal S\}$ is a subspace of $X$.
+\end{theorem}
+
+\begin{proof}
+    Let $u_1, \ldots, u_n \in \mathcal{S}_1$, $v_1, \ldots, v_n \in \mathcal{S}_2$, then $u_1, \ldots, u_n, v_1, \ldots, v_n \in \mathcal{S}_1 \cup \mathcal{S}_2 $.
+    $$span\{\mathcal{S}_1\}:=\left\{u \in X \mid  u=\alpha_1 u_1+\cdots+\alpha_n u_n\right\}$$
+    $$span\{\mathcal{S}_2\}:=\left\{v \in X \mid  v=\beta_1 v_1+\cdots+\beta_n v_n\right\}$$
+    Then $span\{\mathcal{S}_1\}$ and $span\{\mathcal{S}_2\}$ are subspaces in $X$. The addition of the subspaces is given by
+    $$span\{\mathcal{S}_1\}+span\{\mathcal{S}_2\} = \{w \in X\mid w = \alpha_1 u_1+\cdots+\alpha_n u_n + \beta_{1} v_1+\cdots+\beta_{n}v_n\}$$
+    Since $u_1, \ldots, u_n, v_1, \ldots, v_n \in \mathcal{S}_1 \cup \mathcal{S}_2 $, we have
+    $span\left\{S_1\right\}+span\left\{S_2\right\} \subset span\left\{S_1 \cup S_2\right\}$ . \\
+    $$span\{\mathcal{S}_1 \cup  \mathcal{S}_2\}:=\left\{z \in X \mid  z=\gamma_1 z_1+\cdots+\gamma_n z_n\right\}$$
+    Since $z$ can be represented by a linear combination of $u$ and $v$, we have $span\left\{S_1 \cup S_2\right\} \subset span\left\{S_1\right\}+span\left\{S_2\right\}$.
+    
+    Hence $span\left\{S_1 \cup S_2\right\} = span\left\{S_1\right\}+span\left\{S_2\right\}$.
+\end{proof}
+
+\section{}
+\subsection{}
+Linear dependent
+\begin{align*}
+    \begin{bmatrix}
+        1\\5\\9
+    \end{bmatrix}
+    =
+    3
+    \begin{bmatrix}
+        1\\2\\3    
+    \end{bmatrix}-
+    \begin{bmatrix}
+        2\\1\\0
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+Linear dependent
+\begin{align*}
+    \begin{bmatrix}
+        0\\5\\4
+    \end{bmatrix}
+    =
+    4
+    \begin{bmatrix}
+        1\\2\\3    
+    \end{bmatrix}
+    - \frac{1}{2}
+    \begin{bmatrix}
+        0\\0\\6
+    \end{bmatrix}
+    - 4
+    \begin{bmatrix}
+        1\\1\\1   
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+Linear independent, since the third component of the first vector can not be expressed as a linear combination of the rest.
+
+
+\section{}
+\begin{align*}
+    \alpha_1 
+    \begin{bmatrix}
+        1 & 2 \\ 2 & 1
+    \end{bmatrix}
+    +
+    \alpha_2
+    \begin{bmatrix}
+        2 & 1 \\ 1 & 1
+    \end{bmatrix}
+    +
+    \alpha_3
+    \begin{bmatrix}
+        4 & -1 \\ -1 & 1
+    \end{bmatrix}
+    = \mathbf 0\\
+    \begin{bmatrix}
+        \alpha_1 + 2\alpha_2 + 4\alpha_3 & 2\alpha_1 + \alpha_2 - \alpha_3\\
+        2\alpha_1 + \alpha_2 - \alpha_3 & \alpha_1 + \alpha_2 + \alpha_3
+    \end{bmatrix}
+    = \mathbf0\\
+    \underbrace{
+    \begin{bmatrix}
+        1 & 2 & 4\\
+        2 & 1 & -1\\
+        1 & 1 & 1
+    \end{bmatrix}}_A
+    \underbrace{
+    \begin{bmatrix}
+        \alpha_1 \\ \alpha_2 \\ \alpha_3
+    \end{bmatrix}}_x
+    = \mathbf 0\\
+    \Rightarrow \ det(A) = 0
+\end{align*}
+Choose $\alpha_1 = 2$, $\alpha_2 = -3$, $\alpha_1 = 1$ solved $Ax = \mathbf 0$. Hence the set is linearly dependent.
+
+\section{}
+Let ($X$, $\mathcal F$) be a vector space and $\mathcal S \subset {X}$. Prove that if $Y$ is a subspace of $X$ and $\mathcal S \subset Y$, then $span\{\mathcal{S}\}\subset Y$.
+
+\begin{proof}
+    $$span\{\mathcal{S}\}:=\left\{x \in X \mid \exists n \geq 1, \alpha_1, \ldots, \alpha_n \in \mathcal{F}, v_1, \ldots, v_n \in \mathcal{S}, \text { s.t. } x=\alpha_1 v_1+\cdots+\alpha_n v_n\right\}$$\\
+    Since $S\subset Y$, then $v_1, \ldots, v_n \in Y$. Since $Y$ is closed under vector multiplication and scalar addition, $x\in Y$. Hence, $span\{\mathcal{S}\}\subset Y$.
+\end{proof}
+
+\section{}
+
+Let ($X$, $\mathcal F$) be a vector space and $V$ and $W$ are subspaces of $X$. Prove the following two statements are equivalent.
+
+\begin{enumerate}[label=(\alph*)]
+    \item $V \cap W = \{0\}$
+    \item $\forall x\in V+W, \exists$ unique $v\in V$ and $ w\in W$ s.t. $x = v+w$ 
+\end{enumerate}
+
+\begin{proof}
+    ($a \Rightarrow b$) Since for every $x\in V+W$, there exist $v_1\in V$ and $ w_1\in W$ s.t. $x = v_1 + w_1$. Suppose there exist other vectors $v_2 \in V$ and $w_2 \in W$ such that $x = v_2 + w_2$. Then,
+    $$\mathbf 0 = (v_1 - v_2) + (w_1 - w_2) \Leftrightarrow (v_1 - v_2) = - (w_1 - w_2)$$
+    Therefore $v_1 - v_2 \in W$ and so $v_1 - v_2 \in V\cap W$. Since $V\cap W = \{0\}$, we then conclude that $v_1 = v_2$, which also says $w_1 = w_2$. Then $\forall x\in V+W, \exists$ unique $v\in V$ and $ w\in W$ s.t. $x = v+w$.\\
+    ($b \Rightarrow a$) Suppose that $x_0 \in V\cap W$, then on the one hand, there exists $v_0\in V$ such that $x_0 = v_0 + \mathbf 0$; on the other hand, there is $w_0 \in W$ such that $x_0 = \mathbf 0 + w_0$. Therefore, $v_0 = \mathbf 0$ and $w_0 = \mathbf 0$, so $V \cap W = \{0\}$.
+\end{proof}
+
+\end{document}

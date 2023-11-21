@@ -1,0 +1,538 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[parfill]{parskip} % no newline indent
+\usepackage{enumitem} % enumerate / ordered list
+\usepackage{booktabs} % three-line table
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\theoremstyle{definition} % difinition
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ROB 501 HW4}
+\author{Yulun Zhuang \\ \href{mailto:yulunz@umich.edu}{yulunz@umich.edu}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+
+\begin{align*}
+    \alpha_1 
+    \begin{bmatrix}
+        1 \\ 2 \\ -1 \\ 3
+    \end{bmatrix}
+    +
+    \alpha_2 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0 \\ 2
+    \end{bmatrix}
+    +
+    \alpha_3 
+    \begin{bmatrix}
+        2 \\ 8 \\ -4 \\ 8
+    \end{bmatrix}
+    +
+    \alpha_4 
+    \begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1
+    \end{bmatrix}
+    +
+    \alpha_5
+    \begin{bmatrix}
+        3 \\ 3 \\ 0 \\ 6
+    \end{bmatrix}
+    &= 0
+    \\
+    \underbrace{
+    \begin{bmatrix}
+        1 & 1 & 2 & 1 & 3 \\
+        2 & 0 & 8 & 1 & 3 \\
+        -1 & 0 & -4 & 1 & 0 \\
+        3 & 2 & 8 & 1 & 6 \\
+    \end{bmatrix}
+    }_A
+    \begin{bmatrix}
+        \alpha_1 \\ \alpha_2 \\ \alpha_3 \\ \alpha_4 \\ \alpha_5
+    \end{bmatrix}
+    &= 0
+\end{align*}
+Since $rank(A)$ is 3, and through observations
+\begin{align*}
+    \begin{bmatrix}
+        2 \\ 8 \\ -4 \\ 8
+    \end{bmatrix}
+    &=
+    -6
+    \begin{bmatrix}
+        1 \\ 0 \\ 0 \\ 2
+    \end{bmatrix}
+    -4
+    \begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1
+    \end{bmatrix}
+    4
+    \begin{bmatrix}
+        3 \\ 3 \\ 0 \\ 6
+    \end{bmatrix}
+    \\
+    \begin{bmatrix}
+        1 \\ 2 \\ -1 \\ 3
+    \end{bmatrix}
+    &=
+    -
+    \begin{bmatrix}
+        1 \\ 0 \\ 0 \\ 2
+    \end{bmatrix}
+    -
+    \begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        3 \\ 3 \\ 0 \\ 6
+    \end{bmatrix}
+\end{align*}
+
+The dimension of the space spanned by columns of $A$ is 3.
+
+\section{}
+
+\begin{align*}
+    x &= 
+    \begin{bmatrix}
+        8 \\ 7 \\ 4
+    \end{bmatrix}
+    = 8e_1 + 7e_2 + 4e_3
+    \\
+    [x]_S &= 
+    \begin{bmatrix}
+        8 \\ 7 \\ 4        
+    \end{bmatrix}
+\end{align*}
+
+\begin{align*}
+    &x = \alpha_1 u_1 + \alpha_2 u_2 + \alpha_3 u_3 = 
+    \begin{bmatrix}
+        8 \\ 7 \\ 4
+    \end{bmatrix}
+    \\
+    &\left\{
+        \begin{array}{lll}
+            \alpha_1 + \alpha_2 + \alpha_3 = 8\\
+            \alpha_1 + 2\alpha_2 + 2\alpha_3 = 7\\
+            \alpha_1 + 2\alpha_2 + 3\alpha_3 = 4
+        \end{array}
+    \right. 
+    \\
+    \Rightarrow
+    &\left\{
+        \begin{array}{lll}
+            \alpha_1 = 9\\
+            \alpha_2 = 2\\
+            \alpha_3 = -3
+        \end{array}
+    \right. 
+    \\
+    &[x]_U = 
+    \begin{bmatrix}
+        9 \\ 2 \\ -3
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+\begin{theorem}
+    There exists an invertible matrix $P$, with colefficients in $\mathcal{F}$, such that $\forall x \in(\mathcal{X}, \mathcal{F}),[x]_{\bar{u}}=P[x]_u$, where, $P=$ $\left[\begin{array}{llll}P_1 & P_2 & \cdots & P_n\end{array}\right]$ and its $i^{t h}$ column is given by $P_i:=\left[u^i\right]_{\bar{u}} \in \mathcal{F}^n$, and $\left[u^i\right]_{\bar{u}}$ is the representation of $u^i$ with respect to $\bar{u}$. Similarly, there exists an invertible matrix $\bar{P}=\left[\begin{array}{llll}\bar{P}_1 & \bar{P}_2 & \cdots & \bar{P}_n\end{array}\right]$ with $\bar{P}_i=\left[\bar{u}^i\right]_u$, the representation of $\bar{u}^i$ with respect to u, and $P \cdot \bar{P}=\bar{P} \cdot P=I$
+\end{theorem}
+
+
+From standard basis to the new basis, we have
+\begin{align*}
+    &s_1 = 2 u_1 - u_2\\
+    &s_2 = - u_1 + 2u_2 - u_3\\
+    &s_3 = -u_2 + u_3
+\end{align*}
+
+Hence,
+\begin{align*}
+    P = 
+    \begin{bmatrix}
+        2 & -1 & 0 \\
+        -1 & 2 & -1 \\
+        0 & -1 & 1
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+Find the change of basis matrix $P$ from the world frame $(X_W, Y_W)$ to the robot's frame $(X_R, Y_R)$, such that $[x]_R = P[x]_W$.
+
+\begin{align*}
+    &P_i = [w_i]_R\\
+    &w_1 = [1, 0]^T,\ w_2 = [0, 1]^T\\
+    &[w_1]_R = [cos\theta, -sin\theta]^T,\ [w_2]_R = [sin\theta, cos\theta]^T\\
+    \Rightarrow
+    &P = 
+    \begin{bmatrix}
+        cos\theta & sin\theta\\
+        -sin\theta & cos\theta
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+
+\subsection{}
+To show that $M$ is a basis of $\RR^{2, 2}$, we have to show
+\begin{enumerate}[label=(\alph*)]
+    \item $M$ is linear independent
+    \item $span\{M\}=\RR^{2,2}$
+\end{enumerate}
+
+\begin{proof}
+    For part (a)
+    \begin{align*}
+        &\alpha_1 M_1 + \alpha_2 M_2 + \alpha_3 M_3 + \alpha_4 M_4 = 0
+        \\
+        \Rightarrow\ 
+        &\alpha_1 = \alpha_2 = \alpha_3 = \alpha_4 = 0
+    \end{align*}
+    For part (b), given an arbitrary element $U$ in $\RR^{2,2}$
+    \begin{align*}
+        U = 
+        \begin{bmatrix}
+            u_{11} & u_{12}\\
+            u_{21} & u_{22}
+        \end{bmatrix}
+    \end{align*}
+    It can be written as a linear combination by elements in $M$.
+    \begin{align*}
+        U =& \alpha_1 M_1 + \alpha_2 M_2 + \alpha_3 M_3 + \alpha_4 M_4 \\
+        \begin{bmatrix}
+            u_{11} & u_{12}\\
+            u_{21} & u_{22}
+        \end{bmatrix}
+        =& 
+        \alpha_1
+        \begin{bmatrix}
+            0 & 1\\
+            1 & 0
+        \end{bmatrix}
+        +
+        \alpha_2
+        \begin{bmatrix}
+            0 & -1\\
+            1 & 0
+        \end{bmatrix}
+        +
+        \alpha_3
+        \begin{bmatrix}
+            1 & 0\\
+            0 & 1
+        \end{bmatrix}
+        +
+        \alpha_4
+        \begin{bmatrix}
+            1 & 0\\
+            0 & -1
+        \end{bmatrix}
+        \\
+        =&
+        \begin{bmatrix}
+            \alpha_3 + \alpha_4 & \alpha_1 - \alpha_2\\
+            \alpha_1 + \alpha_2 & \alpha_3 - \alpha_4
+        \end{bmatrix}
+        \\
+        \Rightarrow\ 
+        & \left\{
+        \begin{array}{lll}
+            \alpha_1 = (u_{12} + u_{21})/2\\
+            \alpha_2 = (u_{21} - u_{12})/2\\
+            \alpha_3 = (u_{11} + u_{22})/2\\
+            \alpha_4 = (u_{11} - u_{22})/2\\
+        \end{array}
+        \right. 
+    \end{align*}
+    Hence, $span\{M\}=\RR^{2,2}$.
+\end{proof}
+
+\subsection{}
+Given
+$$
+A = 
+\begin{bmatrix}
+    1 & 2 \\ 3 & 4
+\end{bmatrix}
+$$
+We have
+
+\begin{align*}
+    [A]_S = 
+    \begin{bmatrix}
+        1 \\ 2 \\ 3 \\ 4
+    \end{bmatrix}
+\end{align*}
+
+To find the change of basis matrix $P$ ($[A]_M = P[A]_S$) from standard basis $S$ to new basis $M$, we compute $\bar P$ where $P\bar{P}^{-1} = I$ and $\bar{P_i} = [m_i]_S$.
+\begin{align*}
+    [M_1]_S = 
+    \begin{bmatrix}
+        0 \\ 1 \\ 1 \\ 0
+    \end{bmatrix},
+    [M_2]_S &= 
+    \begin{bmatrix}
+        0 \\ -1 \\ 1 \\ 0
+    \end{bmatrix},
+    [M_3]_S = 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0 \\ 1
+    \end{bmatrix},
+    [M_4]_S = 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0 \\ -1
+    \end{bmatrix}
+    \\
+    \Rightarrow
+    \bar P &= 
+    \begin{bmatrix}
+        0 & 0 & 1 & 1\\
+        1 & -1 & 0 & 0 \\
+        1 & 1 & 0 & 0\\
+        0 & 0 & 1 & -1
+    \end{bmatrix}
+    \\
+    \Rightarrow
+    P &= \bar{P}^{-1} =
+    \begin{bmatrix}
+        0 & 0.5 & 0.5 & 0\\
+        0 & -0.5 & 0.5 & 0 \\
+        0.5 & 0 & 0 & 0.5\\
+        0.5 & 0 & 0 & -0.5
+    \end{bmatrix}
+    \\
+    \Rightarrow
+    [A]_M &= P[A]_S = 
+    \begin{bmatrix}
+        2.5 \\ 0.5 \\ 2.5 \\ -1.5
+    \end{bmatrix}
+\end{align*}
+
+\section{}
+
+\subsection{}
+Find the representation of $r(x)$ w.r.t. basis $S$.
+
+\begin{align*}
+    r(x) &= 2 + 3x- x^2 = 2p_0 + 3p_1 -p_2\\
+    [r(x)]_S &= 
+    \begin{bmatrix}
+        2 \\ 3 \\ -1
+    \end{bmatrix}
+\end{align*}
+
+\subsection{}
+Find the representation of $r(x)$ w.r.t. basis $Q$.
+
+\begin{align*}
+    [r(x)]_Q &= P[r(x)]_S\\
+    P_i &= [S_i]_Q\\
+    P_1 = 
+    \begin{bmatrix}
+        1 \\ 0 \\ 0
+    \end{bmatrix},
+    P_2 &= 
+    \begin{bmatrix}
+        1 \\ -1 \\ 0
+    \end{bmatrix},
+    P_3 = 
+    \begin{bmatrix}
+        -1 \\ 1 \\ 1
+    \end{bmatrix}
+    \\
+    \Rightarrow
+    P &= 
+    \begin{bmatrix}
+        1 & 1 & -1\\
+        0 & -1 & 1\\
+        0 & 0 & 1
+    \end{bmatrix}
+\end{align*}
+
+Hence, 
+$$
+[r(x)]_Q = 
+\begin{bmatrix}
+    1 & 1 & -1\\
+    0 & -1 & 1\\
+    0 & 0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+    2 \\ 3 \\ -1
+\end{bmatrix}
+=
+\begin{bmatrix}
+    6 \\ -4 \\ -1
+\end{bmatrix}
+$$
+
+\section{}
+Let $\mathcal{F}=\mathbb{R}$ and let $\mathcal{X}$ be the set of $2 \times 2$ matrices with real coefficients. Define $L: \mathcal{X} \rightarrow \mathcal{X}$ by
+
+$$
+L(M)=2\left(M+M^{\top}\right)
+$$
+
+\subsection{}
+\begin{proof}
+    \begin{align*}
+        L(\alpha A+ \beta B) &= 2(\alpha A+ \beta B+\alpha A^T + \beta B^T)\\
+        &= \alpha 2(A+A^T) + \beta 2(B+B^T)\\
+        &= \alpha L(A) + \beta L(B)
+    \end{align*}
+\end{proof}
+
+\subsection{}
+
+\begin{definition}
+    Let $(\mathcal{X}, \mathcal{F})$ and $(\mathcal{Y}, \mathcal{F})$ be finite dimensional vector spaces, and $\mathcal{L}: \mathcal{X} \rightarrow \mathcal{Y}$ be a linear operator. A matrix representation of $\mathcal{L}$ with respect to a basis $u:=\left\{u^1, \ldots, u^m\right\}$ for $\mathcal{X}$ and $v:=\left\{v^1, \ldots, v^n\right\}$ for $\mathcal{Y}$ is an $n \times m$ matrix $A$, with coefficients in $\mathcal{F}$, such that $\forall x \in \mathcal{X},[\mathcal{L}(x)]_v=A[x]_u$.
+\end{definition}
+\begin{theorem}
+    Let $(\mathcal{X}, \mathcal{F})$ and $(\mathcal{Y}, \mathcal{F})$ be finite dimensional vector spaces, $\mathcal{L}: \mathcal{X} \rightarrow \mathcal{Y}$ a linear operator, $u:=\left\{u^1, \ldots, u^m\right\}$ a basis for $\mathcal{X}$ and $v:=\left\{v^1, \ldots, v^n\right\}$ a basis for $\mathcal{Y}$, then $\mathcal{L}$ has a matrix representation $A=\left[\begin{array}{lll}A_1 & \cdots & A_m\end{array}\right]$, where the $i^{\text {th }}$ column of $A$ is given by
+    $$
+    A_i:=\left[\mathcal{L}\left(u^i\right)\right]_v, 1 \leq i \leq m
+    $$
+\end{theorem}
+
+\begin{align*}
+    A_i &= [L(E_i)]_E\\
+    L(E_1) &= 
+    \begin{bmatrix}
+        4 & 0\\
+        0 & 0
+    \end{bmatrix}
+    = 4 E_1\\
+    L(E_2) &= 
+    \begin{bmatrix}
+        0 & 2\\
+        2 & 0
+    \end{bmatrix}
+    = 2E_2 + 2E_3\\
+    L(E_3) &= 
+    \begin{bmatrix}
+        0 & 2\\
+        2 & 0
+    \end{bmatrix}
+    = 2E_2 + 2E_3\\
+    L(E_4) &= 
+    \begin{bmatrix}
+        0 & 0\\
+        0 & 4
+    \end{bmatrix}
+    = 4 E_4
+\end{align*}
+
+\begin{align*}
+    \Rightarrow
+    A = 
+    \begin{bmatrix}
+        4 & 0 & 0 & 0\\
+        0 & 2 & 2 & 0\\
+        0 & 2 & 2 & 0\\
+        0 & 0 & 0 & 4
+    \end{bmatrix}
+\end{align*}
+
+
+\section{}
+Let $A$ be an $n \times n$ matrix with possibly complex coefficients. Let $L: \mathbb{C}^n \rightarrow \mathbb{C}^n$ by $L(x)=A x$. Note that the field is $\mathcal{F}=\mathbb{C}$.
+
+\subsection{}
+Compute the matrix representation of $L$ when the "natural" (also called canonical) basis is used in $\mathbb{C}^n$. Call your representation $\hat{A}$ and find its relation to the original matrix $A$.
+
+The matrix representation $\hat A$ of $L$ satisfies $[L(x)]_S = \hat{A}[x]_S$.
+
+Define the natural basis in $\mathbb{C}^n$ to be
+\begin{align*}
+    S = \left\{
+        e_1=
+        \begin{bmatrix}
+            1 \\ 0 \\ \vdots \\ 0
+        \end{bmatrix},
+        e_2=
+        \begin{bmatrix}
+            0 \\ 1 \\ \vdots \\ 0
+        \end{bmatrix},
+        \dots,
+        e_n=
+        \begin{bmatrix}
+            0 \\ 0 \\ \vdots \\ 1
+        \end{bmatrix}
+        \right\}
+\end{align*}
+
+\begin{align*}
+    \hat A &= [\hat A_1 \mid \hat A_2 \mid \dots \mid \hat A_n]\\
+    \hat A_i &= [L(e_i)]_S\\
+    &= [Ae_i]_S \Leftarrow L(x) = Ax\\
+    &= [A_i]_S \Leftarrow e_i = [0, \dots, 1, \dots, 0]^T\\
+    &= A_i\\
+    \Rightarrow 
+    \hat A &= A
+\end{align*}
+
+\subsection{}
+Suppose that the e-values of $A$ are distinct. Compute the matrix representation $L$ with respect to a basis constructed from the e-vectors of $A$. Call your representation $\hat{A}$.
+
+Recall $L(x)=Ax$, $Ax = \lambda x$ and the matrix representation $\hat A$ of $L$ satisfies $[L(x)]_S = \hat{A}[x]_S$.
+
+
+Define a set of basis constructed from the e-vectors of $A$ to be
+
+\begin{align*}
+    V = \left\{v_1, v_2, \dots, v_n\right\}
+\end{align*}
+
+\begin{align*}
+    \hat A &= [\hat A_1 \mid \hat A_2 \mid \dots \mid \hat A_n]\\
+    \hat A_i &= [L(v_i)]_V\\
+    &= [Av_i]_V \Leftarrow L(x) = Ax\\
+    &= [\lambda_i v_i]_V \Leftarrow Ax = \lambda x\\
+    &= \lambda_i[v_i]_V\\
+    &= 
+    \begin{bmatrix}
+        0 \\ \vdots \\ \lambda_i \\ \vdots \\ 0
+    \end{bmatrix}
+    \\
+    \hat A &= 
+    \begin{bmatrix}
+        \lambda_1 & 0 & \dots & 0\\
+        0 & \lambda_2 & \dots & 0 \\
+        \vdots & \vdots & \ddots& \vdots\\
+        0 & 0 & \dots & \lambda_n\\
+    \end{bmatrix}
+\end{align*}
+
+
+\end{document}
