@@ -1,0 +1,173 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ME424 HW5}
+\author{Zhuang Yulun 11811126}
+% \date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Probabilistic modeling of uncertainties}
+
+Define event A = \{$S_a$ is accepted\} and event B = \{$S_b$ is accepted\}\\
+$\Omega = \{(A,B),(A,\bar{B}),(\bar{A},B),(\bar{A},\bar{B})\}$\\
+\subsection{}
+Given 
+$$
+P(A) = 0.8,\ P(B) = 0.6,\ P(AB) = P(A)P(B)
+$$
+We have
+
+\begin{align*}
+    P(AB)=P(A)P(B)=0.48\\
+    P(A\bar{B})=P(A)P(\bar{B})=0.32\\
+    P(\bar{A}B)=P(\bar{A})P(B)=0.12\\
+    P(\bar{A}\bar{B})=P(\bar{A})P(\bar{B})=0.16
+\end{align*}
+
+\subsection{}
+Given
+$$
+P(A|B)=1,\ P(A|\bar{B})=0.3\ ,P(\bar{A}\bar{B})=0.35
+$$
+\\
+We have$P(B)=\frac{P(\bar{A}\bar{B})}{P(\bar{A}|\bar{B})}=0.5$\\
+Thus,
+\begin{align*}
+    P(AB)&=P(A|B)P(B)=0.5\\
+    P(A\bar{B})&=P(A|\bar{B})P(\bar{B})=0.15\\
+    P(\bar{A}B)&=P(\bar{A}|B)P(B)=0\\
+    P(\bar{A}\bar{B})&=0.35
+\end{align*}
+
+\section{Conditional Probability and Expectation}
+\subsection{}
+Given
+\begin{align*}
+    p_X(x)=\frac{1}{n+1}\ for\ x = 0,1,\cdots ,n\\
+    p_{Y|X=x}(y|x)=\frac{1}{x+1}\ for \ y=0,1,\cdots ,x
+\end{align*}
+\begin{itemize}
+    \item [(a)] 
+    $E(Y|X=x)=x/2$
+    \item [(b)] 
+    $E(Y)=\Sigma^{n}_{i=0}E(Y|X=x)p_X(x)=n/4$
+    \item [(c)] 
+    $p_{XY}(x,y)=p_X(x)p_{Y|X=x}(y|x)=\frac{1}{(n+1)(x+1)}\ for\ x\geq y,\ otherwise\ 0$
+    \item [(d)] 
+    $p_Y(y)=\Sigma^n_{x=y}p_{XY}(x,y)=\Sigma^n_{x=y}\frac{1}{(n+1)(x+1)}\ for\ x\geq y,\ otherwise\ 0$
+    \item [(e)] 
+    \begin{lstlisting}
+        n = 100;
+        E = 0;
+        for y = 0:n
+            p = 0;
+            for x = y:n
+                p = p+1/(n+1)/(x+1);
+            end
+            E = E + y*p;
+        end
+    \end{lstlisting}
+    The result $E(Y)=25$ for n = 100, which is the same to (b)
+    \item [(f)] 
+    $E(g(X)Y)=2E(Y|X=1)p_X(1)+2E(Y|X=n)p_X(n)=1$
+\end{itemize}
+
+
+\section{Conditional Density and Expectation}
+\begin{itemize}
+    \item [(a)]
+    $E(Y|X=x)=\frac{x-6}{2}$
+    \item [(b)] 
+    $f_X(x)=\int_0^2f_{XY}(x,y)dy=x+\frac{1}{2},\ x\in[0,1]$\\
+    $f_Y(y)=\int_0^1f_{XY}(x,y)dx=\frac{1}{4}(y+1),\ y\in[0,2]$\\
+    $f_{X|Y}(x|y)=\frac{f_{XY}(x,y)}{f_Y(y)}=\frac{2x+y}{y+1},\ x\in[0,1]$\\
+    $\Rightarrow$\\
+    $E(X)=\int_0^1x(f_X(x))dx=\frac{7}{12}$\\
+    $E(X|Y=\frac{1}{2})=\int_0^1xf_{X|Y}(x|\frac{1}{2})dx=\frac{11}{18}$
+    \item [(c)]
+    Given
+    \begin{align*}
+        f(x_1|x_2)&=f(x_1)\\
+        f(x_1|x_3)&=f(x_1)\\
+        f(x_2,x_3)&=f(x_2,x_3|x_1)=\frac{f(x_1,x_2,x_3)}{f(x_1)}
+    \end{align*}
+    We have
+    \begin{align*}
+        f(x_1,x_2|x_3)&=\frac{f(x_1,x_2,x_3)}{f(x_3)}\\
+        &=\frac{f(x_1)f(x_2,x_3)}{f(x_3)}\\
+        &=f(x_1|x_3)f(x_2|x_3)
+    \end{align*}
+\end{itemize}
+
+\section{Random Vectors}
+\begin{itemize}
+    \item [(a)]
+    \begin{align*}
+        E(W)&=
+        \begin{bmatrix}
+            E(X_1)\\E(X_3)
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            1\\-2
+        \end{bmatrix}
+        \\Cov(W)&=
+        \begin{bmatrix}
+            Cov(X_1,X_1)&Cov(X_1,X_3)\\
+            Cov(X_3,X_1)&Cov(X_3,X_3)
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            6&5\\5&6
+        \end{bmatrix}
+    \end{align*}
+    \item [(b)]
+    \begin{align*}
+        Cov(W,X_2)=
+        \begin{bmatrix}
+            Cov(X_1,X_2)\\Cov(X_3,X_2)
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            2\\3
+        \end{bmatrix}
+    \end{align*}
+    \item [(c)]
+    \begin{align*}
+        Cov(V,V)&=
+        \begin{bmatrix}
+            Cov(X_2-1,X_2-1)&Cov(X_2-1,X_1+X_3)\\
+            Cov(X_2-1,X_1+X_3)&Cov(X_1+X_3,X_1+X_3)
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            Cov(X_2,X_2)&Cov(X_2,X_1)+Cov(X_2,X_3)\\
+            Cov(X_2,X_1)+Cov(X_2,X_3)&Cov(X_1)+Cov(X_3)+2Cov(X_1,X_3)
+        \end{bmatrix}\\
+        &=
+        \begin{bmatrix}
+            9&5\\5&22
+        \end{bmatrix}
+    \end{align*}
+\end{itemize}
+
+
+
+\end{document}

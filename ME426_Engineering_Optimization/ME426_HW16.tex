@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ME426 HW16}
+\author{Zhuang Yulun 11811126}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\section{}
+Define events:
+\begin{align*}
+    &S_1=\{Price\ increase\}\\
+    &S_2=\{Price\ remain\ the\ same\}\\
+    &S_3=\{Price\ decrease\}\\
+    &A_1=\{Agent\ favorite\}\\
+    &A_2=\{Agent\ does\ not\ favorite\}    
+\end{align*}
+Given:
+\begin{align*}
+    &P(S_1)=0.25\\
+    &P(S_2)=0.3\\
+    &P(S_3)=0.45\\
+    &P(A_1|S_1)=0.85\\
+    &P(A_1|S_2)=0.50\\
+    &P(A_1|S_3)=0.15\\
+    &P(A_2|S_1)=0.15\\
+    &P(A_2|S_2)=0.50\\
+    &P(A_2|S_3)=0.85
+\end{align*}
+We have:
+\begin{align*}
+    &P(A_1S_1)=P(A_1|S_1)P(S_1)=0.2125\\
+    &P(A_1S_2)=P(A_1|S_2)P(S_2)=0.15\\
+    &P(A_1S_3)=P(A_1|S_3)P(S_3)=0.0675\\
+    &P(A_1)=P(A_1S_1)+P(A_1S_2)+P(A_1S_3)=0.43
+\end{align*}
+and
+\begin{align*}
+    &P(A_2S_1)=P(A_2|S_1)P(S_1)=0.0375\\
+    &P(A_2S_2)=P(A_2|S_2)P(S_2)=0.15\\
+    &P(A_2S_3)=P(A_2|S_3)P(S_3)=0.3825\\
+    &P(A_2)=P(A_2S_1)+P(A_2S_2)+P(A_2S_3)=0.57
+\end{align*}
+Thus
+\begin{align*}
+    &P(S_1|A_1)=\frac{P(S_1A_1)}{P(A_1)}=0.4942\\
+    &P(S_2|A_1)=\frac{P(S_2A_1)}{P(A_1)}=0.3488\\
+    &P(S_3|A_1)=\frac{P(S_3A_1)}{P(A_1)}=0.1570\\
+    &P(S_1|A_2)=\frac{P(S_1A_2)}{P(A_2)}=0.0658\\
+    &P(S_2|A_2)=\frac{P(S_2A_2)}{P(A_2)}=0.2634\\
+    &P(S_3|A_2)=\frac{P(S_3A_2)}{P(A_2)}=0.6711
+\end{align*}
+The expectations are
+\begin{align*}
+    &E_{corn}(S|A_1)=0.4942*30000+0.157*-35000=9331.0\\
+    &E_{bean}(S|A_1)=0.4942*10000+0.157*-5000=4157.0\\
+    &E_{corn}(S|A_2)=0.0658*30000+0.6711*-35000=-21514.5\\
+    &E_{bean}(S|A_2)=0.0658*10000+0.6711*-5000=-2697.5
+\end{align*}
+In a word, if the agent favorite the plan, planting corn can make the best expectational profits 9331 dollars.
+Otherwise, using the land as pasture is better to have 7500 dollars profits.
+\end{document}

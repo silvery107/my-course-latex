@@ -1,0 +1,48 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{Simulation based joint optimization framework}
+\author{Zhuang Yulun 11811126}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\section{}
+
+\begin{align*}
+    &\min \quad \Vert H-H_{desired} \Vert^2\\
+    &\begin{array}{r@{\quad}r@{}l@{\quad}l}
+    s.t.
+        &H&=model(params)\\
+        &g_i(x)&\leq 0,\quad i=1,2,\cdots,m
+    \end{array}
+\end{align*}
+where $g_i(x)$ are constrains comes from danamics, kinematics and power limitions
+\section{}
+
+\begin{align*}
+    &\min \quad \Vert H-H_{desired} \Vert^2+\mu\Sigma_{i=1}^mp_i(x)
+\end{align*}
+where $p_i(x)=(\max\{0,g_i(x)\})^2$, $\mu$ is the penalty factor.
+
+
+
+
+
+
+\end{document}

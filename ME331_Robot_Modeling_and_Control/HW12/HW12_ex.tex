@@ -1,0 +1,210 @@
+% This LaTeX was auto-generated from MATLAB code.
+% To make changes, update the MATLAB code and export to LaTeX again.
+
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{epstopdf}
+\usepackage[table]{xcolor}
+\usepackage{matlab}
+
+\usepackage{geometry}
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+
+\title{ME424 HW8}
+\author{Zhuang Yulun 11811126}
+\date{\today}
+
+\sloppy
+\epstopdfsetup{outdir=./}
+\graphicspath{ {./HW12_ex_images/} }
+
+\begin{document}
+\maketitle
+\begin{matlabcode}
+%% HW12
+% Zhuang Yulun 11811126
+close all;clear;clc;
+\end{matlabcode}
+
+
+\begin{matlabcode}
+% 定义符号变量
+syms q1(t) q2(t)
+q = [q1(t);q2(t)];
+dq = diff(q,t);
+syms m [1 2]
+syms g L postive
+\end{matlabcode}
+
+
+\begin{matlabcode}
+% 初始化容器
+n = 2;
+Q = [0 -1 0 0;1 0 0 0;0 0 0 0;0 0 0 0];
+I = cell(2,1);
+T = cell(3,1); % T01 T02 T12
+U = cell(n,n);
+r_ = cell(n,1); % r11 r22
+K = 0;
+P = 0;
+tau = cell(2,1);
+g_ = [0 g 0 0];
+\end{matlabcode}
+
+
+\begin{matlabcode}
+% 计算势能
+for i = 1:2
+    r_{i} = [-1/2*L;0;0;1];
+    I{i} = [1/3*m(i)*L^2,0,0,-1/2*m(i)*L^2;...
+            0,0,0,0;0,0,0,0;-1/2*m(i)*L^2,0,0,m(i)];
+    if i == 1
+        T{i} = [cos(q(i)),-sin(q(i)),0,L*cos(q(i));...
+                sin(q(i)),cos(q(i)),0,L*sin(q(i));...
+                0,0,1,0;0,0,0,1];
+    else
+        T{i} = T{i-1}*[cos(q(i)),-sin(q(i)),0,L*cos(q(i));...
+                       sin(q(i)),cos(q(i)),0,L*sin(q(i));...
+                       0,0,1,0;0,0,0,1];
+    end
+    P = P-m(i)*g_*(T{i}*r_{i});
+end
+P = simplify(expand(P))
+\end{matlabcode}
+\begin{matlabsymbolicoutput}
+P = 
+
+\hskip1em $\displaystyle -\frac{L\,g\,m_2 \,\sin \left(q_1 \left(t\right)+q_2 \left(t\right)\right)}{2}-\frac{L\,g\,m_1 \,\sin \left(q_1 \left(t\right)\right)}{2}-L\,g\,m_2 \,\sin \left(q_1 \left(t\right)\right)$
+\end{matlabsymbolicoutput}
+
+
+\begin{matlabcode}
+% 计算U矩阵
+T{3} = T{1}\T{2};
+U{1,1} = Q*T{1};
+U{2,1} = Q*T{2};
+U{2,2} = T{1}*Q*T{3};
+\end{matlabcode}
+
+
+\begin{matlabcode}
+% 计算动能
+for i = 1:n
+    for p = 1:i
+        for r = 1:i
+            K = K+1/2*trace(U{i,p}*I{i}*U{i,r}.'*dq(p)*dq(r));
+        end
+    end
+end
+K = simplify(expand(K))
+\end{matlabcode}
+\begin{matlabsymbolicoutput}
+K = 
+
+\hskip1em $\displaystyle \begin{array}{l}
+\frac{2\,L^2 \,m_1 \,\sigma_1 }{3}+\frac{7\,L^2 \,m_2 \,\sigma_1 }{6}-\frac{L^3 \,m_1 \,\sigma_1 }{2}\\
++\frac{2\,L^2 \,m_2 \,\sigma_2 }{3}-\frac{L^3 \,m_2 \,\sigma_1 }{2}-\frac{L^3 \,m_2 \,\sigma_2 }{2}\\
++L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 -\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 }{2}\\
++\frac{4\,L^2 \,m_2 \,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)}{3}-L^3 \,m_2 \,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)\\
++L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)-\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)}{2}\\
+\mathrm{}\\
+\textrm{where}\\
+\mathrm{}\\
+\;\;\sigma_1 ={{\left(\frac{\partial }{\partial t}\;q_1 \left(t\right)\right)}}^2 \\
+\mathrm{}\\
+\;\;\sigma_2 ={{\left(\frac{\partial }{\partial t}\;q_2 \left(t\right)\right)}}^2 
+\end{array}$
+\end{matlabsymbolicoutput}
+\begin{matlabcode}
+% pretty(K)
+\end{matlabcode}
+
+
+\begin{matlabcode}
+% 欧拉-拉格朗日法推导动力学方程
+L = simplify(K-P);
+dq = diff(q,t);
+for i = 1:n
+    tau{i} = diff(diff(L,dq(i)),t)-diff(L,q(i));
+end
+L = simplify(expand(L))
+\end{matlabcode}
+\begin{matlabsymbolicoutput}
+L = 
+
+\hskip1em $\displaystyle \begin{array}{l}
+\frac{2\,L^2 \,m_1 \,\sigma_1 }{3}+\frac{7\,L^2 \,m_2 \,\sigma_1 }{6}-\frac{L^3 \,m_1 \,\sigma_1 }{2}\\
++\frac{2\,L^2 \,m_2 \,\sigma_2 }{3}-\frac{L^3 \,m_2 \,\sigma_1 }{2}-\frac{L^3 \,m_2 \,\sigma_2 }{2}\\
++\frac{L\,g\,m_2 \,\sin \left(q_1 \left(t\right)+q_2 \left(t\right)\right)}{2}+\frac{L\,g\,m_1 \,\sin \left(q_1 \left(t\right)\right)}{2}+L\,g\,m_2 \,\sin \left(q_1 \left(t\right)\right)\\
++L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 -\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 }{2}+\frac{4\,L^2 \,m_2 \,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)}{3}\\
+-L^3 \,m_2 \,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)+L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)\\
+-\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)}{2}\\
+\mathrm{}\\
+\textrm{where}\\
+\mathrm{}\\
+\;\;\sigma_1 ={{\left(\frac{\partial }{\partial t}\;q_1 \left(t\right)\right)}}^2 \\
+\mathrm{}\\
+\;\;\sigma_2 ={{\left(\frac{\partial }{\partial t}\;q_2 \left(t\right)\right)}}^2 
+\end{array}$
+\end{matlabsymbolicoutput}
+\begin{matlabcode}
+tau{1}
+\end{matlabcode}
+\begin{matlabsymbolicoutput}
+ans = 
+
+\hskip1em $\displaystyle \begin{array}{l}
+\frac{4\,L^2 \,m_1 \,\sigma_1 }{3}+\frac{7\,L^2 \,m_2 \,\sigma_1 }{3}-L^3 \,m_1 \,\sigma_1 \\
++\frac{4\,L^2 \,m_2 \,\sigma_2 }{3}-L^3 \,m_2 \,\sigma_1 -L^3 \,m_2 \,\sigma_2 -\frac{L\,g\,m_2 \,\cos \left(q_1 \left(t\right)+q_2 \left(t\right)\right)}{2}\\
+-\frac{L\,g\,m_1 \,\cos \left(q_1 \left(t\right)\right)}{2}-L\,g\,m_2 \,\cos \left(q_1 \left(t\right)\right)-L^2 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\sigma_3\\
++\frac{L^3 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\sigma_3 }{2}+2\,L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 +L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_2\\
+ -L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 -\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_2 }{2}\\
+-2\,L^2 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)+L^3 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\frac{\partial }{\partial t}\;q_2 \left(t\right)\,\frac{\partial }{\partial t}\;q_1 \left(t\right)\\
+\mathrm{}\\
+\textrm{where}\\
+\mathrm{}\\
+\;\;\sigma_1 =\frac{\partial^2 }{\partial t^2 }\;q_1 \left(t\right)\\
+\mathrm{}\\
+\;\;\sigma_2 =\frac{\partial^2 }{\partial t^2 }\;q_2 \left(t\right)\\
+\mathrm{}\\
+\;\;\sigma_3 ={{\left(\frac{\partial }{\partial t}\;q_2 \left(t\right)\right)}}^2 
+\end{array}$
+\end{matlabsymbolicoutput}
+\begin{matlabcode}
+tau{2}
+\end{matlabcode}
+\begin{matlabsymbolicoutput}
+ans = 
+
+\hskip1em $\displaystyle \begin{array}{l}
+\frac{4\,L^2 \,m_2 \,\sigma_1 }{3}+\frac{4\,L^2 \,m_2 \,\sigma_3 }{3}\\
+-L^3 \,m_2 \,\sigma_1 -L^3 \,m_2 \,\sigma_3 -\frac{L\,g\,m_2 \,\cos \left(q_1 \left(t\right)+q_2 \left(t\right)\right)}{2}\\
++L^2 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\sigma_2 -\frac{L^3 \,m_2 \,\sin \left(q_2 \left(t\right)\right)\,\sigma_2 }{2}\\
++L^2 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 -\frac{L^3 \,m_2 \,\cos \left(q_2 \left(t\right)\right)\,\sigma_1 }{2}\\
+\mathrm{}\\
+\textrm{where}\\
+\mathrm{}\\
+\;\;\sigma_1 =\frac{\partial^2 }{\partial t^2 }\;q_1 \left(t\right)\\
+\mathrm{}\\
+\;\;\sigma_2 ={{\left(\frac{\partial }{\partial t}\;q_1 \left(t\right)\right)}}^2 \\
+\mathrm{}\\
+\;\;\sigma_3 =\frac{\partial^2 }{\partial t^2 }\;q_2 \left(t\right)
+\end{array}$
+\end{matlabsymbolicoutput}
+
+\end{document}

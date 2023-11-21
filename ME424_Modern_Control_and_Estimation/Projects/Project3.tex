@@ -1,0 +1,148 @@
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{ME424}
+% \author{Zhuang Yulun 11811126}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+Given
+\begin{align*}
+    \ddot{\theta} & =\frac{MRL\sin\theta\cos\theta\cdot\dot{\theta}^2-\tau}
+    {MRL\cos^2\theta-L/R(2J_w+(M+2m)R^2)}
+    \\
+    \ddot{\alpha} & =\frac{MRL\sin\theta\cdot\dot{\theta}^2-MRL\cos\theta\cdot\ddot{\theta}+\tau}
+    {2J_w+(M+2m)R^2}
+    \\
+    y             & =
+    \begin{bmatrix}
+        \dot{\theta}_m \\a_m
+    \end{bmatrix}
+\end{align*}
+Define
+\begin{align*}
+    x=
+    \begin{bmatrix}
+        x_1 \\x_2\\x_3\\x_4
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \theta \\\dot{\theta}\\\alpha\\\dot{\alpha}
+    \end{bmatrix} \\
+\end{align*}
+We have
+\begin{align*}
+    \dot{x} & =
+    \begin{bmatrix}
+        \dot{x_1} \\\dot{x_2}\\\dot{x_3}\\\dot{x_4}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        x_2 \\
+        \frac{MRL\sin x_1\cos x_1\cdot x_2^2-\tau}
+        {MRL\cos^2 x_1-L/R(2J_w+(M+2m)R^2)}
+        \\
+        x_4 \\
+        \frac{MRL\sin x_1\cdot x_2^2-MRL\cos x_1\cdot
+            \frac{MRL\sin x_1\cos x_1\cdot x_2^2-\tau}
+            {MRL\cos^2 x_1-L/R(2J_w+(M+2m)R^2)}+\tau}
+        {2J_w+(M+2m)R^2}
+    \end{bmatrix} \\
+    y       & =Cx=
+    \begin{bmatrix}
+        0 & 1 & 0 & 0 \\0&0&0&r
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_1 \\x_2\\x_3\\x_4
+    \end{bmatrix}
+\end{align*}
+
+where $r$ is radius of the wheel.\\
+From continuous time model to descrete time model
+\begin{align*}
+    x(k+1) & =x(k)+\dot{x(k)}\Delta t \\
+           & =
+    \begin{bmatrix}
+        x_1(k) \\x_2(k)\\x_3(k)\\x_4(k)
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        x_2(k) \\
+        \frac{MRL\sin x_1(k)\cos x_1(k)\cdot x_2^2(k)-\tau}
+        {MRL\cos^2 x_1(k)-L/R(2J_w+(M+2m)R^2)}
+        \\
+        x_4(k) \\
+        \frac{MRL\sin x_1(k)\cdot x_2^2(k)-MRL\cos x_1(k)\cdot
+            \frac{MRL\sin x_1(k)\cos x_1(k)\cdot x_2^2(k)-\tau}
+            {MRL\cos^2 x_1(k)-L/R(2J_w+(M+2m)R^2)}+\tau}
+        {2J_w+(M+2m)R^2}
+    \end{bmatrix}\Delta t \\
+           & =
+    \begin{bmatrix}
+        x_1(k)+x_2(k)\Delta t \\
+        x_2(k)+\frac{MRL\sin x_1(k)\cos x_1(k)\cdot x_2^2(k)-\tau}
+        {MRL\cos^2 x_1(k)-L/R(2J_w+(M+2m)R^2)}\Delta t
+        \\
+        x_3(k)+x_4(k)\Delta t \\
+        x_4(k)+\frac{MRL\sin x_1(k)\cdot x_2^2(k)-MRL\cos x_1(k)\cdot
+            \frac{MRL\sin x_1(k)\cos x_1(k)\cdot x_2^2(k)-\tau}
+            {MRL\cos^2 x_1(k)-L/R(2J_w+(M+2m)R^2)}+\tau}
+        {2J_w+(M+2m)R^2}\Delta t
+    \end{bmatrix}        \\
+    y(k)   & =Cx(k)                   \\
+           & =
+    \begin{bmatrix}
+        0 & 1 & 0 & 0 \\0&0&0&r
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_1(k) \\x_2(k)\\x_3(k)\\x_4(k)
+    \end{bmatrix}
+\end{align*}
+
+where $\Delta t=0.001s$
+
+\newpage
+
+$$
+\begin{aligned}
+\mathfrak{T}_{\text {MINCO}} =&
+\left\{ p(t):[0, T] \mapsto \mathbb{R}^{m} 
+\mid 
+\mathbf{c}=\mathbf{c}(\mathbf{q}, \mathbf{T}), 
+\mathbf{q} \in \mathbb{R}^{m(M-1)}, 
+\mathbf{T} \in \mathbb{R}_{>0}^{M}
+\right\}\\
+where \quad
+&\mathbf{q}=\left(q_{1}, \ldots, q_{M-1}\right), 
+\mathbf{T}=\left(T_{1}, \ldots, T_{M}\right)^{\mathrm{T}},\\
+&p(t)=p_{i}\left(t-t_{i-1}\right), 
+\forall t \in\left[t_{i-1}, t_{i}\right)\ and\ t_{i}=\Sigma_{j=1}^{i} T_{j} \\
+&p_{i}(t) =  \mathbf{c}_{i}^{\mathrm{T}} \beta(t), t \in\left[0, T_{i}\right], 
+\mathbf{c}_{i} \in \mathbb{R}^{2 s \times m},\\
+&\beta(t)=\left(1, t, \ldots, t^{N}\right)^{\mathrm{T}}
+\end{aligned}
+$$
+\\
+$q_i\in \mathbb{R}^m$ is a specified 0-order derivative at $t_i$,
+$T_{i}$ is the piece time, \\
+$\mathbf{c}_{i}$ is the coefficient matrix of the piece,
+and $\beta(t)$ is the natural basis.\\
+\end{document}
