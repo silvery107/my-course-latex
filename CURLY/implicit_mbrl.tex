@@ -1,0 +1,231 @@
+% \special{dvipdfmx:config z 0} % disable pdf compress to boost compilation time, comment this out for release
+\documentclass{article}
+
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage[parfill]{parskip} % no newline indent
+\usepackage{enumitem} % enumerate / ordered list
+\usepackage{booktabs} % three-line table
+\usepackage{array}   % for \newcolumntype macro
+\usepackage{listings} % MATLAB code block
+\usepackage{pdfpages} % include external pdf pages
+\usepackage[bottom]{footmisc} % move footnote to the bottom
+\usepackage{mathtools}
+\newcolumntype{C}{>{$}c<{$}} % math-mode version of "l" column type
+
+\theoremstyle{definition} % definition
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+
+
+\lstset{
+  language=Matlab, 
+  frame=shadowbox, 
+  numbers=left,
+  breaklines=true
+}
+
+\geometry{
+	paper=a4paper, 
+	top=2.5cm,
+	bottom=2.5cm, 
+	left=2.5cm, 
+	right=3cm,
+	headsep=0.75cm, 
+}
+\title{Implicit Model-Based RL via HJB Bias}
+\author{Yulun Zhuang \\ \href{mailto:yulunz@umich.edu}{yulunz@umich.edu}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\section*{Enhanced PPO}
+
+Value Function Objective
+\begin{align*}
+    V(x_k) &= \max_{u_k}\ r(x_k, u_k) + \gamma V(x_{k+1})
+\end{align*}
+
+\begin{align*}
+    V(x_k) &= \sum_{t=0}^\infty \gamma^t r(x_{k+t}, u_{k+t})\\
+    &= r(x_k, u_k) + \gamma \sum_{t=0}^\infty \gamma^t r(x_{k+t+1}, u_{k+t+1})\\
+    &= r(x_k, u_k) + \gamma V(x_{k+1})\\
+    &= r(x_k, u_k) + \gamma V(F(x_k, u_k)) \Leftarrow F(x_k, u_k) \coloneqq x_{k+1}
+\end{align*}
+
+Partial Derivatives of Value Objective
+\begin{align*}
+    \frac{\partial V(x_k)}{\partial x_k} 
+    &= r_x(x_k, u_k) + \gamma F_x^T(x_k, u_k)\frac{\partial V(x_{k+1})}{\partial x_{k+1}}\\
+    \frac{\partial V(x_k)}{\partial x_k} 
+    &= r_u(x_k, u_k) + \gamma F_u^T(x_k, u_k)\frac{\partial V(x_{k+1})}{\partial x_{k+1}} = \mathbf{0}\\
+    \lambda_k
+    &= r_x(x_k, u_k) + \gamma F_x^T(x_k, u_k) \lambda_{k+1} \Leftarrow \lambda_k \coloneqq \frac{\partial V(x_k)}{\partial x_k}\\
+    \mathbf{0} 
+    &= r_u(x_k, u_k) + \gamma F_u^T(x_k, u_k)\lambda_{k+1}
+\end{align*}
+
+Enhanced Value Loss
+\begin{align*}
+    L^V = \ 
+    &\|r(x_k, u_k) + \gamma V(x_{k+1}) - V(x_k) \|^2\\
+    & + \|r_x(x_k, u_k) + \gamma F_x^T(x_k, u_k)\lambda_{k+1}- \lambda_k\|^2\\
+    & + \|r_u(x_k, u_k) + \gamma F_u^T(x_k, u_k)\lambda_{k+1}\|^2
+\end{align*}
+
+Combined PPO Objective
+\begin{align*}
+    L_t^{C L I P+V+S}(\theta)=\hat{\mathbb{E}}_t\left[L_t^{C L I P}(\theta)-c_1 L_t^{V}(\theta)+c_2 S\left[\pi_\theta\right]\left(s_t\right)\right]
+\end{align*}
+
+Generalized Advantage Estimation for State Derivatives
+\begin{align*}
+    \hat{A}_t &= -V\left(s_t\right)+r_t+\gamma r_{t+1}+\cdots+\gamma^{T-t+1} r_{T-1}+\gamma^{T-t} V\left(s_T\right)\\
+     \hat{A}_t &= \delta_t+(\gamma \lambda) \delta_{t+1}+\cdots+\cdots+(\gamma \lambda)^{T-t+1} \delta_{T-1} \\
+    & \text { where } \quad \delta_t=r_t+\gamma V\left(s_{t+1}\right)-V\left(s_t\right)
+\end{align*}
+
+\section*{Explicit Dynamics Models}
+
+\subsection*{Pendulum}
+
+\begin{align*}
+    \mathbf{x} &= [\cos\theta,\ \sin\theta,\ \dot\theta]^T\\
+    \dot{\mathbf{x}} &= 
+    \begin{bmatrix}
+        -\sin\theta\\\cos\theta\\\frac{3g}{2l}\sin\theta + \frac{3}{ml^2}u
+    \end{bmatrix}
+\end{align*}
+
+Equation of Motion
+\begin{align*}
+    x_{k+1} 
+    &= x_k + \dot{x}_k\mathrm{d}t\\
+    &= F(x_k, u_k) \\
+    &= 
+    \left[
+        \begin{array}{c}
+        \cos \theta \cos (\dot{\theta} \mathrm{d}t)-\sin \theta \sin (\dot{\theta} \mathrm{d}t) \\
+        \sin \theta \cos (\dot{\theta} \mathrm{d}t)+\cos \theta \sin (\dot{\theta} \mathrm{d}t) \\
+        \dot{\theta}+\left(\frac{3g}{2 l} \sin \theta+\frac{3}{m l^2} u\right) \mathrm{d}t
+        \end{array}
+    \right]
+\end{align*}
+
+\begin{align*}
+    \frac{\partial F}{\partial x_k} 
+    &= F_x(x_k, u_k)\\
+    &= 
+    \left[
+        \begin{array}{ccc}
+        \cos (\dot{\theta} \mathrm{d}t) & -\sin (\dot{\theta} \mathrm{d}t) & -\mathrm{d}t \cos \theta \sin (\dot{\theta} \mathrm{d}t)-\mathrm{d}t \sin \theta \cos (\dot{\theta} \mathrm{d}t) \\
+        \sin (\dot{\theta} \mathrm{d}t) & \cos (\dot{\theta} \mathrm{d}t) & -\mathrm{d}t \sin \theta \sin (\dot{\theta} \mathrm{d}t)+\mathrm{d}t \cos \theta \cos (\dot{\theta} \mathrm{d}t) \\
+        0 & \frac{3 g}{2 l} \mathrm{d}t & 1
+        \end{array}
+    \right]\\
+    \frac{\partial F}{\partial u_k} 
+    &= F_u(x_k, u_k) \\
+    &= 
+    \left[\begin{array}{c}0\\0\\\frac{3\mathrm{d}t}{ml^2}\end{array}\right]
+\end{align*}
+
+Quadratic Rewards
+\begin{align*}
+    r_k 
+    &= - (\theta^2 + 0.1 \dot{\theta}^2 + 0.001 u^2)\\
+    \frac{\partial r_k}{\partial x_k}
+    &= r_x = 
+    \begin{bmatrix}
+        2\theta\sin\theta\\-2\theta\cos\theta\\-0.2\dot{\theta}
+    \end{bmatrix}\\
+    \frac{\partial r_k}{\partial u_k}
+    &= r_u =
+    \begin{bmatrix}
+        -0.002u
+    \end{bmatrix}
+\end{align*}
+
+\subsection*{Cart-Pole}
+
+\begin{align*}
+    \mathbf x 
+    &= [x, \dot{x}, \theta, \dot{\theta}]^T\\
+    \dot{\mathbf{x}} 
+    &= 
+    \begin{bmatrix}
+        \dot{x}\\
+        \frac{u+m_p l\left(\dot{\theta}^2 \sin \theta-\ddot{\theta} \cos \theta\right)}{m_c+m_p}\\
+        \dot{\theta}\\
+        \frac{g \sin \theta+\cos \theta\left(\frac{-u-m_p l \dot{\theta}^2 \sin \theta}{m_c+m_p}\right)}{l\left(\frac{4}{3}-\frac{m_p \cos ^2 \theta}{m_c+m_p}\right)}
+    \end{bmatrix}\\
+    \mathbf{s} &\coloneqq [x, \dot{x}, \theta, \dot{\theta}, u]^T
+\end{align*}
+
+
+Equation of Motion
+\begin{align*}
+    x_{k+1} 
+    &= x_k + \dot{x}_k\mathrm{d}t\\
+    &= F(x_k, u_k) \\
+    &= 
+    \begin{bmatrix}
+        x + \dot{x}\mathrm{d}t\\
+        \dot{x} + \frac{u+m_p l\left(\dot{\theta}^2 \sin \theta-\ddot{\theta} \cos \theta\right)}{m_c+m_p}\mathrm{d}t\\
+        \theta + \dot{\theta}\mathrm{d}t\\
+        \dot{\theta} + \frac{g \sin \theta+\cos \theta\left(\frac{-u-m_p l \dot{\theta}^2 \sin \theta}{m_c+m_p}\right)}{l\left(\frac{4}{3}-\frac{m_p \cos ^2 \theta}{m_c+m_p}\right)}\mathrm{d}t
+    \end{bmatrix}
+\end{align*}
+
+
+\begin{align*}
+    \frac{\partial F}{\partial s_k} 
+    &= 
+    \left[\begin{array}{ccccc}
+    1 & \mathrm{d}t & 0 & 0 & 0\\
+    0 & 1 & \frac{\partial F_2}{\partial \theta} & \mathrm{d}t\,{\left(\frac{2\,l\,m_p \,\dot{\theta} \,\sin \left(\theta \right)}{m_c +m_p }-\frac{2\,l\,{m_p }^2 \,\dot{\theta} \,{\cos \left(\theta \right)}^2 \,\sin \left(\theta \right)}{\sigma_3 }\right)} & \mathrm{d}t\,{\left(\frac{1}{m_c +m_p }-\frac{\sigma_6 }{\sigma_3 }\right)}\\
+    0 & 0 & 1 & \mathrm{d}t & 0\\
+    0 & 0 & -\frac{\mathrm{d}t\,\sigma_2 }{l\,\sigma_5 }-\frac{2\,\mathrm{d}t\,m_p \,\cos \left(\theta \right)\,\sin \left(\theta \right)\,\sigma_1 }{l\,{\left(m_c +m_p \right)}\,{\sigma_5 }^2 } & \frac{2\,\mathrm{d}t\,m_p \,\dot{\theta} \,\cos \left(\theta \right)\,\sin \left(\theta \right)}{{\left(m_c +m_p \right)}\,\sigma_5 }+1 & \frac{\mathrm{d}t\,\cos \left(\theta \right)}{l\,{\left(m_c +m_p \right)}\,\sigma_5 }
+    \end{array}\right]\\
+    &\text{where}\\
+    &\frac{\partial F_2}{\partial \theta} = \mathrm{d}t\,{\left(\frac{m_p \,\cos \left(\theta \right)\,\sigma_2 }{{\left(m_c +m_p \right)}\,\sigma_5 }-\frac{m_p \,\sin \left(\theta \right)\,\sigma_1 }{{\left(m_c +m_p \right)}\,\sigma_5 }+\frac{l\,m_p \,{\dot{\theta} }^2 \,\cos \left(\theta \right)}{m_c +m_p }+\frac{2\,{m_p }^2 \,{\cos \left(\theta \right)}^2 \,\sin \left(\theta \right)\,\sigma_1 }{{{\left(m_c +m_p \right)}}^2 \,{\sigma_5 }^2 }\right)}\\
+    &\;\;\sigma_1 =g\,\sin \left(\theta \right)-\frac{\cos \left(\theta \right)\,\sigma_4 }{m_c +m_p }\\
+    &\;\;\sigma_2 =g\,\cos \left(\theta \right)+\frac{\sin \left(\theta \right)\,\sigma_4 }{m_c +m_p }-\frac{l\,m_p \,{\dot{\theta} }^2 \,{\cos \left(\theta \right)}^2 }{m_c +m_p }\\
+    &\;\;\sigma_3 ={{\left(m_c +m_p \right)}}^2 \,\sigma_5 \\
+    &\;\;\sigma_4 =l\,m_p \,\sin \left(\theta \right)\,{\dot{\theta} }^2 +u\\
+    &\;\;\sigma_5 =\frac{\sigma_6 }{m_c +m_p }-\frac{4}{3}\\
+    &\;\;\sigma_6 =m_p \,{\cos \left(\theta \right)}^2 
+\end{align*}
+
+
+Quadratic Rewards
+\begin{align*}
+    r_k 
+    &=-diag(1, 0.1, 1, 0.1)\ \mathbf{x}^2 + 0.001 \mathbf{u}^2\\
+    &= -(x^2 + 0.1\dot{x}^2 + \theta^2 + 0.1\dot\theta^2 + 0.001*u^2)\\
+    \frac{\partial r_k}{\partial s_k}
+    &= 
+    \begin{bmatrix}
+        -2x\\
+        -0.2\dot{x}\\
+        -2\theta\\
+        -0.2\dot{\theta}\\
+        -0.002u
+    \end{bmatrix}
+\end{align*}
+
+
+\end{document}
