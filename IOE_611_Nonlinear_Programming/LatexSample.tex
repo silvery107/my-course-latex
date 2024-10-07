@@ -1,0 +1,424 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Sample \LaTeX\ file; taken from notes for IOE 519\hfill \copyright Marina A. Epelman\hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+
+\begin{document}
+\title{IOE 519: Introduction to Nonlinear Programming}
+\author{\copyright Marina A. Epelman}
+\maketitle
+%**********************************
+\section{Calculus and analysis review}
+
+Almost all books on nonlinear programming have an appendix reviewing the relevant notions. 
+
+Most of these should be familiar to you from a course in analysis. Most of material in this course is based in some form on these concepts, therefore, to succeed in this course you should be not just familiar, but comfortable working with these concepts.
+\begin{center}
+\textbf{A few words on symbols and wording in mathematical statements}
+\end{center}
+Three symbols used frequently in these notes are
+\begin{itemize}
+\item $\forall$ --- read as ``for every,'' or ``for any,'' or ``for all.''
+\begin{itemize}
+\item E.g., the expression ``for any $x$ in $\reals^n$ such that $x$ is nonnegative...'' is abbreviated as ``$\forall x\in\reals^n$ such that $x\ge0$...''
+\end{itemize}
+\item $\exists$  --- read as ``there exists a...'' or, less formally, ``one can find a...''
+\begin{itemize}
+\item E.g., the expression ``for any $x\in S$, there exists (or one can find) a value $\delta>0$ such that $\|x\|\le \delta$'' is abbreviated as ``$\forall x\in S,\ \exists \delta>0$ such that  $\|x\|\le \delta$.''
+\item Note that the above is meant to indicate that the value of $\delta$ can depend on the specific $x$; however, if the statement read ``one can find (or there exists) a value $\delta>0$ such that  $\|x\|\le \delta$ for any $x\in S$'' (abbreviated as ``$\exists\delta>0$: $\|x\|\le \delta\ \forall x\in S$''), that would mean that \emph{the same} value of $\delta$ has to ``work'' for every $x\in S$.
+\end{itemize}
+\item $\Leftrightarrow$ --- read as ``if and only if.''
+\end{itemize}
+\begin{center}
+\textbf{Vectors and Norms}
+\end{center}
+\begin{itemize}
+\item $\reals^n$: set of $n$-dimensional real vectors $(x_1,\ldots,x_n)^T$ (``$x^T$'' --- transpose)
+\item Definition: \emph{norm} $\|\cdot\|$ on $\reals^n$: a mapping of $\reals^n$ into $\reals$ such that:
+\begin{enumerate}
+\item$\|x\|\ge0\ \forall x\in\reals^n$; $\|x\|=0\Leftrightarrow x=0$. 
+\item$\|cx\|=|c|\cdot\|x\|\ \forall c\in \reals,x\in\reals^n$.
+\item$\|x+y\|\le\|x\|+\|y\|\ \forall x,y\in \reals^n$.
+\end{enumerate}
+
+\item Euclidean norm: $\|\cdot\|_2$: $\|x\|_2=\sqrt{x^Tx}=\left(\sum_{i=1}^nx_i^2\right)^{1/2}$.
+\begin{itemize}
+\item Schwartz inequality: $|x^Ty|\le\|x\|_2\cdot\|y\|_2$; equality holds if and only if $x=\alpha y$.
+\end{itemize}
+\item Other norm examples: $\|x\|_1=\sum_{i=1}^n|x_i|$; $\|x\|_\infty=\max_{i=1,\ldots,n}|x_i|$, etc.
+\item All norms in $\reals^n$ are \emph{equivalent}, i.e., for any $\|\cdot\|^1$ and $\|\cdot\|^2$
+$\exists\alpha_1,\alpha_2>0$ s.t. $\alpha_1\|x\|^1\le\|x\|^2\le\alpha_2\|x\|^1\ \forall x\in\reals^n$.
+\item \emph{$\epsilon$--Neighborhood}:  $N_\epsilon(x)=B(x,\epsilon)=\{y\ :\ \|y-x\|\le\epsilon\}$ (sometimes --- strict inequality).
+\end{itemize}
+\begin{center}
+\textbf{Sequences and Limits.}
+\end{center}
+\textbf{Sequences in $\reals$}
+\begin{itemize}
+\item Notation: a \emph{sequence}: $\{x_k\ :\ k=1,2,\ldots\}\subset\reals$, $\{x_k\}$ for short.
+\item Definition: $\{x_k\}\subset\reals$ \emph{converges} to $x\in \reals$ ($x_k\rightarrow x$,
+$\lim_{k\rightarrow\infty}x_k=x$) if
+$$
+\forall\epsilon>0\ \exists K:\ |x_k-x|\le\epsilon\ (\text{equiv.\ }x_k\in B(x,\epsilon))\ \forall k\ge K.
+$$
+$x_k\rightarrow\infty\ (-\infty)$ if
+$$
+\forall A\ \exists K:\ x_k\ge A\ (x_k\le A)\ \forall k\ge K.
+$$
+\item Definition: $\{x_k\}$ is \emph{bounded above (below)}:  $\exists A: x_k\le A\ (x_k\ge A)\
+\forall k$.
+\item Definition: $\{x_k\}$ is \emph{bounded}:  $\{|x_k|\}$ is bounded; equivalently, $\{x_k\}$ bounded
+above and below.
+\item Definition: $\{x_k\}$ is \emph{nonincreasing (nondecreasing)}:  $x_{k+1}\le x_k\
+(x_{k+1}\ge x_k)\ \forall k$;\\
+\emph{monotone}: nondecreasing or nonincreasing.
+\item Proposition: Every monotone sequence in $\reals$ has a limit (possibly infinite). If it is also bounded, the
+limit is finite.  
+\end{itemize}
+\textbf{Sequences in $\reals^n$}
+\begin{itemize}
+\item Definition: $\{x_k\}\subset\reals^n$ \emph{converges to $x\in\reals^n$ (is bounded)} if
+$\{x_k^i\}$ (the sequence of $i$th coordinates of $x_k$'s) converges to the $x^i$ (is bounded) $\forall i$.
+\item Propositions: \begin{itemize}
+\item $x_k\rightarrow x\Leftrightarrow\|x_k-x\|\rightarrow0$
+\item $\{x_k\}$ is bounded$\Leftrightarrow\{\|x_k\|\}$ is bounded
+\end{itemize}
+\item Note: $\|x_n\|\rightarrow\|x\|$ does not imply that $x_n\rightarrow x$!! (Unless $x=0$).
+\end{itemize}
+\textbf{Limit Points}
+\begin{itemize}
+\item Definition: $x$ is a limit point of $\{x_k\}$ if there exists an infinite subsequence of $\{x_k\}$ that
+converges to $x$.
+\item Definition: $x$ is a limit point of $A\subseteq\reals^n$ if there exists an infinite sequence $\{x_k\}\subset A$
+that converges to $x$.
+\item To see the difference between limits and limit points, consider the sequence
+$$\{(1,0),(0,1),(-1,0),(0,-1),(1,0),(0,1),(-1,0),(0,-1),\ldots\}$$
+\item Proposition: let $\{x_k\}\subset\reals^n$
+\begin{itemize}
+\item If $\{x_k\}$ is bounded, then $\{x_k\}$ converges if and only if it has a unique limit point
+\item If $\{x_k\}$ is bounded, it has at least one limit point
+\end{itemize}
+\end{itemize}
+\begin{center}
+\textbf{Infimum and Supremum}
+\end{center}
+\begin{itemize}
+\item Let $A\subset\reals$.\\
+\emph{Supremum} of $A$ ($\sup A$): smallest $y\in\reals$ that satisfies $x\le y\ \forall x\in A$.\\
+\emph{Infimum} of $A$ ($\inf A$): largest $y\in\reals$ that satisfies $x\ge y\ \forall x\in A$.
+\item Not the same as \emph{maximum} and \emph{minimum}, which are the largest and smallest elements of the set $A$! Consider, for example, $A=(0,1)$.
+\end{itemize}
+\begin{center}
+\textbf{Closed and Open Sets}
+\end{center}
+\begin{itemize}
+\item Definition: a set $A\subseteq \reals^n$ is closed if it contains all its limit points. In other words, for any sequence $\{x_k\}\subset A$ that has a limit $x$, $x\in A$.
+\item Definition: a set $A\subseteq \reals^n$ is open if its complement, $\reals^n\backslash A$, is closed
+\item Definition: a point $x\in A$ is \emph{interior} if there is a neighborhood of $x$ contained in $A$
+\item Proposition\begin{enumerate}
+\item A set is open $\Leftrightarrow$ All of its elements are interior points.
+\item Union of \emph{finitely many} closed sets is closed.
+\item Intersection of closed sets is closed.
+\item Union of open sets is open.
+\item Intersection of \emph{finitely many} open sets is open.
+\item Every subspace of $\reals^n$ is closed.
+\end{enumerate}
+\item Examples: neighborhoods of $x$:\\
+$\{y\ :\ \|y-x\|\le\epsilon\}$ --- closed\\
+$\{y\ :\ \|y-x\|<\epsilon\}$ --- open
+\item Some sets are neither: $(0,1]$.
+\end{itemize}
+\begin{center}
+\textbf{Functions and Continuity}
+\end{center}
+\begin{itemize}
+\item $A\subseteq\reals^m$, $f:A\rightarrow\reals$ -- a function.
+\item Definition: $f$ is \emph{continuous} at $\bar x$ if
+$$
+\forall\epsilon>0\ \exists\delta>0:\ x\in A,\ \|x-\bar x\|<\delta\Rightarrow|f(x)-f(\bar x)|<\epsilon.
+$$
+\item Proposition: $f$ is continuous at $\bar x$ $\Leftrightarrow$ for any $\{x_n\}\subset A:\ x_n\rightarrow \bar x$ we have
+$f(x_n)\rightarrow f(\bar x)$.
+(In other words, $\lim f(x_n)=f(\lim x_n)$.)
+\item Proposition:
+\begin{itemize}
+\item Sums, products and inverses of continuous functions are continuous (in the last case, provided the
+function is never zero).
+\item Composition of two continuous functions is continuous.
+\item Any vector norm is a continuous function.
+\end{itemize}
+\end{itemize}
+\begin{center}
+\textbf{Differentiation}
+\end{center}
+\textbf{Real-valued functions:} Let $f:X\rightarrow\reals$, where $X\subset\reals^n$ is open.
+\begin{itemize}
+\item Definition: $f$ is \emph{differentiable} at $\bar x\in X$ if there exists a vector $\gfb$ (the \emph{gradient} of $f$ at $\bar x$) and a function $\alpha_{\bar x}(y):X\rightarrow\reals$ satisfying $\lim_{y\rightarrow0}\alpha_{\bar x}(y)=0$, such that for each $x\in X$
+$$
+f(x)=f(\bar x)+\gfb^T(x-\bar x)+\|x-\bar x\|\alpha_{\bar x}(x-\bar x).
+$$
+$f$ is \emph{differentiable on $X$} if $f$ is differentiable $\forall\bar x\in X$. The gradient
+vector is a vector of partial derivatives:
+$$
+\gfb=\left(\frac{\partial f(\bar x)}{\partial x_1},\ldots,
+\frac{\partial f(\bar x)}{\partial x_n}\right)^T.
+$$
+The \emph{directional derivative} of $f$ at $\bar x$ in the direction
+$d$ is
+$$
+\lim_{\lambda\rightarrow0}\frac{f(\bar x+\lambda d)-f(\bar
+x)}{\lambda} =\gfb^Td
+$$
+\item
+Definition: the function $f$ is \emph{twice differentiable} at $\bar x\in X$ if
+there exists a vector $\gfb$ and an $n\times n$ symmetric matrix $H(\bar x)$
+(the \emph{Hessian} of $f$ at $\bar x$) such that for each $x\in X$
+$$
+f(x)=f(\bar x)+\gfb^T(x-\bar x)+\oh(x-\bar x)^T\hfb(x-\bar x)+
+\|x-\bar x\|^2\alpha_{\bar x}(x-\bar x),
+$$
+and $\lim_{y\rightarrow 0}\alpha_{\bar x}(y)=0$. $f$ is \emph{twice
+differentiable on $X$} if $f$ is twice differentiable $\forall\bar
+x\in X$. The Hessian, which we often denote by $H(x)$ for short, is a matrix of second partial derivatives:
+$$
+[H(x)]_{ij}=\frac{\partial^2 f(\bar x)}{\partial x_i\partial x_j},
+$$
+and for functions with continuous second derivatives, it will always be symmetric:
+$$
+\frac{\partial^2 f(\bar x)}{\partial x_i\partial x_j}=\frac{\partial^2 f(\bar x)}{\partial x_j\partial x_i}
+$$
+\item Example:$$f(x)=3x_1^2x_2^3+x_2^2x_3^3$$
+$$
+\nabla f(x)=\left(
+\begin{array}{c}
+6x_1x_2^3\\
+9x_1^2x_2^2+2x_2x_3^3\\
+3x_2^2x_3^2\\
+\end{array}
+\right)
+$$
+$$
+H(x)=\left[
+\begin{array}{ccc}
+6x_2^3&18x_1x_2^2&0\\
+18x_1x_2^2&18x_1^2x_2+2x_3^3&6x_2x_3^2\\
+0&6x_2x_3^2&6x_2^2x_3
+\end{array}
+\right]
+$$
+\item See additional handout to verify your understanding and derive the gradient and Hessian of linear and quadratic functions.
+\end{itemize}
+
+\textbf{Vector-valued functions:} Let $f:X\rightarrow\reals^m$, where $X\subset\reals^n$ is open.
+\begin{itemize}
+\item
+$$
+f(x)=f(x_1,\ldots,x_n)=\left(\begin{array}{c}
+f_1(x_1,\ldots,x_n)\\
+f_2(x_1,\ldots,x_n)\\
+\vdots\\
+f_m(x_1,\ldots,x_n)\\
+\end{array}\right),
+$$
+where each of the functions $f_i$ is a real-valued function.
+\item Definition: the \emph{Jacobian} of $f$ at point $\bar x$ is the matrix whose $j$th \underline{row} is the gradient of $f_j$ at $\bar x$, transposed. More specifically, the Jacobian of $f$ at $\bar x$ is defined as $\nabla f(\bar x)^T$, where $\nabla f(\bar x)$ is the matrix with entries:
+$$
+[\nabla f(\bar x)]_{ij}=\frac{\partial f_j(\bar x)}{\partial x_i}.
+$$
+Notice that the $j$th \underline{column} of $\nabla f(\bar x)$ is the gradient of $f_j$ at $\bar x$ (what happens when $m=1$?)
+\item Example:
+$$
+f(x)=\left(
+\begin{array}{c}
+\sin x_1+\cos x_2\\
+e^{3x_1+x_2^2}\\
+4x_1^3+7x_1x_2^2
+\end{array}
+\right).
+$$
+Then
+$$
+\nabla f(x)^T=\left(\begin{array}{cc}
+\cos x_1&-\sin x_2\\
+3e^{3x_1+x_2^2}&2x_2e^{3x_1+x_2^2}\\
+12x_1^2+7x_2^2&14x_1x_2\\
+\end{array}\right).
+$$
+\end{itemize}
+Other well-known results from calculus and analysis will be introduced throughout the course as needed.
+
+\newpage
+\section{Examples of nonlinear programming problems formulations}
+\subsection{Forms and components of a mathematical programming  problems}
+
+A \emph{mathematical programming problem} or, simply, a \emph{mathematical program}  is a mathematical formulation of an optimization problem.
+
+\textbf{Unconstrained Problem:}
+
+$$
+\begin{array}{ccl}
+\text{(P)}&\text{minimize}_x&f(x)\\
+&\st&x\in X,
+\end{array}
+$$
+where $x=(x_1,\ldots,x_n)^T\in\reals^n$, $f(x):\reals^n\rightarrow\reals$,
+and $X$ is an open set (usually, but not always, $X=\reals^n$).
+
+\textbf{Constrained Problem:}
+
+$$
+\begin{array}{ccll}
+\text{(P)}&\text{mininimize}_x&f(x)&\\
+&\st&g_i(x)\le 0&i=1,\ldots,m\\ 
+&&h_i(x)=0&i=1,\ldots,l\\ 
+&&x\in X,\end{array}
+$$
+where  $g_1(x),\ldots, g_m(x), h_1(x),\ldots,
+h_l(x):\reals^n\rightarrow\reals$.
+
+Let $g(x)=(g_1(x),\ldots,g_m(x))^T:\reals^n\rightarrow\reals^m$,
+$h(x)=(h_1(x),\ldots,h_l(x))^T:\reals^n\rightarrow\reals^l$. Then (P) can
+be written as
+\begin{equation}\label{eq:1}
+\begin{array}{ccl}
+\text{(P)}&\text{minimize}_x&f(x)\\ 
+&\st&g(x)\preceq 0\\
+&&h(x)=0\\
+&&x\in X. \\
+\end{array}
+\end{equation}
+
+Some terminology: Function $f(x)$ in \eqref{eq:1} is the \emph{objective function}. Restrictions ``$h_i(x)=0$'' are referred to as \emph{equality constraints}, while ``$g_i(x)\le 0$'' are \emph{inequality constraints}. Notice that we do not use constraints in the form ``$g_i(x)<0$''! 
+
+A point $x$ is \emph{feasible} for (P) if it satisfies all the constraints.  (For an unconstrained problem, $x\in X$.) The set of all feasible points forms the \emph{feasible region}, or \emph{feasible set} (let us denote it by $S$). The goal of an optimization problem in minimization form, as above, is to find a feasible point $\bar x$ such that $f(\bar x)\le f(x)$ for any other feasible point $x$.
+
+
+\subsection{Markowitz portfolio optimization model}
+
+Suppose one has the opportunity to invest in $n$ assets. Their future returns are represented by random variables, $R_1,\ldots,R_n$, whose expected values and covariances, $\text{E}[R_i],\ i=1,\ldots,n$ and $\text{Cov}(R_i,R_j),\ i,j=1,\ldots,n$, respectively, can be estimated based on historical data and, possibly, other considerations. At least one of these assets is a risk-free asset.
+
+Suppose $x_i,\ i=1,\ldots,n$, are the fractions of your wealth allocated to each of the assets (that is, $x\ge0$ and $\sum_{i=1}^nx_i=1$). The return of the resulting portfolio is a random variable $\sum_{i=1}^nx_iR_i$ with mean $\sum_{i=1}^nx_i\text{E}[R_i]$ and variance $\sum_{i=1}^n\sum_{j=1}^nx_ix_j\text{Cov}(R_i,R_j)$. A portfolio is usually chosen to optimize some measure of a tradeoff between the expected return and the risk, such as
+$$
+\begin{array}{cl}
+\text{maximize}&\sum_{i=1}^nx_i\text{E}[R_i]-\mu\sum_{i=1}^n\sum_{j=1}^nx_ix_j\text{Cov}(R_i,R_j)\\
+\st&\sum_{i=1}^nx_i=1\\
+&x\ge0,
+\end{array}
+$$
+where $\mu>0$ is a (fixed) parameter reflecting the investor's preferences in the above tradeoff. Since it is hard to assess anybody's value of $\mu$, the above problem can (and should) be solved for a variety of values of $\mu$, thus generating a variety of portfolios on the \emph{efficient frontier}.
+
+\subsection{Least squares problem (parameter estimation)}
+
+Applications in model constructions, statistics (e.g., linear regression), neural networks, etc.
+
+We consider a linear measurement model, i.e., we stipulate that an (output) quantity of interest $y\in\reals$ can be expressed as a linear function $y\approx a^Tx$ of input $a\in\reals^n$ and model parameters $x\in\reals^n$. Our goal is to find the vector of parameters $x$ which provide the ``best fit'' for the available set of input-output pairs $(a_i,y_i),\ i=1,\ldots,m$. If ``fit'' is measured by sum of squared errors between estimated and measured outputs, solution to the following optimization problem
+$$
+\begin{array}{cllll}
+\text{minimize}&\sum_{i=1}^m(v_i)^2&&=\text{minimize}_{x\in\reals^n}\sum_{i=1}^m(y_i-a_i^Tx)^2&=\text{minimize}_{x\in\reals^n}\|Ax-y\|_2^2,\\
+x\in\reals^n\\
+\st&v_i=y_i-a_i^Tx,&i=1,\ldots,m\\
+\end{array}
+$$
+provides the best fit. Here, $A$ is the matrix with rows $a_i^T$.
+
+\subsection{Maximum likelihood estimation}
+
+Consider a family of probability distributions $p_\theta(\cdot)$ on $\reals$, parameterized by vector $\theta$. E.g., we could be considering the family of exponential distributions, which is parameterized by a single parameter $\theta=\lambda>0$ and has the form
+$$
+p_\lambda(t)=\begin{cases}\lambda e^{-\lambda t},&t\ge0\\
+0,&t<0.
+\end{cases}
+$$ 
+Another example of a parametric family of probability distributions is the Normal distribution, parameterized by $\theta=(\mu,\sigma)$, where $\mu$ is the mean, and $\sigma$ --- the standard deviation, of the distribution.
+
+When considered as a function of $\theta$ for a particular observation of a random variable $y\in\reals$, the function $p_\theta(y)$ is called the \emph{likelihood function}. It is more convenient to work with its logarithm, which is called the \emph{log-likelihood function}:
+$$
+l(\theta)=\log p_\theta(y).
+$$ 
+Consider the problem of estimating the value of the parameter vector $\theta$ based on observing one sample point $y$ from the distribution. One possible method, \emph{maximum likelihood (ML) estimation}, is to estimate $\theta$ as 
+$$
+\hat \theta=\argmax_\theta p_\theta(y)=\argmax_\theta l(\theta),
+$$
+i.e., to choose as the estimate the value of the parameter that maximizes the likelihood (or the log-likelihood) function for the observed value of $y$.
+
+If there is prior information available about $\theta$, we can add constraint $\theta\in C\subseteq\reals^n$ explicitly, or impose it implicitly, by redefining $p_\theta(y)=0$ for $\theta\not\in C$ (note that in that case $l(\theta)=-\infty$ for $\theta\not\in C$). 
+
+For $m$ iid sample points $(y_1,\ldots,y_m)$, the log-likelihood function is
+$$
+l(\theta)=\log\left(\prod_{i=1}^m p_\theta(y_i)\right)=\sum_{i=1}^m\log p_\theta(y_i).
+$$ 
+The ML estimation is thus an optimization problem:
+$$
+\text{maximize}\ l(\theta)\text{ subject to }\theta\in C.
+$$
+
+For example, returning to the linear measurement model $y=a^Tx+v$, let us now assume that the error $v$ is iid random noise with known density $p(\cdot)$. If there are $m$ measurement/output pairs $(a_i,y_i)$ available, then the likelihood function is
+$$
+p_x(y)=\prod_{i=1}^mp(y_i-a_i^Tx),
+$$
+and the log-likelihood function is
+$$
+l(x)=\sum_{i=1}^m\log p(y_i-a_i^Tx).
+$$
+
+For example, suppose the noise is Gaussian (or Normal) with mean $0$ and standard deviation $\sigma$. Then $p(z)=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{z^2}{2\sigma^2}}$ and the log-likelihood function is
+$$
+l(x)=-\oh\log(2\pi\sigma)-\frac{1}{2\sigma^2}\|Ax-y\|_2^2.
+$$
+Therefore, the ML estimate of $x$ is $\arg\min_x\|Ax-y\|_2^2$, the solution of the least squares approximation problem (note that the analysis is the same whether $\sigma$ is known or not).
+
+\subsection{Current in a resistive electric network}
+
+Consider a linear resistive electric network with node set $N$ and arc set $A$. Let $v_i$ be the  voltage of node $i$ and let $x_{ij}$ be the current on arc $(i,j)$. Kirchhoff's current law says that  for each node $i$, the total incoming current is equal to the total outgoing current: 
+$$
+\sum_{j:(j,i)\in A}x_{ji}=\sum_{j:(i,j)\in A}x_{ij}.
+$$
+Ohm's law says that the current $x_{ij}$ and the voltage drop $v_i-v_j$ along each arc $(i, j )$ are related by 
+$$
+v_i-v_j=R_{ij}x_{ij}-t_{ij}.
+$$
+where $R_{ij}\ge0$ is a resistance parameter, and $t_{ij}\ge0$ is another parameter that is nonzero when  there is voltage source along the arc $(i, j )$ ($t_{ij}$ is positive if the voltage source pushes current in the direction from $i$ to $j$). 
+
+
+
+Given the arc resistance and arc voltage parameters $R_{ij}$ and $t_{ij}$ for all $(i,j)\in A$, the current in the system is distributed so that to minimize the ``energy loss'' in the system, while satisfying Kirchhoff's current law. This can be modeled as the following nonlinear
+programming problem:
+$$
+\begin{array}{cll}
+\text{minimize}&\sum_{(i,j)\in A}\left(\oh R_{ij}x_{ij}^2-t_{ij}x_{ij}\right)\\
+\st&\sum_{j:(i,j)\in A}x_{ij}=\sum_{j:(j,i)\in
+A}x_{ji}&\forall i\in N\\
+\end{array}
+$$
+
+It can be shown by studying the \emph{optimality conditions} for this
+problem that the optimal solution  of the
+above problem satisfies Ohm's law. Moreover, if a vector of currents values $x^\star$ and a vector of node voltage values $v^\star$ together satisfy Kirchhoff's and Ohm's laws, then the vector $x^\star$ is an optimal solution of the above optimization problem.
+
+
+
+\end{document}

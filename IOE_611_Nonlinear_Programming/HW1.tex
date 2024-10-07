@@ -1,0 +1,320 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Homework of IOE 611 Nonlinear Programming\hfill Yulun Zhuang \hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]}
+  {\end{proof}}
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bS}{\mathbb{S}}
+
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\T}{^\top}
+
+\begin{document}
+\title{IOE 611: Homework 1}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Problem 1}
+
+For a vector $x \in \mathbf{R}^n$, its $\ell_{\infty}$-norm is defined as $\|x\|_{\infty}=\max _{1 \leq i \leq n}\left|\alpha_i\right|$. Consider the following two optimization problems:
+
+$$
+\begin{gathered}
+(P 1) \min _x\|A x-b\|_{\infty} \\
+\text { s.t. } x \succeq 0
+\end{gathered}
+$$
+
+
+$$
+\begin{aligned}
+ { (P2) } \min _{y, t}~~~~&~~~~ t \\
+\text { s.t. }~~~~ & a_i^{\top} y-t \leq b_i\text {, } \\
+& -a_i^{\top} y-t \leq-b_i, \forall i=1, \ldots, k, \\
+& y \succeq 0 \text {. }
+\end{aligned}
+$$
+where $x \in \mathbf{R}^n$, and $a_i^{\top}$ is the $i$ th row of $A$. Note that $(P 2)$ is a linear program. Show that $(P 1)$ and $(P 2)$ are equivalent by showing that:
+
+(a) For every feasible solution $x$ of $(P 1)$, there exists a feasible solution $(y, t)$ of $(P 2)$ such that $t \leq\|A x-b\|_{\infty}$
+
+\begin{proof}
+    Notice that
+    $$
+    \begin{aligned}
+    \|A x-b\|_{\infty} & =\max _{i=1, \dots, k}\left|(A x-b)_i\right| \\
+    & =\max _{i =1, \dots, k}\left|a_i^{\top} x-b_i\right|
+    \end{aligned}
+    $$
+
+    For any feasible solution $x \succeq 0$ of $(P1)$, let
+    $$
+    \left\{\begin{array}{l}
+    \hat y=x\succeq 0\\
+    \hat t=\|A x-b\|_{\infty} =\max_{i}\left|a_i^{\top}\hat  y-b_i\right|
+    \end{array}\right.
+    $$
+    
+    For any $i=1, \dots, k$,
+    $$
+    \left\{\begin{array}{l}
+    \hat t\geq \left|a_i^{\top} \hat y-b_i\right|\\
+    \hat t \geq a_i^{\top} x-b_i \Leftrightarrow b_i \geq a_i^{\top} x-\hat t, \\
+    \hat t \geq b_i-a_i^{\top} x \Leftrightarrow-b_i \geq-a_i^{\top} x-\hat t,
+    \end{array}\right.
+    $$    
+    which implies $(\hat y, \hat t)$ is a feasible solution of (P2).
+\end{proof}
+
+(b) For every feasible solution $(y, t)$ of $(P 2)$, there exists a feasible solution $x$ of $P 1$ such that $\|A x-b\|_{\infty} \leq t$
+
+\begin{proof}
+    For any feasible solution $(y, t)$ of $(P 2)$, let $\hat x=y$. By definition
+    \begin{align*}
+    &y\succeq0\\
+    &a_i^{\top} y-t \leq b_i,  \forall i=1, \dots, k\\
+    &-a_i^{\top} y-t \leq-b_i,  \forall i=1, \dots, k
+    \end{align*}
+
+    For any $i=1, \dots, k$
+    \begin{align*}
+    &-t \leq a_i^{\top} y-b_i \leq t\\
+    &t \geq \left|a_i^{\top} y-b_i\right|\\
+    &t \geq \max _{i=1, \dots, k}\left|a_i^{\top} y-b_i\right| \\
+    &t \geq \|A y-b\|_{\infty} \\
+    &t \geq \left\|A \hat x-b\right\|_{\infty} 
+    \end{align*}
+    which implies $\hat x$ is a feasible solution of $(P1)$.
+\end{proof}
+
+\clearpage
+\section*{Problem 2}
+
+Derive a linear program equivalent to
+$$
+\min_x \|Ax-b\|_\infty + \rho\|x\|_1
+$$
+where $\rho\geq 0$.
+
+\begin{solution}
+    \begin{align*}
+        \min_{t, y, z} ~~ &t + \rho \sum_{j=1}^{n} z_j\\
+        s.t. ~~& a_i\T - t \leq b_i\\
+        &-a_i\T - t \leq -b_i \\
+        &y_j \leq z_j\\
+        &-y_j \leq z_j\\
+        &i = 1, \dots, k\\
+        &j = 1, \dots, n
+    \end{align*}
+\end{solution}
+
+\clearpage
+\section*{Problem 3}
+Let $C \subseteq \mathbf{R}^n$ be a convex set, with $x_1, \ldots, x_k \in C$, and let $\theta_1, \ldots, \theta_k \in \mathbf{R}$ satisfy $\theta_i \geq 0$, $\theta_1+\cdots+\theta_k=1$. Show that $\theta_1 x_1+\cdots+\theta_k x_k \in C$.
+
+\begin{proof}
+    By induction, for $k=2$, $\theta_1 x_1 + \theta_2 x_2 \in C$ holds by the definition of convexity.
+    
+    Assume this holds for $k=m, m\geq 2$.
+    $$\theta_1 x_1+\cdots+\theta_m x_m \in C$$
+
+    For $k=m+1$, $x_1, \dots, x_m, x_{m+1} \in C$, and $\theta_1, \dots, \theta_m,  \theta_{m+1}\in \RR$ satisfy $\theta_i \geq 0$, $\sum_{i=1}^{m+1}\theta_i=1$.
+    \begin{align*}
+        &\sum_{i=1}^{m+1} \theta_i\alpha_i\\
+        & = \sum_{i=1}^{m} \theta_i\alpha_i + \theta_{m+1}x_{m+1}\\
+        &= (1-\theta_{m+1}) \sum_{i=1}^{m} \frac{\theta_i}{1-\theta_{m+1}}\alpha_i + \theta_{m+1}x_{m+1}
+    \end{align*}
+
+    Since $\sum_{i=1}^{m} \frac{\theta_i}{1-\theta_{m+1}}\alpha_i \in C$  by the induction hypothesis, and     
+    \begin{align*}
+        &\sum_{i=1}^{m+1}\theta_i=1\\
+        &\sum_{i=1}^{m}\theta_i = 1 - \theta_{m+1}\\
+        &\sum_{i=1}^{m} \frac{\theta_i}{1-\theta_{m+1}} = 1
+    \end{align*}
+
+    Original proposition holds for arbitrary $k$.
+\end{proof}
+
+\clearpage
+\section*{Problem 4}
+(a) Show that if a matrix is symmetric and has non-negative eigenvalues, then it must be PSD.
+
+\begin{proof}
+    Suppose $A\in \RR^{n\times n}$ is a symmetric matrix and has non-negative eigenvalues, we can decompose $A$ as
+    $$
+    A = \sum_{i=1}^{n}\lambda_i v_i v_i\T, i=1, \dots, n
+    $$
+    where $\lambda_i \geq 0$ are eigenvalues of $A$ and $v_i$ is the corresponding eigenvectors. Note that $\{v_i\}_{i\in[n]}$ is an orthonormal basis of $\RR^n$, i.e.
+    $$
+    v_i^T v_j= \begin{cases}0 & i \neq j \\ 1 & i=j\end{cases}
+    $$
+    
+    For any $x \in \mathbb{R}^n$, $\exists \alpha_i\in\RR, i=1, \dots, n$, we can represent it as
+    $$
+    x=\sum_{i=1}^n \alpha_i v_i
+    $$
+    
+    and then    
+    $$
+    \begin{aligned}
+    A x & =\left(\sum_{i=1}^n \lambda_i v_i v_i^{\top}\right)\left(\sum_{j=1}^n \alpha_j v_j\right) \\
+    & =\sum_{i, j=1}^n \lambda_i \alpha_j\left(v_i^{\top} v_j\right) v_j \\
+    & =\sum_{i=1}^n \lambda_i \alpha_i v_i, \\
+    x^{\top} A x & =\left(\sum_{i=1}^n \alpha_i v_i^{\top}\right)\left(\sum_{j=1}^n \lambda_j \alpha_j v_j\right) \\
+    & =\sum_{i, j=1}^n \lambda_j \alpha_i \alpha_j\left(v_i^{\top} v_j\right) \\
+    & =\sum_{i=1}^n \lambda_i \alpha_i^2 \geqslant 0 .
+    \end{aligned}
+    $$
+    
+    
+    Therefore, $A$ is PSD.
+
+\end{proof}
+
+
+(b) Show that a symmetric matrix $X$ is PSD if and only if it can be written as $X = V V\T$ , for
+some matrix $V$ .
+
+\begin{proof}
+    $\Rightarrow$: If a symmetric matrix X is PSD, it can be decomposed as
+    \begin{align*}
+        X &= \sum_{i=1}^{n} \lambda_i v_i v_i\T\\
+        & = Q\Lambda Q\T
+    \end{align*}
+    where $\lambda_i \geq 0$ are eigenvalues of $A$; $v_i$ is the corresponding eigenvectors; $Q = [v_1, \dots, v_n]$ is an orthogonal matrix and $\Lambda = diag(\lambda_1, \dots, \lambda_n)$ is a diagonal matrix.
+
+    Let $V =  Q \sqrt{\Lambda}$, where $\sqrt{\Lambda}= diag(\sqrt\lambda_1, \dots, \sqrt\lambda_n)$, we have
+    \begin{align*}
+        X &= Q  \sqrt{\Lambda}  \sqrt{\Lambda}\T Q\T\\
+        &=(Q \sqrt{\Lambda})(Q \sqrt{\Lambda})\T\\
+        &=V V\T
+    \end{align*}
+
+    $\Leftarrow$: If a symmetric matrix $X=VV\T$, for any $z\in\RR^n$, we have
+    \begin{align*}
+        z\T Xz &= z\T VV\T z\\
+        &= (V\T z)\T(V\T z)\\
+        &= \|V\T z\| \succeq 0
+    \end{align*}
+
+    Therefore, $X$ is PSD.
+\end{proof}
+
+\clearpage
+\section*{Problem 5}
+Show that the PSD cone is self-dual, that is, $(\bS_{+}^n)^* = \bS_{+}^n$.
+
+\begin{proof}
+    By the definition of dual cone, we have
+    $$
+    (\bS_{+}^n)^* = \{B \in \bS^n_{+}| \left<A, B\right> \geq 0, \forall A\in \bS^n_{+}\}
+    $$
+    where $\left<A, B\right> = tr(AB)$.
+
+    We now show that $\forall A\in \bS^n_{+}$, $\left<A, B\right> \geq 0$ if and only if $B \in \bS^n_{+}$.
+
+    $\Rightarrow$:
+    Suppose $B\notin \bS^n_{+}$, then there exists $z\in\RR^n$, such that
+    $ z\T Bz = tr(zz\T B) < 0 $. 
+    
+    Let $A = z z\T$ is PSD, then
+    $$
+    \left<A, B\right> = tr(AB) = tr(zz\T B) < 0
+    $$
+    which shows $B\notin (\bS^n_{+})^*$
+
+    $\Leftarrow$:
+    Since $A\in \bS^n_{+}$, A can be decomposed as 
+    $$A = \sum_{i=1}^{n}\lambda_i z_i z_i\T$$
+    where $\lambda_i \geq 0$ are eigenvalues.
+    Then, 
+    \begin{align*}
+        \left<A, B\right> 
+        &= tr(AB) \\
+        &= tr(B\sum_{i=1}^{n}\lambda_i z_i z_i\T)\\
+        &= \sum_{i=1}^{n}\lambda_i z_i\T B z_i \geq 0
+    \end{align*}
+    which shows $B\in (\bS^n_{+})^*$
+
+\end{proof}
+
+\clearpage
+\section*{Problem 6}
+The second-order cone is defined as $C = \{(x, t): \|x\|_2\leq t, t\geq0\}$.
+
+(a) Prove that $C$ is a cone ant it is convex.
+
+\begin{proof}
+    To show $C$ is a cone, for any $\lambda>0, (x, t) \in C$ we have
+    \[
+    \|\lambda x\|_2 = \lambda\|x\|_2 \leq \lambda t
+    \]
+    which implies $\lambda(x, t) = (\lambda x, \lambda t) \Leftrightarrow C$ is a cone.
+
+    To show $C$ is convex, for any $\left(x_1, t_1\right),\left(x_2, t_2\right) \in C$, $\theta \in[0,1]$, we have
+    \begin{align*}
+    \left\|\theta x_1+(1-\theta) x_2\right\|_2 & \leq \theta\left\|x_1\right\|_2+(1-\theta)\left\|x_2\right\|_2 \\
+    & \leq \theta t_1+(1-\theta) t_2
+    \end{align*}
+    which implies $\theta\left(x_1, t_1\right)+(1-\theta)\left(x_2, t_2\right)=\left(\theta x_1+(1-\theta) x_2, \theta t_1+(1-\theta) t_2\right)  \Leftrightarrow C$ is convex.
+\end{proof}
+
+(b) Let $P$ be a PSD matrix. Prove that the set $C = \{x|x\T Px\leq(a\T x)^2, a\T x\geq0\}$ is a cone and it is convex. This cone is called hyperbolic cone.
+
+\begin{proof}
+    To show $C$ is a cone, for any $\lambda>0, x \in C$,
+    \begin{align*}
+    (\lambda x)^{\top} P(\lambda x) 
+    & =\lambda^2 \left(x^{\top} P x\right) \\
+    & \leqslant \lambda^2\left(a^{\top} x\right)^2\\
+    &=\left(a^{\top}(\lambda x)\right)^2
+    \end{align*}
+    
+
+    Since $a^{\top} \lambda x  =\lambda a^{\top} x \geq 0$, $\lambda x \in C$. $C$ is a cone.
+\end{proof}
+
+
+\end{document}

@@ -1,0 +1,162 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Homework of IOE 611 Nonlinear Programming\hfill Yulun Zhuang \hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[Solution]}
+  {\end{proof}}
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bS}{\mathbb{S}}
+
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\T}{^\top}
+
+\begin{document}
+\title{IOE 611: Homework 2}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Problem 1}
+\textit{Inverse of an increasing convex function}. Suppose $f : \RR \rightarrow \RR$ is increasing and convex on its domain $(a, b)$. Let $g$ denote its inverse, i.e., the function with domain $(f(a), f(b))$ and $g(f(x)) = x$ for $a < x < b$. What can you say about convexity or concavity of $g$?
+
+
+
+
+\clearpage
+\section*{Problem 2}
+\textit{A family of concave utility functions}. For $0 < \alpha \leq 1$ let 
+\[
+u_\alpha(x) = \frac{x^\alpha - 1}{\alpha}
+\]
+with $\dom u_\alpha = \RR_+$. We also define $u_0(x) = \log x$ (with $\dom u_0 = \RR_{++}$).
+
+(a) Show that for $x>0$, $u_0(x) = \lim_{\alpha \rightarrow 0} u_\alpha(x)$.
+
+
+(b) Show that $u_\alpha$ are concave, monotone increasing, and all satisfy $u_\alpha(1) = 0$.
+
+\clearpage
+\section*{Problem 3}
+For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave.
+
+(a) $f(x)=e^x-1$ on $\RR$
+
+(b) $f\left(x_1, x_2\right)=x_1 x_2$ on $\RR_{++}^2$.
+
+(c) $f\left(x_1, x_2\right)=1 /\left(x_1 x_2\right)$ on $\RR_{++}^2$.
+
+(d) $f\left(x_1, x_2\right)=x_1 / x_2$ on $\RR_{++}^2$.
+
+(e) $f\left(x_1, x_2\right)=x_1^2 / x_2$ on $\RR \times \RR_{++}$.
+
+(f) $f\left(x_1, x_2\right)=x_1^\alpha x_2^{1-\alpha}$, where $0 \leq \alpha \leq 1$, on $\RR_{++}^2$.
+
+\clearpage
+\section*{Problem 4}
+Adapt the proof of concavity of the log-determinant function in §3.1.5 to show the following.
+
+(a) $f(X) = tr(X^-1)$ is convex on $\dom f = \bS^n_{++}$.
+
+(b) $f(X) = (\det X)^{1/n}$ is concave on $\dom f = \bS^n_{++}$.
+
+
+\clearpage
+\section*{Problem 5}
+\textit{Perspective of a function}.
+
+(a) Show that for $p>1$,
+\[
+f(x, t) = \frac{|x_1|^p + \dots + |x_n|^p}{t^{p-1}} = \frac{\|x\|^p_p}{t^{p-1}}
+\]
+is convex on $\{(x, t)|t>0\}$
+
+(b) Show that
+\[
+f(x) = \frac{\|Ax+b\|^2_2}{c\T x+d}
+\]
+is convex on $\{x|c\T x+d > 0\}$, where $A\in \RR^{m\times n}, b\in \RR^m, c\in\RR^n$ and $d\in \RR$.
+
+
+\clearpage
+\section*{Problem 6}
+\textit{Subgradient}. A vector $g\in \RR^n$ is a subgradient of function $f:\RR^n \rightarrow \RR$ at point $x\in\dom f$ if
+\[
+f(y) \geq f(x) + g\T (y-x)
+\] 
+for any $y\in\dom f$.
+
+(a) Suppose $f$ is a convex function, and $x\in\intr\dom f$. Prove that there exists a subgradient of $f$ at $x$.
+
+(b) Suppose $x\in\dom f$, but is not an interior point of the domain. Does there (always) exist a subgradient of $f$ at $x$?
+
+
+\clearpage
+\section*{Problem 7}
+Show that the so-called logarithmic barrier for the second order cone, $f(x, t) = -log(t^2 - x\T x)$ with $\dom f = \{(x,t) \in \RR^{n+1} | t>\|x\|_2\}$, is convex.
+While this can be done by demonstrating that the Hessian of f is positive semidefinite everywhere on its domain, the following is an outline of a much simpler and more elegant proof:
+
+(a) Show that $t-\frac{u\T u}{t}$ is a concave function on $\dom f$.
+
+(b) Show that $-\log (t - \frac{u\T u}{t})$ is a convex function on $\dom f$.
+
+(c) Show that $f$ is convex.
+
+
+\clearpage
+\section*{Problem 8}
+Suppose that $f(x): \RR^n \rightarrow \RR$ is a twice differentiable function (but not necessarily convex). Show that if $\bar x$ is a local minimum of $f(x)$, then we must have $\grad f(\bar x) = 0$.
+
+\clearpage
+\section*{Problem 9}
+Given a set of points $\{v_1, v_2, \dots, v_k\}$, define
+\[
+\Co\{v_1, v_2, \dots, v_k\} = \{\alpha_1 v_1 + \dots + \alpha_k v_k~|~\alpha_1 + \dots \alpha_k = 1, \alpha_1, \dots, \alpha_k \geq 0\}
+\]
+
+Show that the maximum of a convex function $f$ over $\Co\{v_1, v_2, \dots, v_k\}$ is achieved at one of its vertices, i.e.,
+
+\[
+\sup_{x\in\Co{v1, \dots, v_k}} f(x) = \max_{1\leq i \leq k} f(v_i)
+\]
+
+\end{document}
