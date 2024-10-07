@@ -59,7 +59,21 @@
 \section*{Problem 1}
 \textit{Inverse of an increasing convex function}. Suppose $f : \RR \rightarrow \RR$ is increasing and convex on its domain $(a, b)$. Let $g$ denote its inverse, i.e., the function with domain $(f(a), f(b))$ and $g(f(x)) = x$ for $a < x < b$. What can you say about convexity or concavity of $g$?
 
+\begin{proof}
+  Since $g$ and $f$ are both differentiable, by the chain rule we have
+  \begin{align*}
+    &g(f(x)) = x\\
+    &g'(f(x))f'(x) = 1\\
+    \Rightarrow~&g'(f(x)) = \frac{1}{f'(x)} > 0\\
+    &g''(f(x))f'(x)^2 + g'(f(x))f''(x) = 0\\
+    &g''(f(x))f'(x)^2 + \frac{f''(x)}{f'(x)} = 0\\
+    \Rightarrow~& g''(f(x)) = - \frac{f''(x)}{f'(x)^3} < 0
+  \end{align*}
 
+  Since $f(x)$ is increasing, $f'(x)>0$, such that $g'>0$. Also because $f(x)$ is convex, $f''(x)>=0, \forall x\in \dom f$, such that $g''<=0$. 
+  
+  Thus, $g$ is concave.
+\end{proof}
 
 
 \clearpage
@@ -71,9 +85,29 @@ u_\alpha(x) = \frac{x^\alpha - 1}{\alpha}
 with $\dom u_\alpha = \RR_+$. We also define $u_0(x) = \log x$ (with $\dom u_0 = \RR_{++}$).
 
 (a) Show that for $x>0$, $u_0(x) = \lim_{\alpha \rightarrow 0} u_\alpha(x)$.
-
+\begin{proof}
+  Since at $\lim_{\alpha\rightarrow0} u_\alpha(x)$, both numerator and denominator go to zero, by the L'Hopital's rule, we have
+  \begin{align*}
+    \lim_{\alpha\rightarrow0} u_\alpha(x) 
+    &=
+    \lim_{\alpha\rightarrow0} \frac{\frac{\dd}{\dd\alpha}(x^\alpha - 1)}{\frac{\dd}{\dd\alpha}\alpha}\\
+    &=
+    \lim_{\alpha\rightarrow0} \frac{x^\alpha\log(x)}{1}\\
+    &=
+    \log(x)
+  \end{align*}
+\end{proof}
 
 (b) Show that $u_\alpha$ are concave, monotone increasing, and all satisfy $u_\alpha(1) = 0$.
+
+\begin{proof}
+  For $\alpha\in(0, 1]$
+  \begin{align*}
+    &u_\alpha(1) = \frac{1^\alpha - 1}{\alpha} = 0\\
+    &u_\alpha'(x) = x^{\alpha-1}\geq0 \Rightarrow\text{monotone increasing}\\
+    &u_\alpha''(x) = (\alpha-1)x^{\alpha-2} \leq 0 \Rightarrow\text{concave}
+  \end{align*}
+\end{proof}
 
 \clearpage
 \section*{Problem 3}
