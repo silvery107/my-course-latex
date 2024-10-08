@@ -292,11 +292,54 @@ for any $y\in\dom f$.
 
 (a) Suppose $f$ is a convex function, and $x\in\intr\dom f$. Prove that there exists a subgradient of $f$ at $x$.
 
+\begin{proof}
+  Since $f$ is convex, $\epi f=\{(x, t) \mid f(x) \leq t, x \in \dom f\}$ is a convex set in $\RR^{n+1}$. Therefore, for any $x_0 \in \dom f$, $\left(x_0, f(x_0)\right)$ is on the boundary of $\epi f$, thus there exists a supporting hyperplane on $x_0$, i.e. $\exists (a, b) \in \RR^{n+1}$ nonzero, such that for any $(x, t) \in$ $\epi f$,
+  \[
+    a\T x+b t \geq a\T x_0+b f\left(x_0\right)
+  \]
+  
+  If $b=0$, then $a\neq0$. We have $a\T x \geq a\T x_0$ for all $x\in\dom f$. However, since $x_0 \in\intr\dom f$, there exists $\epsilon > 0$, such that $B(x_0, \epsilon) \subseteq \dom f$. Consider $x=x_0 - \epsilon a$, we have
+  \[
+    a\T x = a\T x_0 - \epsilon\|a\|_2^2 < a\T x_0
+  \]
+  which violates the inequality.
 
+  If $b<0$, then $t$ can be arbitrarily large, such that $a\T x+bt$ is arbitrarily small which will violate the inequality.
+
+  Therefore, $b$ has to be positive. Let $x=y, t = f(y)$, we have
+  \begin{align*}
+    a\T y + b f(y) &\geq  a\T x_0 + bf(x_0)\\
+    b f(y) &\geq b f(x_0) + a\T (x_0 - y)\\
+    f(y) &\geq f(x_0) + \frac{-a\T}{b} (y - x_0)
+  \end{align*}
+  where $g = -a\T/b$ is the subgradient of $f$ at $x_0$.
+\end{proof}
 
 
 (b) Suppose $x\in\dom f$, but is not an interior point of the domain. Does there (always) exist a subgradient of $f$ at $x$?
+\begin{proof}
+  Not always.
 
+  Consider a convex function $f(x), \dom f = (-\infty, 1]$
+  $$
+  f(x)= 
+  \begin{cases}
+    0, & \text { if } x <1 \\ 
+    1, & \text { if } x=1
+  \end{cases}
+  $$
+
+  However, for any $g \in \RR$, let $y=1-\frac{1}{|g|} < 1, f(y) = 0$, then
+
+  $$
+  \begin{aligned}
+  f(1) + g(y-1) &= 1-\frac{g}{|g|} \\
+  & \geq 0  = f(y)
+  \end{aligned}
+  $$
+
+  which indicates subgradient function may not exist at boundaries.
+  \end{proof}
 
 \clearpage
 \section*{Problem 7}
