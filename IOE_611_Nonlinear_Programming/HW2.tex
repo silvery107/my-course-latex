@@ -304,11 +304,25 @@ Show that the so-called logarithmic barrier for the second order cone, $f(x, t) 
 While this can be done by demonstrating that the Hessian of f is positive semidefinite everywhere on its domain, the following is an outline of a much simpler and more elegant proof:
 
 (a) Show that $t-\frac{u\T u}{t}$ is a concave function on $\dom f$.
+\begin{proof}
+  Let $g(u) = u\T u, \dom g=\{u\in \RR^n\}$, which is convex, hence $h(u, t) = u\T u/t, \dom h = \{(u, t)\in \RR^{n+1} \mid u/t \in \dom g, t>\|u\|_2\}$ is the perspective of $g(u)$ so it is convex. Note that $- \frac{u\T u}{t}$ is concave and $t-\frac{u\T u}{t}>0$ is a combination of an affine function and a concave function so it is also concave.
+\end{proof}
 
 (b) Show that $-\log (t - \frac{u\T u}{t})$ is a convex function on $\dom f$.
+\begin{proof}
+  Since the negative logarithm is convex, its extended-value extension is non-increasing. By the composition rules, given $h(u, t)$ is concave, $-\log(h(u,t))$ is convex.
+\end{proof}
 
 (c) Show that $f$ is convex.
-
+\begin{proof}
+  \begin{align*}
+    f(x, t)
+    &= -\log(t^2 - x\T x)\\
+    &= -\log(t\cdot h(x, t))\\
+    &= -\log(t) - \log(h(x, t))
+  \end{align*}
+  which is a sum of two convex function and thus also convex on $\dom f$.
+\end{proof}
 
 \clearpage
 \section*{Problem 8}
@@ -348,6 +362,7 @@ Show that the maximum of a convex function $f$ over $\Co\{v_1, v_2, \dots, v_k\}
     &\leq \max_{1\leq i \leq k} f(v_i)\\
     &=\sup_x f(x)
   \end{align*}
+  That is, the maximum of $f(x)$ is achieved at one of its vertices $f(v_i)$.
 \end{proof}
 
 \end{document}
