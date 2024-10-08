@@ -37,6 +37,7 @@
 \newcommand{\green}[1]{\textcolor{green}{#1}}
 \newcommand{\grad}{\nabla}
 \newcommand{\hess}{\nabla^2}
+\newcommand{\tr}{\text{tr}}
 
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\RR}{\mathbb{R}}
@@ -116,89 +117,132 @@ For each of the following functions determine whether it is convex, concave, qua
 (a) $f(x)=e^x-1$ on $\RR$
 \begin{solution}
   \begin{align*}
-    &f'(x) = e^x > 0 \Rightarrow \text{quasilinear}\\
-    &f''(x) = e^x > 0 \Rightarrow \text{convex}
+    f'(x) &= e^x > 0 \Rightarrow \text{monotonic} \Rightarrow \text{quasilinear}\\
+    f''(x) &= e^x > 0 \Rightarrow \text{convex, not concave}
   \end{align*}
 \end{solution}
 
 (b) $f\left(x_1, x_2\right)=x_1 x_2$ on $\RR_{++}^2$.
 \begin{solution}
   \begin{align*}
-    &\grad f = 
+    \grad f &= 
     \begin{bmatrix}
       x_2 \\x_1
     \end{bmatrix}\\
-    &\hess f = 
+    \hess f &= 
     \begin{bmatrix}
       0 & 1\\1 & 0
-    \end{bmatrix}\prec 0
+    \end{bmatrix} \\
+    &\Rightarrow \text{indefinite} \Rightarrow \text{not convex or concave}
   \end{align*}
+  The superlevel sets $\{x_1, x_2\mid x_1x_2\geq \alpha\}$ on $\RR^2_{++}$ are convex, so $f$ is quasiconcave but not quasiconvex.
 \end{solution}
 
 (c) $f\left(x_1, x_2\right)=1 /\left(x_1 x_2\right)$ on $\RR_{++}^2$.
 \begin{solution}
   \begin{align*}
-    &\grad f = 
+    \grad f &= 
     \begin{bmatrix}
       -\frac{1}{x_1^2x_2} \\ -\frac{1}{x_1x_2^2}
     \end{bmatrix}\\
-    &\hess f = 
+    \hess f &= 
     \begin{bmatrix}
       \frac{2}{x_1^3x_2} & \frac{1}{x_1^2x_2^2} \\ \frac{1}{x_1^2x_2^2} & \frac{2}{x_1x_2^3}
-    \end{bmatrix}\succ 0 \Rightarrow convex
+    \end{bmatrix}\succ 0 \\
+    &\Rightarrow \text{convex, not concave; quasiconvex, not quasiconcave}
   \end{align*}
 \end{solution}
 
 (d) $f\left(x_1, x_2\right)=x_1 / x_2$ on $\RR_{++}^2$.
 \begin{solution}
   \begin{align*}
-    &\grad f = 
+    \grad f &= 
     \begin{bmatrix}
       \frac{1}{x_2} \\ -\frac{x_1}{x_2^2}
     \end{bmatrix}\\
-    &\hess f = 
+    \hess f &= 
     \begin{bmatrix}
       0 & -\frac{1}{x_2^2} \\ -\frac{1}{x_2^2} & \frac{2x_1}{x_2^3}
-    \end{bmatrix}\succ 0 \Rightarrow convex
+    \end{bmatrix} \\
+    &\Rightarrow \text{indefinite} \Rightarrow \text{not convex or concave}
   \end{align*}
+  The sublevel sets of both $f$ and $-f$ are convex, so it is quasilinear.
 \end{solution}
 
 (e) $f\left(x_1, x_2\right)=x_1^2 / x_2$ on $\RR \times \RR_{++}$.
 \begin{solution}
   \begin{align*}
-    &\grad f = 
+    \grad f &= 
     \begin{bmatrix}
       \frac{2x_1}{x_2} \\ -\frac{x_1^2}{x_2^2}
     \end{bmatrix}\\
-    &\hess f = 
+    \hess f &= 
     \begin{bmatrix}
       \frac{2}{x_2} & -\frac{2x_1}{x_2^2} \\ -\frac{2x_1}{x_2^2} & \frac{2x_1^2}{x_2^3}
-    \end{bmatrix} = 0
+    \end{bmatrix}
   \end{align*}
+  The leading principal minors of $\hess f$ are one positive and one zero, so $\hess f$ is positive semidefinite and $f$ is convex and quasiconvex, but not concave and quasiconcave.
 \end{solution}
-
+  
 (f) $f\left(x_1, x_2\right)=x_1^\alpha x_2^{1-\alpha}$, where $0 \leq \alpha \leq 1$, on $\RR_{++}^2$.
 \begin{solution}
   \begin{align*}
-    &\grad f = 
+    \grad f &= 
     \begin{bmatrix}
       \alpha x_1^{\alpha-1} x_2^{1-\alpha} \\ (1-\alpha) x_1^\alpha x_2^{-\alpha}
     \end{bmatrix}\\
-    &\hess f = 
+    \hess f &= 
     \begin{bmatrix}
       \alpha(\alpha-1) x_1^{\alpha-2} x_2^{1-\alpha} & \alpha(1-\alpha) x_1^{\alpha-1} x_2^{-\alpha}\\
       \alpha(1-\alpha) x_1^{\alpha-1} x_2^{-\alpha} & -\alpha(1-\alpha) x_1^{\alpha} x_2^{-\alpha - 1}
-    \end{bmatrix} = 0
+    \end{bmatrix}\\
+    &= \alpha(1-\alpha)x^{\alpha}x^{1-\alpha}
+    \begin{bmatrix}
+      -\frac{1}{x_1^2} & \frac{1}{x_1x_2}\\ \frac{1}{x_1x_2} & -\frac{1}{x_2^2}
+    \end{bmatrix}\\
+    &= -\alpha(1-\alpha)x^{\alpha}x^{1-\alpha}
+    \begin{bmatrix}
+      \frac{1}{x_1}\\ -\frac{1}{x_2}
+    \end{bmatrix}
+    \begin{bmatrix}
+      \frac{1}{x_1}\\ -\frac{1}{x_2}
+    \end{bmatrix}\T \preceq 0\\
+    &\Rightarrow \text{concave, not convex; quasiconcave, not quasiconvex}
   \end{align*}
 \end{solution}
 
+
 \clearpage
 \section*{Problem 4}
-Adapt the proof of concavity of the log-determinant function in §3.1.5 to show the following.
+Adapt the proof of concavity of the log-determinant function to show the following.
 
-(a) $f(X) = tr(X^{-1})$ is convex on $\dom f = \bS^n_{++}$.
+(a) $f(X) = \tr(X^{-1})$ is convex on $\dom f = \bS^n_{++}$.
+\begin{proof}
+  Define $g(t) = f(Z+tV)$ where $Z\succ 0$ and $V\in\bS^n$.
+  \begin{align*}
+    g(t) 
+    &= f(Z+tV)\\
+    &= \tr\left((Z+tV)^{-1}\right)\\
+    &= \tr\left(Z^{-1}\left(I+tZ^{-\half}VZ^{-\half}\right)^{-1}\right)\\
+    &= \sum_{i=1}^{n} Z^{-1}_{ii} (1 + t\lambda_i)^{-1}
+  \end{align*}
+  where $\lambda_i, i=1, \dots, n$ are eigenvalues of $Z^{-\half} V Z^{-\half}$. 
+  
+  We have $Z^{-1}_{ii} > 0$ because the inverse of a positive definite matrix is also positive definite. $g(t)$ is convex since it is a positive weighted sum of convex functions $(1 + t\lambda_i)^{-1}$. Thus, $f(X)$ is convex. 
+\end{proof}
 
 (b) $f(X) = (\det X)^{1/n}$ is concave on $\dom f = \bS^n_{++}$.
+\begin{proof}
+  Define $g(t) = f(Z+tV)$ where $Z\succ 0$ and $V\in\bS^n$.
+  \begin{align*}
+    g(t) & =(\det(Z+t V))^{1 / n} \\
+    & =\left(\det Z^{1 / 2} \det\left(I+t Z^{-1 / 2} V Z^{-1 / 2}\right) \det Z^{1 / 2}\right)^{1 / n} \\
+    & =(\det Z)^{1 / n}\left(\prod_{i=1}^n\left(1+t \lambda_i\right)\right)^{1 / n}
+  \end{align*}
+  where $\lambda_i, i=1, \dots, n$ are eigenvalues of $Z^{-\half} V Z^{-\half}$.
+
+  $g(t)$ is concave since $\det Z > 0$ and the geometric mean $\left(\prod_{i=1}^{n}x_i\right)^{1/n}$ is concave on $\RR^n_{++}$. Thus $f(X)$ is concave.
+\end{proof}
 
 
 \clearpage
@@ -209,14 +253,34 @@ Adapt the proof of concavity of the log-determinant function in §3.1.5 to show 
 \[
 f(x, t) = \frac{|x_1|^p + \dots + |x_n|^p}{t^{p-1}} = \frac{\|x\|^p_p}{t^{p-1}}
 \]
-is convex on $\{(x, t)|t>0\}$
+is convex on $\{(x, t)\mid t>0\}$
+
+\begin{proof}
+  Define $g(x) = \|x\|^p_p, \dom g=\{x\mid x\in \RR^n\}$ which is convex. The perspective function of $g(x)$ on $\{(x, t)\mid x/t\in\dom g, t>0\}$ is
+  \begin{align*}
+    tg(x/t) &= t\frac{\|x\|^p_p}{t^p} = \frac{\|x\|^p_p}{t^{p-1}} = f(x, t)
+  \end{align*}
+  
+  Thus, $f(x, t), \dom f=\{(x, t)\mid t>0\}$ is the perspective function of a convex function $\|x\|^p_p$, so it is convex.
+\end{proof}
+
 
 (b) Show that
 \[
 f(x) = \frac{\|Ax+b\|^2_2}{c\T x+d}
 \]
-is convex on $\{x|c\T x+d > 0\}$, where $A\in \RR^{m\times n}, b\in \RR^m, c\in\RR^n$ and $d\in \RR$.
+is convex on $\{x\mid c\T x+d > 0\}$, where $A\in \RR^{m\times n}, b\in \RR^m, c\in\RR^n$ and $d\in \RR$.
 
+\begin{proof}
+  Let $g(x)=\|A x+b\|_2^2, \dom g=\{x\mid x\in \RR^n\}$, then $\nabla^2 g(x)=2 A^{\top} A \succeq 0$, which implies $g$ is convex.
+  
+  Therefore, the perspective function
+  $$
+  h(x, t)=\frac{\|A x+\|_2^2}{t}, \quad \dom h=\left\{(x, t) \mid x \in \mathbb{R}^n, t>0\right\}
+  $$  
+  is also convex.
+  Since $f(x)=h\left(x, c^{\top} x+d\right), \dom f=\left\{x \mid c^{\top} x+d>0\right\}$ is a composition of an affine function and a convex function, then it is also a convex function.
+\end{proof}
 
 \clearpage
 \section*{Problem 6}
@@ -251,7 +315,7 @@ Suppose that $f(x): \RR^n \rightarrow \RR$ is a twice differentiable function (b
 \section*{Problem 9}
 Given a set of points $\{v_1, v_2, \dots, v_k\}$, define
 \[
-\Co\{v_1, v_2, \dots, v_k\} = \{\alpha_1 v_1 + \dots + \alpha_k v_k~|~\alpha_1 + \dots \alpha_k = 1, \alpha_1, \dots, \alpha_k \geq 0\}
+\Co\{v_1, v_2, \dots, v_k\} = \{\alpha_1 v_1 + \dots + \alpha_k v_k\mid \alpha_1 + \dots \alpha_k = 1, \alpha_1, \dots, \alpha_k \geq 0\}
 \]
 
 Show that the maximum of a convex function $f$ over $\Co\{v_1, v_2, \dots, v_k\}$ is achieved at one of its vertices, i.e.,
