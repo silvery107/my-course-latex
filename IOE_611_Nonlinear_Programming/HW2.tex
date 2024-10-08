@@ -114,22 +114,89 @@ with $\dom u_\alpha = \RR_+$. We also define $u_0(x) = \log x$ (with $\dom u_0 =
 For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave.
 
 (a) $f(x)=e^x-1$ on $\RR$
+\begin{solution}
+  \begin{align*}
+    &f'(x) = e^x > 0 \Rightarrow \text{quasilinear}\\
+    &f''(x) = e^x > 0 \Rightarrow \text{convex}
+  \end{align*}
+\end{solution}
 
 (b) $f\left(x_1, x_2\right)=x_1 x_2$ on $\RR_{++}^2$.
+\begin{solution}
+  \begin{align*}
+    &\grad f = 
+    \begin{bmatrix}
+      x_2 \\x_1
+    \end{bmatrix}\\
+    &\hess f = 
+    \begin{bmatrix}
+      0 & 1\\1 & 0
+    \end{bmatrix}\prec 0
+  \end{align*}
+\end{solution}
 
 (c) $f\left(x_1, x_2\right)=1 /\left(x_1 x_2\right)$ on $\RR_{++}^2$.
+\begin{solution}
+  \begin{align*}
+    &\grad f = 
+    \begin{bmatrix}
+      -\frac{1}{x_1^2x_2} \\ -\frac{1}{x_1x_2^2}
+    \end{bmatrix}\\
+    &\hess f = 
+    \begin{bmatrix}
+      \frac{2}{x_1^3x_2} & \frac{1}{x_1^2x_2^2} \\ \frac{1}{x_1^2x_2^2} & \frac{2}{x_1x_2^3}
+    \end{bmatrix}\succ 0 \Rightarrow convex
+  \end{align*}
+\end{solution}
 
 (d) $f\left(x_1, x_2\right)=x_1 / x_2$ on $\RR_{++}^2$.
+\begin{solution}
+  \begin{align*}
+    &\grad f = 
+    \begin{bmatrix}
+      \frac{1}{x_2} \\ -\frac{x_1}{x_2^2}
+    \end{bmatrix}\\
+    &\hess f = 
+    \begin{bmatrix}
+      0 & -\frac{1}{x_2^2} \\ -\frac{1}{x_2^2} & \frac{2x_1}{x_2^3}
+    \end{bmatrix}\succ 0 \Rightarrow convex
+  \end{align*}
+\end{solution}
 
 (e) $f\left(x_1, x_2\right)=x_1^2 / x_2$ on $\RR \times \RR_{++}$.
+\begin{solution}
+  \begin{align*}
+    &\grad f = 
+    \begin{bmatrix}
+      \frac{2x_1}{x_2} \\ -\frac{x_1^2}{x_2^2}
+    \end{bmatrix}\\
+    &\hess f = 
+    \begin{bmatrix}
+      \frac{2}{x_2} & -\frac{2x_1}{x_2^2} \\ -\frac{2x_1}{x_2^2} & \frac{2x_1^2}{x_2^3}
+    \end{bmatrix} = 0
+  \end{align*}
+\end{solution}
 
 (f) $f\left(x_1, x_2\right)=x_1^\alpha x_2^{1-\alpha}$, where $0 \leq \alpha \leq 1$, on $\RR_{++}^2$.
+\begin{solution}
+  \begin{align*}
+    &\grad f = 
+    \begin{bmatrix}
+      \alpha x_1^{\alpha-1} x_2^{1-\alpha} \\ (1-\alpha) x_1^\alpha x_2^{-\alpha}
+    \end{bmatrix}\\
+    &\hess f = 
+    \begin{bmatrix}
+      \alpha(\alpha-1) x_1^{\alpha-2} x_2^{1-\alpha} & \alpha(1-\alpha) x_1^{\alpha-1} x_2^{-\alpha}\\
+      \alpha(1-\alpha) x_1^{\alpha-1} x_2^{-\alpha} & -\alpha(1-\alpha) x_1^{\alpha} x_2^{-\alpha - 1}
+    \end{bmatrix} = 0
+  \end{align*}
+\end{solution}
 
 \clearpage
 \section*{Problem 4}
 Adapt the proof of concavity of the log-determinant function in §3.1.5 to show the following.
 
-(a) $f(X) = tr(X^-1)$ is convex on $\dom f = \bS^n_{++}$.
+(a) $f(X) = tr(X^{-1})$ is convex on $\dom f = \bS^n_{++}$.
 
 (b) $f(X) = (\det X)^{1/n}$ is concave on $\dom f = \bS^n_{++}$.
 
