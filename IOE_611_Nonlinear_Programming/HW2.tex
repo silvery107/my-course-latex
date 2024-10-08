@@ -292,6 +292,9 @@ for any $y\in\dom f$.
 
 (a) Suppose $f$ is a convex function, and $x\in\intr\dom f$. Prove that there exists a subgradient of $f$ at $x$.
 
+
+
+
 (b) Suppose $x\in\dom f$, but is not an interior point of the domain. Does there (always) exist a subgradient of $f$ at $x$?
 
 
@@ -311,6 +314,19 @@ While this can be done by demonstrating that the Hessian of f is positive semide
 \section*{Problem 8}
 Suppose that $f(x): \RR^n \rightarrow \RR$ is a twice differentiable function (but not necessarily convex). Show that if $\bar x$ is a local minimum of $f(x)$, then we must have $\grad f(\bar x) = 0$.
 
+\begin{proof}
+  Given $\bar x$ is a local minimum of $f(x)$, there exists $\epsilon>0, y\in \RR^n, y\neq x$, such that $f(y) \geq f(\bar x)$ for $\|y - \bar x\| \leq \epsilon$.
+
+  Since $f(x)$ is twice differentiable, expand $f(y) = f(\bar x) + \grad f(\bar x) (y - \bar x) \geq f(\bar x)$, i.e. 
+  $$\grad f(\bar x) (y - \bar x) \geq 0$$
+
+  Choose $y_1>\bar x$ and $y_2 < \bar x$, the inequality must holds for both $y$, thus 
+  \[
+    \grad f(\bar x) (y - \bar x) = 0 \Rightarrow \grad f(\bar x) = 0
+  \]
+\end{proof}
+
+
 \clearpage
 \section*{Problem 9}
 Given a set of points $\{v_1, v_2, \dots, v_k\}$, define
@@ -319,9 +335,19 @@ Given a set of points $\{v_1, v_2, \dots, v_k\}$, define
 \]
 
 Show that the maximum of a convex function $f$ over $\Co\{v_1, v_2, \dots, v_k\}$ is achieved at one of its vertices, i.e.,
-
 \[
-\sup_{x\in\Co{v1, \dots, v_k}} f(x) = \max_{1\leq i \leq k} f(v_i)
+\sup_{x\in\Co\{v1, \dots, v_k\}} f(x) = \max_{1\leq i \leq k} f(v_i)
 \]
+
+\begin{proof}
+  Let $x = \alpha_1 v_1 + \dots + \alpha_k v_k \in \Co\{v_1, v_2, \dots, v_k\}$,
+  \begin{align*}
+    f(x) 
+    &= f(\alpha_1 v_1 + \dots + \alpha_k v_k)\\
+    &\leq \alpha_1 f(v_1) + \dots + \alpha_k f(v_k)\\
+    &\leq \max_{1\leq i \leq k} f(v_i)\\
+    &=\sup_x f(x)
+  \end{align*}
+\end{proof}
 
 \end{document}
