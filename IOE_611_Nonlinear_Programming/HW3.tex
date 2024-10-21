@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Homework of IOE 611 Nonlinear Programming\hfill Yulun Zhuang \hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[Solution]}
+  {\end{proof}}
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+\newcommand{\tr}{\text{tr}}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bS}{\mathbb{S}}
+
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\T}{^\top}
+
+\begin{document}
+\title{IOE 611: Homework 3}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Problem 1}
+Prove that $x^* = (1, 1/2, -1)$ is optimal for the optimization problem
+\begin{align*}
+  &\begin{array}{ll}
+  \text{minimize} & (1 / 2) x^T P x+q^T x+r \\
+  \text {subject to} & -1 \leq x_i \leq 1, \quad i=1,2,3
+  \end{array}\\
+\end{align*}
+where
+\begin{align*}
+  &P=\left[\begin{array}{rrr}
+  13 & 12 & -2 \\
+  12 & 17 & 6 \\
+  -2 & 6 & 12
+  \end{array}\right], \quad q=\left[\begin{array}{r}
+  -22.0 \\
+  -14.5 \\
+  13.0
+  \end{array}\right], \quad r=1
+\end{align*}
+
+\begin{proof}
+  The gradient of the objective function at $x^*$ is
+  \begin{align*}
+    &\grad f_0(x) = P x + q\\
+    &\grad f_0(x^*) = [-1, 0, 2]\T
+  \end{align*}
+
+  The optimality condition is
+  \begin{align*}
+      \nabla f_0(x^*)\T (y - x^*)
+      &= (-1) (y_1 - 1) + 2 (y_3 + 1) \\
+      &= -y_1 + 2y_3 + 3
+  \end{align*}
+  which is always non-negative for the feasible region $\{ y_i \mid -1 \leq y_i \leq 1 \}$.
+\end{proof}
+
+
+
+
+\clearpage
+\section*{Problem 2}
+\textit{Equivalent convex problems}.  Show that the following three convex problems are equivalent.
+Carefully explain how the solution of each problem is obtained from the solution of
+the other problems. The problem data are the matrix $A \in \RR^{m\times n}$ (with rows $a\T_i$), the vector $b \in\RR^m$, and the constant $M > 0$.
+
+(a) The \textit{robust least-squares problem}
+\[
+\text{minimize}\quad \sum_{i=1}{m} \Phi(a\T_i x - b_i)
+\]
+with variable $x\in\RR^n$, where $\Phi:\RR \rightarrow \RR$ is define as
+\[
+  \Phi(u)= 
+  \begin{cases}
+    u^2, & |u| \leq M \\ 
+    M (2|u| - M), & |u| > M
+  \end{cases}
+\]
+
+(b) The \textit{least-squares problem with variable weights}
+\begin{align*}
+  &\text{minimize}\quad \sum_{i=1}^{m} (a\T_i x - b_i)^2 / (w_i + 1) + M^2 \mathbf{1}\T w\\
+  &\text{subject to}\quad w\succeq 0
+\end{align*}
+with variables $x\in\RR^n$ and $w\in\RR^m$, and domain $D = \{(x, w) \in\RR^n\times \RR^m | w\succ -1\}$.
+
+
+(c) The \textit{quadratic program}
+\begin{align*}
+  \text{minimize}\quad &\sum_{i=1}^{m}(u_i^2 + 2Mv_i)\\
+  \text{subject to}\quad &-u -v \preceq Ax - b \preceq u+v\\
+  & 0 \preceq u \preceq M \mathbf{1}\\
+  & v \succeq 0
+\end{align*}
+
+
+\clearpage
+\section*{Problem 3}
+\textit{Robust LP with interval coefficients}. Consider the problem, with variable $x\in\RR^n$,
+\begin{align*}
+  \text{minimize}\quad &c\T x\\
+  \text{subject to}\quad & Ax\preceq b, \ \forall A\in \mathcal{A}
+\end{align*}
+where $\mathcal{A} \subseteq \RR^{m\times n}$ is the set
+\[
+\mathcal{A} = \{A\in \RR^{m\times n} | \bar A_{ij} - V_{ij} \leq A_{ij} \leq \bar A_{ij} + V_{ij}, i = 1, \dots, m, j = 1, \dots, n\}
+\]
+(The matrices $\bar A$ and $V$ are given.) This problem can be interpreted as an LP where each coefficient of $A$ is only known to lie in an interval, and we require that $x$ must satisfy the constraints for all possible values of the coefficients. 
+
+Express this problem as an LP. The LP you construct should be efficient, i.e., it should not have dimensions that grow exponentially with $n$ or $m$.
+
+% TODO add 8.16
+
+
+\clearpage
+\section*{Problem 4}
+\textit{Minimum fuel optimal control}. We consider a linear dynamical system with state $x(t)\in \RR^n, t=0, \dots, N$, and actuator or input signal $u(t)\in\RR, t=0, \dots, N-1$. The dynamics of the system is given by the linear recurrence
+\[
+x(t+1) = Ax(t) + bu(t),\ t=0, \dots, N-1
+\]
+where $A\in\RR^{n\times n}$ and $b\in \RR$ are given. We assume that the initial state is zero, i.e., $x(0) = 0$.
+
+The \textit{minimum fuel optimal control problem} is to choose the inputs $u(0), \dots, u(N-1)$ so as to minimize the total fuel consumed, which is given by
+\[
+F = \sum_{t=0}^{N-1} f(u(t))
+\]
+subject to the constraint that $x(N) = x_{\text{des}}$, where $N$ is the (given) time horizon, and $x_{\text{des}}$ is the (given) desired final or target state. The function $f:\RR\rightarrow \RR$ is the fuel use map for the actuator, and gives the amount of fuel used as a function of the actuator signal amplitude. In this problem we use
+\[
+f(a) = 
+\begin{cases}
+  |a| & |a| \leq 1\\
+  2|a| -1 & |a| >1
+\end{cases}
+\]
+This means that fuel use is proportional to the absolute value of the actuator signal, for actuator signals between -1 and 1; for larger actuator signals the marginal fuel efficiency is half.
+
+Formulate the minimum fuel optimal control problem as an LP.
+
+\end{document}
