@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath, amsfonts, amsthm, amssymb} 
 \usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
 
 \parskip = 0.1in
 
@@ -28,9 +29,9 @@
 \newtheorem{claim}{Claim}
 \newtheorem{exam}{Example}
 \newenvironment{solution}
-  {\renewcommand\qedsymbol{$\square$}\begin{proof}[Solution]}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[\textbf{Solution}]}
   {\end{proof}}
-
+\renewcommand{\proofname}{\textbf{Proof}}
 
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 \newcommand{\blue}[1]{\textcolor{blue}{#1}}
@@ -121,7 +122,7 @@ with variable $x\in\RR^n$, where $\Phi:\RR \rightarrow \RR$ is define as
   &\text{minimize}\quad \sum_{i=1}^{m} (a\T_i x - b_i)^2 / (w_i + 1) + M^2 \mathbf{1}\T w\\
   &\text{subject to}\quad w\succeq 0
 \end{align*}
-with variables $x\in\RR^n$ and $w\in\RR^m$, and domain $D = \{(x, w) \in\RR^n\times \RR^m | w\succ -1\}$.
+with variables $x\in\RR^n$ and $w\in\RR^m$, and domain $D = \{(x, w) \in\RR^n\times \RR^m \mid w\succ -1\}$.
 
 
 (c) The \textit{quadratic program}
@@ -132,9 +133,13 @@ with variables $x\in\RR^n$ and $w\in\RR^m$, and domain $D = \{(x, w) \in\RR^n\ti
   & v \succeq 0
 \end{align*}
 
+\begin{proof}
+  TODO
+\end{proof}
 
 \clearpage
 \section*{Problem 3}
+\subsection*{4.13}
 \textit{Robust LP with interval coefficients}. Consider the problem, with variable $x\in\RR^n$,
 \begin{align*}
   \text{minimize}\quad &c\T x\\
@@ -142,14 +147,44 @@ with variables $x\in\RR^n$ and $w\in\RR^m$, and domain $D = \{(x, w) \in\RR^n\ti
 \end{align*}
 where $\mathcal{A} \subseteq \RR^{m\times n}$ is the set
 \[
-\mathcal{A} = \{A\in \RR^{m\times n} | \bar A_{ij} - V_{ij} \leq A_{ij} \leq \bar A_{ij} + V_{ij}, i = 1, \dots, m, j = 1, \dots, n\}
+\mathcal{A} = \{A\in \RR^{m\times n} \mid \bar A_{ij} - V_{ij} \leq A_{ij} \leq \bar A_{ij} + V_{ij}, i = 1, \dots, m, j = 1, \dots, n\}
 \]
-(The matrices $\bar A$ and $V$ are given.) This problem can be interpreted as an LP where each coefficient of $A$ is only known to lie in an interval, and we require that $x$ must satisfy the constraints for all possible values of the coefficients. 
+(The matrices $\bar A$ and $V$ are given.) This problem can be interpreted as an LP where each coefficient of $A$ is only known to lie in an interval, and we require that $x$ must satisfy the constraints for all possible values of the coefficients.
 
-Express this problem as an LP. The LP you construct should be efficient, i.e., it should not have dimensions that grow exponentially with $n$ or $m$.
+Express this problem as an LP.
 
-% TODO add 8.16
+\begin{solution}
+  Since $x$ must satisfy $Ax\preceq b$ for all possible values of $A$, the problem is equivalent to
+  \begin{align*}
+    \min_x \quad &c\T x\\
+    \text{s.t.}\quad & \bar A x + V|x| \succeq b
+  \end{align*}
+  where $|x| = [|x_1|, |x_2|, \dots, |x_n|]\T$.
 
+  By introducing an additional variable $z\in\RR^n$, it can be transformed as LP at the expense of an additional inequality constraint
+  \begin{align*}
+    \min_x \quad &c\T x\\
+    \text{s.t.}\quad & \bar A x + Vz \preceq b\\
+    &-z \preceq x \preceq z
+  \end{align*}
+\end{solution}
+
+
+\subsection*{8.16}
+\textit{Maximum volume rectangle inside a polyhedron}. Formulate the following problem as a convex optimization problem. Find the rectangle
+\[
+\mathcal{R} = \{x\in\RR^n \mid l\preceq x \preceq u\}
+\]
+of maximum volume, enclosed in a polyhedron $\mathcal{P} = \{x \mid Ax \preceq b\}$. The variables are $l, u \in\RR^n$.
+
+\begin{solution}
+  Define $a^+_{ij} = \max\{a_{ij}, 0\}, a^{-}_{ij}=\max\{-a_{ij}, 0\}$, then the original problem can be formulated as follows
+  \begin{align*}
+    \max_{l, u}\quad &(\prod_{i=1}^{n} (u_i - l_i))^{1/n}\\
+    \text{s.t.}\quad & \sum_{i=1}^{n}(a^+_{ij}u_j - a^{-}_{ij}l_j) \leq b_i\\
+    &i=1,\dots, m
+  \end{align*}
+\end{solution}
 
 \clearpage
 \section*{Problem 4}
@@ -174,5 +209,381 @@ f(a) =
 This means that fuel use is proportional to the absolute value of the actuator signal, for actuator signals between -1 and 1; for larger actuator signals the marginal fuel efficiency is half.
 
 Formulate the minimum fuel optimal control problem as an LP.
+
+\begin{solution}
+  \begin{align*}
+    \min_u\quad & \sum_{t=0}^{N-1} f(u(t))\\
+    \text{s.t.}\quad & 
+    x_{\text{des}} = 
+    \begin{bmatrix}
+      A^{N-1}b & A^{N-2}b &\cdots & Ab & b
+    \end{bmatrix}
+    u
+  \end{align*}
+  Define $z(t)$, such that $z(t) \geq f(u(t))$. Then we push the objective into inequality constraints
+  \begin{align*}
+    \min_{z, u}\quad & \sum_{t=0}^{N-1} z(t)\\
+    \text{s.t.}\quad & 
+    x_{\text{des}} = 
+    \begin{bmatrix}
+      A^{N-1}b & A^{N-2}b &\cdots & Ab & b
+    \end{bmatrix}
+    u\\
+    & z \succeq |u|\\
+    & z \succeq 2|u| - 1
+  \end{align*}
+  which is also equivalent to a LP
+  \begin{align*}
+    \min_{z, u}\quad & \sum_{t=0}^{N-1} z(t)\\
+    \text{s.t.}\quad & 
+    x_{\text{des}} = 
+    \begin{bmatrix}
+      A^{N-1}b & A^{N-2}b &\cdots & Ab & b
+    \end{bmatrix}
+    u\\
+    & -z \preceq u \preceq z\\
+    & -(z + 1)/2 \preceq 2u \preceq (z + 1)/2
+  \end{align*}
+\end{solution}
+
+
+\clearpage
+\section*{Problem 5}
+\textit{Linear separation of two sets of ellipsoids}. Suppose we are given $K + L$ ellipsoids
+\begin{align*}
+\mathcal{E}_i = \{P_iu + q_i \mid \|u\|_2 \leq 1\}, \quad i = 1, \ldots, K + L,
+\end{align*}
+where $P_i \in \symm^n$. 
+We are interested in finding a hyperplane that strictly separates 
+$\mathcal{E}_1, \ldots, \mathcal{E}_K$ from $\mathcal{E}_{K+1}, \ldots, \mathcal{E}_{K+L}$, i.e., 
+we want to compute $a \in \real^n$, $b \in \real$ such that
+\begin{align*}
+a\T x + b > 0 \quad& \text{for} \quad x \in \mathcal{E}_1 \cup \ldots \cup \mathcal{E}_K, \\
+a\T x + b < 0 \quad& \text{for} \quad x \in \mathcal{E}_{K+1} \cup \ldots \cup \mathcal{E}_{K+L},
+\end{align*}
+or prove that no such hyperplane exists. 
+Express this problem as an SOCP feasibility problem.
+
+\begin{solution}
+  To form the separating hyperplane, $a$ and $b$ must satisfy
+  \begin{align*}
+    0 < &\min_{u}\  a\T(P_i u + q_i) + b, i = 1, \dots, K\\
+    0 > &\max_{u}\  a\T(P_i u + q_i) + b, i = K+1, \dots, K+L
+  \end{align*}
+  Given that $|a\T P_i u| \leq \|P_i\T a\|$, 
+  \begin{align*}
+    & \min_{u}\  a\T(P_i u + q_i) + b \geq -\|P_i\T a\|_2 + a\T q_i + b, i = 1, \dots, K\\
+    & \max_{u}\  a\T(P_i u + q_i) + b \leq \|P_i\T a\|_2 + a\T q_i + b, i = K+1, \dots, K+L
+  \end{align*}  
+  
+  Thus, the SOCP problem can be formulated as follows
+  \begin{align*}
+    \min_{a, b} \quad & 0\\
+    \text{s.t.} \quad 
+    & \|P_i\T a\|_2 <   a\T q_i + b, i = 1, \dots, K\\
+    & \|P_i\T a\|_2 < - a\T q_i - b, i = K+1, \dots, K+L
+  \end{align*}
+\end{solution}
+
+\clearpage
+\section*{Problem 6}
+\textit{Hyperbolic constraints as SOC constraints}. Verify that $x\in\real^n,y,z\in\real$ satisfy
+\[
+x\T x\leq yz, \quad y\geq 0, \quad z\geq 0
+\]
+if and only if
+\[
+\left\|\begin{bmatrix}
+  2x\\ y-z
+\end{bmatrix}\right\|_2 
+\leq y+z,\quad y\geq 0,\quad z\geq 0
+\]
+
+Use this observation to cast the following problems as SOCPs
+
+(a) \textit{Maximizing harmonic mean}.
+\[
+\max_x\quad \left(\sum_{i=1}^{m} 1/(a_i\T x - b_i)\right)^{-1}
+\]
+with domain $\{x\mid Ax\succ b\}$, where $a_i\T$ is the ith row of $A$.
+
+
+(b) \textit{Maximizing geometric mean}.
+\[
+\max_x\quad \left(\prod_{i=1}^{m} (a_i\T x - b_i)\right)^{1/m}
+\]
+with domain $\{x\mid Ax\succ b\}$, where $a_i\T$ is the ith row of $A$.
+
+\begin{solution}
+  For $y\geq 0, z\geq 0$, 
+  \begin{align*}
+    &\left\|\begin{bmatrix}
+      2x\\ y-z
+    \end{bmatrix}\right\|_2 
+    \leq y+z\\
+    \Leftrightarrow\quad & 4x\T x + (y-z)^2 \leq (y+z)^2\\
+    \Leftrightarrow\quad & x\T x \leq yz
+  \end{align*}
+  For part (a), the original optimization is equivalent to
+  \begin{align*}
+    \min_x\quad &\sum_{i=1}^{m} 1/(a_i\T x - b_i)\\
+    \text{s.t.}\quad & Ax\succ b
+  \end{align*}
+  
+  Define $t\in\real^m$, such that $1/(a_i\T x - b_i) \leq t_i$, and push the objective into constraints
+  \begin{align*}
+    \min_x\quad & \sum_{i=1}^{m}t_i\\
+    \text{s.t.}\quad & Ax\succ b\\
+    & t_i (a_i\T x - b_i) \geq 1\\
+    & t_i \geq 0\\
+    & i = 1, \dots, m
+  \end{align*}
+
+  Use the given observation, and transform it as a SOCP
+  \begin{align*}
+    \min_x\quad & \sum_{i=1}^{m}t_i\\
+    \text{s.t.}\quad & Ax\succ b\\
+    & \left\|\begin{bmatrix}
+      2 \\ a_i\T x - b_i - t_i
+    \end{bmatrix}
+    \right\|_2
+    \leq a_i\T x - b_i + t_i\\
+    & t_i \geq 0\\
+    & i = 1, \dots, m
+  \end{align*}
+\end{solution}
+
+
+\clearpage
+\section*{Problem 7}
+\textit{Robust quadratic programming}. Consider the robust variation of the (convex) quadratic program
+\begin{align*}
+  \min_x\quad & (1/2) x\T P x + q\T x + r\\
+  \text{s.t.} \quad & Ax \preceq b
+\end{align*}
+For simplicity we assume that only the matrix $P$ is subject to errors, and the other parameters $(q, r, A, b)$ are exactly known. The robust quadratic program is defined as
+\begin{align*}
+  \min_x\quad & \sup_{P\in\mathcal{E}}\ ((1/2) x\T P x + q\T x + r)\\
+  \text{s.t.} \quad & Ax \preceq b
+\end{align*}
+where $\mathcal{E}$ is the set of possible matrices $P$.
+
+For each of the following sets $\mathcal{E}$, express the robust QP as a convex problem. Be as specific as you can. If the problem can be expressed in a standard form (e.g., QP, QCQP, SOCP, SDP), say so.
+
+(a) A finite set of matrices: $\mathcal{E} = \{P_1, \dots, P_K\}$, where $P_i\in\symm^n_+, i=1, \dots, K$.
+
+(b) A set specified by a nominal value $P_0\in\symm^n_+$ plus a bound on the eigenvalues of the deviation $P-P_0$:
+\[
+\mathcal{E} = \{P\in\symm^n \mid -\gamma I \preceq P - P_0 \preceq \gamma I\}
+\]
+where $\gamma\in\real$ and $P_0\in\symm^n_+$.
+
+\begin{solution}
+  For part (a), it can be expressed as a QCQP as follows
+  \begin{align*}
+    \min_{x, t} \quad & t\\
+    \text{s.t.} \quad 
+    &Ax \preceq b\\
+    & (1/2) x\T P_i x + q\T x + r \leq t,\ i=1, \dots, K
+  \end{align*}
+
+  For part (b), given that $P \preceq P_0 + \gamma I$, it can be expressed as a QP as follows
+  \begin{align*}
+    \min_{x} \quad & (1/2) x\T (P_0 + \gamma I) x + q\T x + r\\
+    \text{s.t.} \quad 
+    &Ax \preceq b
+  \end{align*}
+\end{solution}
+
+\clearpage
+\section*{Problem 8}
+Express the following problems as convex optimization problems
+
+(a) Minimize $\max\{p(x), q(x)\}$, where $p$ and $q$ are posynomials.
+
+(b) Minimize $exp(p(x)) + exp(q(x))$, where $p$ and $q$ are posynomials.
+
+(c) Minimize $p(x) / (r(x) - q(x))$, subject to $r(x) > q(x)$, where $p, q$ are posynomials, and $r$ is a monomial.
+
+\begin{solution}
+  (a)
+  \begin{align*}
+    \min \quad & t\\
+    \text{s.t.} \quad 
+    & p(x) / t \leq 1\\
+    & q(x) / t \leq 1\\
+    & x_i = e^{y_i}
+  \end{align*}
+
+  (b)
+  \begin{align*}
+    \min \quad & e^{t_1} + e^{t_2}\\
+    \text{s.t.} \quad 
+    & p(x) / t \leq 1\\
+    & q(x) / t \leq 1\\
+    & x_i = e^{y_i}
+  \end{align*}
+
+  (c)
+  \begin{align*}
+    \min \quad & t\\
+    \text{s.t.} \quad 
+    & \frac{p(x)/t + q(x)}{r(x)} \leq 1\\
+    & x_i = e^{y_i}
+  \end{align*}
+\end{solution}
+
+
+\clearpage
+\section*{\blue{Problem 9}}
+\blue{\textit{LPs, QPs, QCQPs, and SOCPs as SDPs}. Express the following problems as SDPs.}
+
+Recall the semidefinite programming (SDP),
+\begin{align*}
+  \min_x \quad & c\T x + d\\
+  \text{s.t.}\quad 
+  & x_1 F_1 + \cdots + x_n F_n + G \preceq 0\\
+  & Ax = b
+\end{align*}
+where $G, F_1, \dots, F_n \in\symm^k$, and $A\in\real^{p\times n}$.
+
+Recall the Schur Complement, for $A\in\symm^r_{++}, C\in\symm^s, B\in\real^{r\times s}$, we have
+\begin{align*}
+  C - B\T A^{-1} B \succeq 0
+  \quad \Leftrightarrow \quad
+  \begin{bmatrix}
+    A & B\\ B\T & C
+  \end{bmatrix}
+  \succeq 0 
+\end{align*}
+
+(a) The LP
+\begin{align*}
+  \text{minimize}\quad & c\T x + d\\
+  \text{subject to}\quad 
+  & Gx \preceq h\\
+  & Ax = b
+\end{align*}
+
+Rewrite the inequality constraint as a diagonal matrix form
+\begin{align*}
+  Gx\preceq h \quad
+  & \Leftrightarrow \quad g_i\T x - h_i \leq 0,\ i=1, \dots, n\\
+  & \Leftrightarrow \quad \begin{bmatrix}
+    g_1\T x - h_1 & & \\
+     & \ddots & \\
+     & & g_n\T x - h_n
+  \end{bmatrix} \preceq 0\\
+  & \Leftrightarrow \quad 
+  x_1 
+  \begin{bmatrix}
+    g_{11} & & \\
+     & \ddots & \\
+     & & g_{n1}
+  \end{bmatrix}
+  + \dots +
+  x_n
+  \begin{bmatrix}
+    g_{1n} & & \\
+     & \ddots & \\
+     & & g_{nn}
+  \end{bmatrix}
+  -
+  \begin{bmatrix}
+    h_1 & & \\
+     & \ddots & \\
+     & & h_n
+  \end{bmatrix}
+  \preceq 0
+\end{align*}
+
+$\Leftrightarrow$
+\begin{align*}
+  \min_x \quad & c\T x + d\\
+  \text{s.t.}\quad 
+  & \textbf{diag}(Gx - h) \preceq 0\\
+  & Ax = b
+\end{align*}
+
+(b) The QP
+\begin{align*}
+  \text{minimize}\quad & (1/2) x\T P x + q\T x + r\\
+  \text{subject to}\quad 
+  & Gx \preceq h\\
+  & Ax = b
+\end{align*}
+
+
+Decompose $P = WW\T$ where $W\in\real^{n\times r}$. Define $t$, such that $x\T WW\T x \leq t$.
+\[
+  t - (W\T x) (I)^{-1} (W\T x) \geq 0
+  \quad \Leftrightarrow \quad
+  \begin{bmatrix}
+    I & W\T x\\ x\T W & t
+  \end{bmatrix}
+  \succeq 0 
+\]
+
+
+$\Leftrightarrow$
+\begin{align*}
+  \min_{x, t} \quad & (1/2)t + q\T x + r\\
+  \text{s.t.}\quad 
+  & \begin{bmatrix}
+    I & W\T x\\ x\T W & t
+  \end{bmatrix} \succeq 0\\
+  & \textbf{diag}(Gx - h) \preceq 0\\
+  & Ax = b
+\end{align*}
+
+
+(c) The QCQP
+\begin{align*}
+  \text{minimize}\quad & (1/2) x\T P_0 x + q_0\T x + r_0\\
+  \text{subject to}\quad 
+  & (1/2) x\T P_i x + q_i\T x + r_i \leq 0,\ i=1, \dots, m\\
+  & Ax = b
+\end{align*}
+
+
+Decompose $P_i = W_i W_i\T$ where $W_i \in\real^{n\times r_i}$. Define $t_i$, such that $x\T W_iW_i\T x \leq t_i,\ i=0, \dots, m$.
+
+$\Leftrightarrow$
+\begin{align*}
+  \min_{x, t_i} \quad & (1/2)t_0 + q_0\T x + r_0\\
+  \text{s.t.}\quad 
+  & \begin{bmatrix}
+    I & W_i\T x\\ x\T W_i & t_i
+  \end{bmatrix} \succeq 0,\ i=0, \dots, m\\
+  & (1/2) t_i + q_i\T x + r_i,\ i=1, \dots, m\\
+  & Ax = b
+\end{align*}
+
+
+(d) The SOCP
+\begin{align*}
+  \text{minimize}\quad & f\T x\\
+  \text{subject to}\quad 
+  & \|A_ix + b_i\|_2 \leq c_i\T x + d_i, \ i=1, \dots, m\\
+  & Fx = g
+\end{align*}
+
+Assume $c_i\T x + d_i > 0$, square both sides and divide it by $(c_i\T x + d_i)$
+\[
+  \|A_ix + b_i\|_2^2 \leq (c_i\T x + d_i)^2 
+  \quad \Leftrightarrow \quad
+  (c_i\T x + d_i) - (A_ix + b_i)\T ((c_i\T x + d_i)I)^{-1} (A_ix + b_i) \geq 0
+\]
+
+$\Leftrightarrow$
+\begin{align*}
+  \min_{x, t_i} \quad & f\T x\\
+  \text{s.t.}\quad 
+  & \begin{bmatrix}
+    (c_i\T x + d_i) I & A_i x + b_i\\ (A_i x + b_i)\T & c_i\T x + d_i
+  \end{bmatrix} \succeq 0,\ i=1, \dots, m\\
+  & Fx = g
+\end{align*}
+
 
 \end{document}
