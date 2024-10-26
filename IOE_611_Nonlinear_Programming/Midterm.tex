@@ -6,6 +6,7 @@
 \usepackage{amsmath, amsfonts, amsthm, amssymb} 
 \usepackage[shortlabels]{enumitem}
 \usepackage{xcolor}
+\usepackage{mathtools}
 
 \parskip = 0.1in
 
@@ -65,7 +66,58 @@ K = \{(x, y, z):y>0, ye^{x/y} \leq z\}
 \]
 
 \begin{solution}
-    TODO
+By definition, the dual cone $K^*$ can be written as:
+$$
+\begin{aligned}
+{K}^* & =\{(u, v, w) \mid  x u+y v+z w \geq 0, \forall(x, y, z) \in K\} \\
+& =\left\{(u, v, w) \mid  u \frac{x}{y}+v+w \frac{z}{y}>0, \forall y>0, e^{x / y} \leq z / y\right\}
+\end{aligned}
+$$
+
+Note that if $w<0$, then for any $u, v \in \mathbb{R}$, consider $\left(x_0, y_0,  z_0\right)=(0, 1, \max \{1,-\frac{|v|+1}{w}\}) \in K$, we have
+\[
+u x_0+v y_0+w z_0=v+w z_0 \leq v+w \cdot\left(-\frac{|v|+1}{w}\right)=v-|v|-1<0
+\]
+which implies that $(u, v, w)\notin K^*$.
+
+Thus, $\forall(u, v, w) \in {K}^*$, we must have $w \geq 0$.
+
+If $w=0$, consider $y=1, z=e^x$, then $\forall x \in \mathbb{R},(x, y, z) \in K$, therefore if $(u, v, 0) \in K^*$, we must have $u x+v \geq 0$ for all $x \in \mathbb{R}$. 
+
+Then, we must have $u=0, v \geq 0$.
+
+Conversely, if $u=w=0, v\geq 0$, then $\forall(x, y, z) \in {K},  u x+v y+w z=v y \geq 0$.
+
+If $w > 0$, then for any $(x, y, z) \in K$,
+$$
+u \frac{x}{y}+v+w \frac{z}{y} \geq u \frac{x}{y}+v+w e^{x / y}
+$$
+and equality holds if and only if $z / y=e^{x / y}$.
+
+Since $\forall x \in \mathbb{R},\left(x, 1, e^x\right) \in \mathcal{K}$, we know $\forall(u, v, w) \in K^*$,
+$$
+f(x)=u x+v+w e^x \geq 0, \forall x \in \mathbb{R} .
+$$
+
+
+If $u>0$, then when $x \rightarrow -\infty, u x \rightarrow-\infty, w_e^x \rightarrow 0 \Rightarrow f(x) \rightarrow-\infty$, it leads to a contradiction! Therefore $u \leq 0$. 
+
+Note that $f^{\prime}(x)=w e^x+u$.
+
+If $u=0$, then $f(x)$ increases when $x$ increases, i.e., $\inf_{x \in \real} f(x)=\lim_{x \rightarrow \infty} f(x)=v$. Therefore, $(0, v, w) \in K^*$ for $w>0$ if $v \geq 0$.
+
+If $u<0$, then $f(x)$ is monotonically increasing for $x \in\left(-\infty, \log \frac{-u}{w}\right)$ and monotonically decreasing for $x \in\left(\log \frac{-u}{w},+\infty\right)$. 
+
+Therefore 
+$$\min_{x \in \mathbb{R}} f(x)=f\left(\log \frac{-u}{w}\right)=u \log \frac{-u}{w}+v+w \cdot\left(\frac{-u}{w}\right)=u\left(\log \frac{-u}{w}-1\right)+v$$
+
+Consequently, $(u, v, w) \in K^*$ for $u<0, w>0$ if $v \geq u\left(1-\log \frac{-u}{w}\right)$.
+
+In conclusion, 
+\[
+K^* = \{(u, v, w) \mid  u = 0, v, w \geq 0\} \cup \{(u, v, w) \mid  u<0, w>0, v\geq u(1-\log \frac{-u}{w})\}
+\]
+
 \end{solution}
 
 
@@ -73,7 +125,6 @@ K = \{(x, y, z):y>0, ye^{x/y} \leq z\}
 \clearpage
 \section*{Problem 2}
 Consider the following optimization problem:
-
 \begin{align}
     \min_{x\in\real^n}\quad &f(x)\notag\\
     \text{s.t.}\quad 
@@ -93,6 +144,88 @@ where $\grad f(x^*)_i$ is the ith element of $\grad f(x^*)$.
 x_k^* > 0 \Rightarrow \grad f(x^*)_k = \min_{1\leq i\leq n}\grad f(x^*)_i
 \]
 
+\begin{proof}
+Since $f(x)$ is convex, by the first order optimality condition, $x$ is optimal if and only if $x^*$ is feasible and for any feasible $y\in\dom f$,
+\[
+\grad f(x^*)\T (y - x^*) \geq 0 \Rightarrow \grad f(x^*)\T y \geq  \grad f(x^*)\T x^*
+\]
+
+(a) 
+
+"$\Rightarrow$": 
+If $x^*$ is optimal, for any $i = 1, \dots, n$, let $e_i$ be the unit vector such that all elements except the $i$-th element are 0 , and the $i$-th element is 1.
+
+Therefore, $\ones^{\top} e_i=1$ and $e_i \geq 0$, which indicates that $e_i$ is feasible\, for any $i = 1, \dots, n$. 
+
+Then $\forall i = 1, \dots, n$, we have
+$$
+\begin{aligned}
+& \nabla f\left(x^*\right)^{\top}\left(e_i-x^*\right) \geq 0 \\
+\Leftrightarrow\quad & \nabla f\left(x^*\right)^{\top} e_i \geq \nabla f\left(x^*\right)^{\top} x^*\\
+\Leftrightarrow\quad & \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)^{\top} x^*\\
+\Leftrightarrow\quad & \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)^{\top} x^*
+\end{aligned}
+$$
+
+"$\Leftarrow$":
+If $\min_{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)^{\top} x^*$, then for any $y\succeq 0, \ones\T y = 1$,
+\begin{align*}
+    \grad f(x^*)\T y
+    & = \sum_{i=1}^{n} y_i \grad f(x^*)_i\\
+    & \geq \min_{1 \leq i \leq n} \grad f(x^*)_i \sum_{i=1}^{n} y_i \\
+    & = \min_{1 \leq i \leq n} \grad f(x^*)_i \ones\T y\\
+    & = \min_{1 \leq i \leq n} \grad f(x^*)_i\\
+    & \geq \grad f(x^*)\T x^*
+\end{align*}
+which implies $\grad f(x^*)\T y \geq \grad f(x^*)\T x^*$ for any feasible $y$. Thus, $x^*$ is optimal.
+
+(b) From the result of part (a), we only need to prove that 
+$$\min_{1\leq i \leq n} \grad f(x^*)_i \geq \grad f(x^*)\T x^*$$
+if and only if $x^*$ is feasible, and for each $k = 1, \dots, n$, 
+$$x_k^* > 0 \Rightarrow \grad f(x^*)_k = \min_{1\leq i\leq n}\grad f(x^*)_i$$
+
+
+"$\Rightarrow$": 
+If $\min_{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)^{\top} x^*, x^*$ is feasible and $x_k^*>0$ for each $k = 1, \dots, n$, then we have
+$$
+\begin{aligned}
+\nabla f\left(x^*\right)^{\top} x^* & =\nabla f\left(x^*\right)_k  x_k^*+\sum_{i \neq k} \nabla f\left(x^*\right)_i x_i^* \\
+& \geq \nabla f\left(x^*\right)_k  x_k^*+\sum_{i \neq k} x_i^*  \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i \\
+& =\nabla f\left(x^*\right)_k  x_k^*+\left(1-x_k^*\right) \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i
+\end{aligned}
+$$
+
+
+Given that $\min_{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)^{\top} x^*$, and $x_k^*>0$, we have
+$$
+\begin{aligned}
+& \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i-\left(1-x_k^*\right)\min_{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq x_k^* \nabla f\left(x^*\right)_k \\
+\Leftrightarrow \quad
+& \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i \geq \nabla f\left(x^*\right)_k .
+\end{aligned}
+$$
+
+
+Since we also have $\nabla f\left(x^*\right)_k \geq \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i$, we must have $\nabla f\left(x^*\right)_k=\min _{i \leq i \leq n} \nabla f\left(x^*\right)_i$.
+
+
+"$\Leftarrow$":
+If $x^*$ is feasible and for each $k$, $x_k^*>0 \Rightarrow \nabla f\left(x^*\right)_k=\min _{1\leq  i \leq n} \nabla f\left(x^*\right)_i$, we can separate $x$ as two parts. First part we have $x_k$ for some $k$ such that $x_k > 0$, and the second part we have $x_l$ for $l$ includes the rest of $x$ such that $x_l = 0$.
+$$
+\begin{aligned}
+\nabla f\left(x^*\right)^{\top} x^* & =\sum_{i=1}^n x_i^* \nabla f\left(x^*\right)_i \\
+& =\sum_{k} x_k^* \nabla f\left(x^*\right)_k+\sum_{l} x_l^* \nabla f\left(x^*\right)_l \\
+% & =\sum_{k} x_k^* \min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i \\
+& =\min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i \sum_{k} x_k^* \\
+& =\min _{l \leq i \leq n} \nabla f\left(x^*\right)_i(\ones^{\top} x^*-\sum_{l} x_l^*) \\
+& =\min _{1 \leq i \leq n} \nabla f\left(x^*\right)_i
+\end{aligned}
+$$
+
+
+Therefore, $\nabla f\left(x^*\right)^{\top} x^* \leq \min _{1\leq i \leq n} \nabla f\left(x^*\right)_i$.
+\end{proof}
+
 \clearpage
 \section*{Problem 3}
 Consider the function $f:\real^{n \times n}\times \real^n \rightarrow \real$ defined by $f(X, y) = y\T X^{-1}y$, where $X\in \real^{n\times n}$ and $y\in\real^n$.
@@ -102,16 +235,51 @@ Consider the function $f:\real^{n \times n}\times \real^n \rightarrow \real$ def
 (b) Suppose that $\dom f=\{(X, y): X+X\T \in\symm^n_{++}\}$. Is $f(X, y)$ convex? If so, prove it. If not, give a counter-example.
 
 
+\begin{solution}
+    (a)
+    To determine if \( f(X, y) \) is convex, we can check if the epigraph of \( f \), defined as
+    \[
+    \epi f = \{ (X, y, t) \mid y\T X^{-1} y \leq t, \; X \succ 0 \},
+    \]
+    is convex. Using the Schur complement, we have
+    \[
+    t - y\T X^{-1} y \geq 0 \quad \text{and} \quad X \succ 0 \quad \Longleftrightarrow \quad \begin{bmatrix} X & y \\ y\T & t \end{bmatrix} \succ 0, X\succ 0 
+    \]
+    Thus, the epigraph can be expressed as
+    \[
+    \epi f = \{ (X, y, t) \mid \begin{bmatrix} X & y \\ y\T & t \end{bmatrix} \succ 0, \; X \succ 0 \}.
+    \]
+    This set is the intersection of two convex sets (a positive semi-definite matrix constraint and \( X \succ 0 \)), which is itself convex. 
+    
+    Therefore, \( f(X, y) \) is convex when \( \dom f = \{(X, y) \mid X \in \mathbb{S}_{++}^n\} \).
+    
+    (b)
+    When the domain is changed to \( \dom f = \{(X, y) \mid X + X\T \in \mathbb{S}_{++}^n \} \), the function \( f(X, y) \) is no longer convex. We can find a counterexample which violates the convexity.
+    
+    Consider the matrices and vectors:
+    \[
+    X_1 = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}, \quad X_2 = \begin{bmatrix} 2 & -1 \\ -1 & 2 \end{bmatrix}, \quad y_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \quad y_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}.
+    \]
+    
+    Evaluate it on the Jensen's inequality.
+    \[ f( \half (X_1 + X_2), \half(y_1 + y_2) ) = \frac{1}{4} \]
+    and
+    \[
+        \half f(X_1, y_1) + \half f(X_2, y_2) = \frac{2}{3}
+    \]
+    which does not satisfy convexity in this domain.    
+\end{solution}
+
 
 \clearpage
 \section*{Problem 4}
 Let $f:\real^n\rightarrow \real$ be a convex function with $f(0)\leq 0$.
 
-(a) Show that the perspective function $tf(x/t)$ with domain $\{(x, t): t>0, x/t\in\dom f\}$ is nonincreasing as a function of $t$ for a fixed $x$.
+(a) Show that the perspective function $tf(x/t)$ with domain $\{(x, t) \mid  t>0, x/t\in\dom f\}$ is nonincreasing as a function of $t$ for a fixed $x$.
 
 (b) Let $g:\real^n\rightarrow \real$ be concave and positive on its domain. Show that the following function is convex:
 \[
-h(x) = g(x)f(x/g(x)), \quad \dom h=\{x\in\dom g: x/g(x) \in \dom f\}
+h(x) = g(x)f(x/g(x)), \quad \dom h=\{x\in\dom g \mid  x/g(x) \in \dom f\}
 \]
 
 (c) Using the result of part (b), show that the following function is convex:
@@ -119,12 +287,136 @@ h(x) = g(x)f(x/g(x)), \quad \dom h=\{x\in\dom g: x/g(x) \in \dom f\}
 h(x) = \frac{\|x\|_2^2}{(\prod_{i=1}^{n}x_i)^{1/n}},\quad \dom h = \real_{++}^n
 \]
 
+
+\begin{proof}
+(a) 
+Take $t$ and $s$, such that $0<t\leq s$ and $x/t, x/s \in \dom f$,
+\begin{align*}
+    f(\frac{x}{s}) &= f(\frac{x}{t}\cdot\frac{t}{s} + 0\cdot (1-\frac{t}{s}))\\
+    & \leq \frac{t}{s}f(\frac{x}{t}) + (1-\frac{t}{s}) f(0)\\
+    & \leq \frac{t}{s}f(\frac{x}{t})\\
+    \Leftrightarrow \quad
+    sf(\frac{x}{s}) & \leq tf(\frac{x}{t})
+\end{align*}
+which implies $tf(x/t)$ is nonincreasing for a fixed $x$.
+
+(b)
+To show $h(x)$ is convex, we first show $\dom h$ is convex, i.e. $\forall x, y \in\dom h, \alpha \in [0, 1] \Rightarrow \alpha x + (1-\alpha)y \in\dom h$, which is equivalent to show that
+\[
+\alpha x + (1-\alpha) y \in \dom g \ \text{ and }\  \frac{\alpha x + (1-\alpha) y}{g(\alpha x + (1-\alpha) y)} \in\dom f
+\]
+
+Take $\forall x, y \in\dom h, \alpha \in [0, 1]$. 
+
+Given $g(x)$ is concave, we have $\dom g$ is convex.
+
+Therefore, $\alpha x + (1-\alpha) y \in \dom g$.
+
+\begin{align*}
+    \frac{\alpha x + (1-\alpha) y}{g(\alpha x + (1-\alpha) y)}
+    =& \frac{\alpha g(x)}{g(\alpha x + (1-\alpha) y)} \cdot \frac{x}{g(x)} \\
+    &+ \frac{(1-\alpha)g(y)}{g(\alpha x + (1-\alpha) y)}\cdot \frac{y}{g(y)} \\
+    &+ (1 - \frac{\alpha g(x) + (1-\alpha)g(y)}{g(\alpha x + (1-\alpha) y)}) \cdot 0
+\end{align*}
+where $x/g(x), y/g(y), 0\in\dom f$ and their corresponding coefficients sum up to $1$.
+
+This implies it is a convex combination of elements within a convex set $\dom f$, which also lies in the same set, i.e.
+\[
+    \frac{\alpha x + (1-\alpha) y}{g(\alpha x + (1-\alpha) y)} \in\dom f
+\]
+
+Then, we need to show that $h(x)$ satisfies the Jensen's inequality, i.e. 
+\[
+    h(\alpha x + (1-\alpha) y) \leq \alpha h(x) + (1-\alpha) h(y)
+\]
+
+\begin{align*}
+    h(\alpha x + (1-\alpha) y) 
+    & = g(\alpha x + (1-\alpha) y) f(\frac{\alpha x + (1-\alpha) y}{g(\alpha x + (1-\alpha) y)})\\
+    & \leq (\alpha g(x) + (1-\alpha)g(y)) f(\frac{\alpha x + (1-\alpha) y}{\alpha g(x) + (1-\alpha)g(y)}) \Leftarrow  \text{from part (a)}\\
+    & = (\alpha g(x) + (1-\alpha)g(y)) f(\frac{\alpha g(x)}{\alpha g(x) + (1-\alpha)g(y)} \cdot \frac{x}{g(x)} + \frac{(1-\alpha) g(y)}{\alpha g(x) + (1-\alpha)g(y)} \cdot \frac{y}{g(y)})\\
+    & \leq \alpha g(x) f( \frac{x}{g(x)}) + (1-\alpha) g(y) f(\frac{y}{g(y)}) \Leftarrow \text{$f$ is convex}\\
+    & = \alpha h(x) + (1-\alpha) h(y)
+\end{align*}
+
+Thus, $h(x)$ is convex.
+
+(c)
+Take $f(x) = \|x\|_2^2$, such that $f(x)$ is convex and $f(0) = 0$.
+Take $g(x) = (\prod_{i=1}^{n})^{1/n}, \dom g = \real^n_{++}$, such that $g(x)$ is concave and positive on its domain.
+
+From the results of part (a) and (b), the function $h(x)$
+\begin{align*}
+    h(x) & = g(x) f(x/g(x)) \\
+    & = (\prod_{i=1}^{n})^{1/n} \left\|\frac{x}{(\prod_{i=1}^{n})^{1/n}}\right\|_2^2\\
+    & = \frac{\|x\|_2^2}{(\prod_{i=1}^{n}x_i)^{1/n}}
+\end{align*}
+with domain
+\[
+\dom h = \{x\in\dom g, x/g(x) \in \dom f\} = \real^n_{++}
+\]
+is a convex function.
+
+\end{proof}
+
+
 \clearpage
 \section*{Problem 5}
 (a) Let $X = \{x_1, x_2, \dots, x_m\}$ be a set of points in $\real^n$, where $m\geq n+2$. Show that $X$ can be partitioned in two sets $Y$ and $Z = X\backslash Y$ such that $\Co Y \cap \Co Z$ is non-empty. Here, $\Co Y$ and $\Co Z$ refer to the convex hulls of $Y$ and $Z$, respectively.
 
 (b) Let $S_1, \dots, S_m$ be a collection of convex sets in $\real^n$, where $m\geq n + 2$. Suppose that the intersection of every $m-1$ sets from this collection is non-empty. Then the intersection of all sets $S_1\cap\dots\cap S_m$ is non-empty.
 
+
+\begin{proof}
+    (a) Since $\left[x_i, 1\right]^{\top}, 1 \leq i \leq m$ are $\mathbb{R}^{n+1}$ vectors and $m>n+1$, we know that they are linearly dependent, i.e. $\exists y \in \mathbb{R}^m \backslash\{0\}$,
+    $$
+    \left[\begin{array}{ccc}
+    x_1 & \cdots & x_m \\
+    1 & \cdots & 1
+    \end{array}\right]\left[\begin{array}{c}
+    y_1 \\
+    \vdots \\
+    y_m
+    \end{array}\right]=0 
+    \quad\Rightarrow\quad
+    \begin{cases}
+        \sum_{i=1}^m y_i x_i=0 \\
+        \sum_{i=1}^m y_i=0 .
+    \end{cases}
+    $$
+    
+    Define $S=\left\{i\mid i = 1, \dots,  m, y_i \geq 0\right\},\ T=\{i\mid i=1, \dots, m\} \backslash S=\left\{i\mid i = 1, \dots,  m, y_i<0\right\}$. Since $y \neq 0$ we must have $S, T \neq \varnothing$. 
+    
+    Therefore, we have
+    \begin{align}
+        \begin{cases}  
+            \sum_{i=1}^m y_i x_i=0 &\Leftrightarrow\quad \sum_{i \in S} y_i x_i=\sum_{j \in T}\left(-y_j\right) x_j\\
+            \sum_{i=1}^m y_i=0 &\Leftrightarrow\quad \sum_{i \in S} y_i=\sum_{j \in T}\left(-y_j\right)>0 \\
+            \forall i \in S, y_i \geq 0 ; \forall j \in T,-y_j>0
+        \end{cases}
+        \label{eq:p5}
+    \end{align}
+    
+    Define $c=\sum_{i \in S} y_i>0$ and
+    \[
+    z_{i|j} = 
+    \begin{cases}
+        y_i / c & \text{if } i \in S\\
+        -y_j / c & \text{if }  j \in T
+    \end{cases}
+    \]
+
+    Then, divide \eqref{eq:p5} by $c$, we have
+    \begin{align*}
+        &\sum_{i \in S} z_i x_i=\sum_{j \in T} z_j x_j \coloneqq v\\
+        &\sum_{i \epsilon s} z_i=\sum_{j \in T} z_j=1\\
+        &\forall i \in\{1, \cdots, m\}, z_i \geq 0
+    \end{align*}
+    which implies that $v$ can be expressed as two convex combinations of $z_{i|j}, x_{i|j}$ for $i\in S, j\in T$.
+    
+    Consequently, let $Y=\left\{x_i\mid i \in S\right\}, Z=\left\{x_j\mid j \in T\right\}$, we have $\exists v \in \mathbb{R}^n, \ v\in\Co Y$ and $v\in\Co  Z$, i.e.
+    $\Co Y \cap \Co Z$ is non-empty.
+\end{proof}
 
 
 \end{document}
