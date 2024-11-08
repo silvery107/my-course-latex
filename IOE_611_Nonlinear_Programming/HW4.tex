@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{mathtools}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Homework of IOE 611 Nonlinear Programming\hfill Yulun Zhuang \hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[\textbf{Solution}]}
+  {\end{proof}}
+\renewcommand{\proofname}{\textbf{Proof}}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+\newcommand{\tr}{\text{tr}}
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bS}{\mathbb{S}}
+
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\T}{^\top}
+
+\begin{document}
+\title{IOE 611: Homework 4}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Problem 1}
+
+\clearpage
+\section*{Problem 2}
+
+\clearpage
+\section*{Problem 3}
+
+\clearpage
+\section*{Problem 4}
+\textit{Weak duality for unbounded and infeasible problems}. 
+The weak duality inequality, $d^* \leq p^*$,
+clearly holds when $d^* = -\infty$ or $p^* = \infty$. Show that it holds in the other two cases as well: If $p^* = -\infty$, then we must have $d^* = -\infty$, and also, if $d^* = \infty$, then we must have $p^* = \infty$.
+
+\clearpage
+\section*{Problem 5}
+\textit{Suboptimality of a simple covering ellipsoid}. 
+Recall the problem of determining the minimum
+volume ellipsoid, centered at the origin, that contains the points $a_1, \dots, a_m\in\real^n$
+\begin{align*}
+  \text{minimize}\quad& f_0(X) = \log\det(X^{-1})\\
+  \text{subject to}\quad & a_i\T X a_i \leq 1, \ i=1,\dots, m,
+\end{align*}
+with $\dom f_0 = \symm^n_{++}$.
+We assume that the vectors $a_1, \dots, m \text{ span } \real^n$ (which implies that the problem is bounded below).
+
+(a) Show that the matrix
+\[
+X_{sim} = \left(\sum_{k=1}^{m}a_ka_k\T\right)^{-1},
+\]
+is feasible.
+
+(b) Now we establish a bound on how suboptimal the feasible point $X_{sim}$ is, via the dual
+problem,
+\begin{align*}
+  \text{minimize}\quad& \log\det(\sum_{i=1}^{m} \lambda_i a_i a_i\T) - \ones\T \lambda + n\\
+  \text{subject to}\quad & \lambda \succeq 0,
+\end{align*}
+with the implicit constraint $\sum_{i=1}^{m} \lambda_i a_i a_i\T \succ 0$.
+To derive a bound, we restrict our attention to dual variables of the form $\lambda = t\ones$, where $t > 0$. Find (analytically) the optimal value of $t$, and evaluate the dual objective at this $\lambda$. Use this to prove that the volume of the ellipsoid $\{u\mid u\T X_{sim}u\leq 1\}$ is no more than a factor $(m/n)^{n/2}$ more than the volume of the minimum volume ellipsoid.
+
+\end{document}
