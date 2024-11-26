@@ -56,6 +56,133 @@
 \maketitle
 %**********************************
 \section*{Problem 1}
+\textit{A convex problem in which strong duality fails}. Consider the optimization problem
+\begin{align*}
+  \text{minimize} \quad & e^{-x}\\
+  \text{subject to} \quad & x^2/y \leq 0
+\end{align*}
+with variables $x$ and $y$, and domain $\mathcal{D} = \{(x, y)\mid y>0\}$.
+
+(a) Verify that this is a convex optimization problem. Find the optimal value.
+
+(b) Give the Lagrange dual problem, and find the optimal solution $\lambda^*$ and optimal value $d^*$ of the dual problem. What is the optimal duality gap?
+
+(c) Does Slater's condition hold for this problem?
+
+(d) What is the optimal value $p^*(u)$ of the perturbed problem
+\begin{align*}
+  \text{minimize} \quad & e^{-x}\\
+  \text{subject to} \quad & x^2/y \leq u
+\end{align*}
+as a function of $u$? Verify that the global sensitivity inequality
+\[
+  p^*(u) \geq p^*(0) - \lambda^* u
+\]
+does not hold.
+
+
+
+\clearpage
+\section*{Problem 2}
+\textit{Geometric interpretation of duality}. For each of the following optimization problems, draw a sketch of the sets
+\begin{align*}
+  \mathcal{G} &= \{(u, t)\mid \exists x\in \mathcal{D}, f_0(x) = t, f_1(x) = u\},\\
+  \mathcal{A} &= \{(u, t)\mid \exists x\in \mathcal{D}, f_0(x) \leq t, f_1(x) \leq u\},
+\end{align*}
+give the dual problem, and solve the primal and dual problems. Is the problem convex? Is Slater's condition satisfied? Does strong duality hold?
+
+The domain of the problem is $\real$ unless otherwise stated.
+
+(a) Minimize $x$ subject to $x^2 \leq 1$.
+
+(b) Minimize $x$ subject to $x^2 \leq 0$.
+
+(c) Minimize $x$ subject to $|x| \leq 0$.
+
+(d) Minimize $x$ subject to $f_1(x) \leq 0$ where
+\begin{align*}
+  f_1(x) = 
+  \begin{cases}
+    -x + 2 & x \geq 1\\
+    x & -1 \leq x \leq 1\\
+    -x-2 & x\leq -1.
+  \end{cases}
+\end{align*}
+
+
+(e) Minimize $x^3$ subject to $-x + 1 \leq 0$.
+
+(f) Minimize $x^3$ subject to $-x + 1 \leq 0$ with domain $\mathcal{D} = \real_+$.
+
+
+\clearpage
+\section*{Problem 3}
+\textit{Equality constrained least-squares}. Consider the equality constrained least-squares problem
+\begin{align*}
+  \text{minimize} \quad & \|Ax - b\|^2_2\\
+  \text{subject to} \quad & Gx = h
+\end{align*}
+where $A\in\real^{m\times n}$ with $\Rank A = n$, and $G \in\real^{p\times n}$ with $\Rank G = p$.
+
+Give the KKT conditions, and derive expressions for the primal solution $x^*$ and the dual solution $\nu^*$.
+
+
+
+\clearpage
+\section*{Problem 4}
+Derive the KKT conditions for the problem
+\begin{align*}
+  \text{minimize} \quad & \Tr X - \log\det X\\
+  \text{subject to} \quad & Xs = y,
+\end{align*}
+with variable $X\in\symm^n$ and domain $\symm^n_{++}$. $y\in\real^n$ and $s\in\real^n$ are given, with $s\T y = 1$.
+
+Verify that the optimal solution is given by
+\[
+  X^* = I + yy\T - \frac{1}{s\T s} s s\T.
+\]
+
+
+\clearpage
+\section*{Problem 5}
+\textit{Dual of SOCP}. Show that the dual of the SOCP
+\begin{align*}
+  \text{minimize} \quad & f\T x\\
+  \text{subject to} \quad & \|A_i x + b_i\|_2 \leq c_i\T x + d_i, \quad i = 1, \dots, m,
+\end{align*}
+with variables $x\in\real^n$, can be expressed as 
+\begin{align*}
+  \text{minimize} \quad & \sum_{i=1}^{m} (b_i\T u_i - d_i v_i)\\
+  \text{subject to} \quad & \sum_{i=1}^{m} (A_i\T u_i - c_i v_i) + f = 0\\
+  & \|u_i\|_2 \leq v_i, \quad i = 1, \dots, m,
+\end{align*}
+with variables $u_i\in\real^{n_i}, v_i\in\real, i = 1, \dots, m$. The problem data are $f\in\real^n, A_i\in\real^{n_i\times n}$.
+
+Derive the dual in the following two ways.
+
+(a) Introduce new variables $y_i\in\real^{n_i}$ and $t_i \in \real$ and equalities $y_i = A_i x + b_i, t_i = c_i\T x + d_i$, and derive the Lagrange dual.
+
+(b) Start from the conic formulation of the SOCP and use the conic dual. Use the fact that the second-order cone is self-dual.
+
+
+
+\clearpage
+\section*{Problem 6}
+\textit{Gradient and Newton methods}. Consider the unconstrained problem
+\[
+\text{minimize} \quad f(x) = -\sum_{i=1}^{m}\log(1 - a_i\T x) - \sum_{i=1}^{n} \log(1 - x^2_i),
+\]
+with variable $x\in\real^n$, and $\dom f=\{x \mid a_i\T x < 1, i = 1, \dots, m, |x_i| < 1, i = 1, \dots, n\}$.
+This is the problem of computing the analytic center of the set of linear inequalities
+\[
+a_i\T x \leq 1, \quad i=1, \dots, m, \quad |x_i| \leq 1, \quad i = 1, \dots, n.
+\]
+
+Note that we can choose $x^{(0)} = 0$ as our initial point. You can generate instances of this problem by choosing $a_i$ from some distribution on $\real^n$.
+
+(a) Use the gradient method to solve the problem, using reasonable choices for the backtracking parameters, and a stopping criterion of the form $\|\grad f(x) \|_2 \leq \eta$. Plot the objective function and step length versus iteration number. (Once you have determined $p^*$ to high accuracy, you can also plot $f - p^*$ versus iteration.) Experiment with the backtracking parameters $\alpha$ and $\beta$ to see their effect on the total number of iterations required. Carry these experiments out for several instances of the problem, of different sizes.
+
+(b) Repeat using Newton's method, with stopping criterion based on the Newton decrement $\lambda^2$. Look for quadratic convergence. You do not have to use an efficient method to compute the Newton step; you can use a general purpose dense solver, although it is better to use one that is based on a Cholesky factorization.
 
 
 
