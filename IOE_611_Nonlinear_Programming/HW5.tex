@@ -80,6 +80,78 @@ as a function of $u$? Verify that the global sensitivity inequality
 \]
 does not hold.
 
+\begin{solution}
+(a) The Hessian of the objective function $f_0 = e^{-x}$ is
+\begin{align*}
+  \hess f_0 =
+  \begin{bmatrix}
+    e^{-x} & 0\\
+    0 & 0
+  \end{bmatrix}
+  \succeq 0
+\end{align*}
+which shows it is convex.
+
+Given $y>0$ and $x^2 \geq 0$, $x^2$ must be zero for $x^2/y \leq 0$ to satisfy the constraint. Therefore, the feasible region is the positive $y$-axis, i.e. $\{(0, y) \mid y>0\}$, which is convex.
+
+Then we take the Hessian of the constraint function,
+\begin{align*}
+  \hess f_1 =
+  \begin{bmatrix}
+    2/y & -2x/y^2\\
+    -2x/y^2 & 2x^2/y^3
+  \end{bmatrix}
+  \succeq 0, \forall y>0
+\end{align*}
+which shows it is also convex.
+
+Since the objective function and constraint are convex, the optimization problem is convex. 
+
+Since the only feasible value for $x$ is zero, the optimal value is 
+\begin{align*}
+    f_0^* = e^{0} = 1
+\end{align*}
+
+(b) The Lagrangian dual function is, for $\lambda \geq 0$,
+\begin{align*}
+    g(\lambda) 
+    = \inf_{x,y} L(x, y, \lambda) 
+    = \inf_{x,y} e^{-x} + \lambda \frac{x^2}{y} = 0
+\end{align*}
+with $x, y \to \infty$ by inspection. The dual problem is 
+\begin{align*}
+    d^* = \max_{\lambda \geq 0} g(\lambda) = \max_{\lambda \geq 0} 0 = 0
+\end{align*}
+where $\lambda^*$ is not obtained. The duality gap is
+\begin{align*}
+    p^* - d^* = 1 - 0 = 1
+\end{align*}
+
+(c) Slater's condition does not hold. Since $x^2 \geq 0$ and $y >0$, there does not exists a feasible $(x,y)$ such that the strict inequality $x^2/y < 0$ hold. 
+
+(d) 
+If $u = 0$, then $p^*(u) = 1$. 
+
+If $u < 0$, the problem is infeasible since $x^2/y$ is non-negative given that $y>0$. Therefore, $p^*(u) = \infty$. 
+
+If $u > 0$, then the constraint is $x^2 \leq uy$. With $\inf e^{-x} = 0$ as $x^*$ approaches infinity, for any $u$, there always exists some $y^*$ that satisfies $(x^*)^2 < uy^*$. Therefore, $p^*(u) = 0$.
+
+For the global sensitivity, first find $\lambda^*$ for the dual problem, 
+\begin{align*}
+    \lambda^* &= \argmax_{\lambda \geq 0} \inf_{x,y} e^{-x} + \lambda \left(\frac{x^2}{y} - u \right) \\
+    &= \argmax_{\lambda \geq 0} -u \lambda
+\end{align*}
+where $\lambda^* = 0$ if $u > 0$, $\lambda^* = \infty$ is $u<0$. Consider $u>0$, 
+\begin{align*}
+    p^*(u) &= 0 \\
+    p^*(0) - \lambda^* u &= 1 - 0 = 1
+\end{align*}
+where $p^*(u) < p^*(0) - \lambda^* u$ and therefore the global sensitivity inequality does not hold. 
+
+
+
+
+\end{solution}
 
 
 \clearpage
@@ -109,10 +181,61 @@ The domain of the problem is $\real$ unless otherwise stated.
   \end{cases}
 \end{align*}
 
-
 (e) Minimize $x^3$ subject to $-x + 1 \leq 0$.
 
 (f) Minimize $x^3$ subject to $-x + 1 \leq 0$ with domain $\mathcal{D} = \real_+$.
+
+\begin{solution}
+(a) $\mathcal{G} = \{(t, u) \mid t\in\mathcal{D}, u = t^2-1\}$
+
+The primal problem is
+\begin{align*}
+  \min_x \quad & x\\
+  \text{s.t.} \quad & x^2 - 1 \leq 0
+\end{align*}
+
+The problem is convex since the objective is affine and the constraint is quadratic over a convex domain.
+
+The Slater's condition is satisfied since there exists feasible $\bar x\in(-1, 1) \subseteq \intr \mathcal{D}$ which satisfies strict inequality constraint $f_1(\bar x) <0 $.
+
+The primal optimal $p^* = f_0(x^*) = -1$ is obtained when $x^* = -1$ is on the boundary of the constraint.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_x \ x + \lambda(x^2 - 1)\\
+  =& \max_{\lambda\geq 0}\ - \frac{1}{4\lambda} -\lambda 
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = -1$ is obtained when $\lambda^* = 1/2$.
+
+The strong duality holds since $d^* = p^*$. We can also conclude that since the problem is convex and the Slater's condition is satisfied.
+
+
+(b) $\mathcal{G} = \{(t, u) \mid t\in\mathcal{D}, u = t^2\}$
+
+The primal problem is
+\begin{align*}
+  \min_x \quad & x\\
+  \text{s.t.} \quad & x^2 \leq 0
+\end{align*}
+
+The problem is convex since the objective is affine and the constraint is quadratic over a convex domain.
+
+The Slater's condition is not satisfied since there does not exist feasible $\bar x\in \intr \mathcal{D}$ which satisfies strict inequality constraint $f_1(\bar x) < 0 $.
+
+The primal optimal $p^* = f_0(x^*) = 0$ is obtained when $x^* = 0$ is on the boundary of the constraint.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_x \ x + \lambda x^2\\
+  =& \max_{\lambda\geq 0}\ - \frac{1}{4\lambda}
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = 0$ is obtained when $\lambda^* = \infty$.
+
+The strong duality holds since $d^* = p^*$, but the Slater's condition is not satisfied.
+
+(c) TODO
+
+\end{solution}
 
 
 \clearpage
