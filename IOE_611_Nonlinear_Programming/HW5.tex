@@ -233,8 +233,100 @@ where dual optimal $d^* = g(\lambda^*) = 0$ is obtained when $\lambda^* = \infty
 
 The strong duality holds since $d^* = p^*$, but the Slater's condition is not satisfied.
 
-(c) TODO
+(c) $\mathcal{G} = \{(t, u) \mid t\in\mathcal{D}, u = |t|\}$
 
+The primal problem is
+\begin{align*}
+  \min_x \quad & x\\
+  \text{s.t.} \quad & |x| \leq 0
+\end{align*}
+
+The problem is convex since the objective is affine and the constraint is affine over a single feasible point $x=0$.
+
+The Slater's condition is not satisfied since there does not exist feasible $\bar x\in \intr \mathcal{D}$ which satisfies strict inequality constraint $f_1(\bar x) < 0 $.
+
+The primal optimal $p^* = f_0(x^*) = 0$ is obtained when $x^* = 0$.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_x \ x + \lambda |x|\\
+  =& \max_{\lambda\geq 0}\ \min_x \ 
+  \begin{cases}
+    (1 + \lambda) x & x \geq 0\\
+    (1 - \lambda) x & x < 0
+  \end{cases}
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = 0$ is obtained when $\lambda^* = 1$.
+
+The strong duality holds since $d^* = p^*$, but the Slater's condition is not satisfied.
+
+(d) $\mathcal{G} = \{(t, u) \mid t\in\mathcal{D}, u = f_1(t)\}$
+
+The primal problem is
+\begin{align*}
+  \min_x \quad & x\\
+  \text{s.t.} \quad & f_1(x) \leq 0
+\end{align*}
+
+The problem is not convex since the objective is affine and the constraint is piece-wise linear (nonlinear) over a convex domain.
+
+The Slater's condition is not useful in this case.
+
+The primal optimal $p^* = f_0(x^*) = -2$ is obtained when $x^* = -2$.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_x \ x + \lambda f_1(x)\\
+  =& \max_{\lambda\geq 0}\ \min_x \ (1 - \lambda) x - 2
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = -2$ is obtained when $\lambda^* = 1$.
+
+The strong duality holds since $d^* = p^*$, but the problem is not convex.
+
+(e) $\mathcal{G} = \{(t, u) \mid t = (1-u)^3\}$
+
+The primal problem is
+\begin{align*}
+  \min_x \quad & x^3\\
+  \text{s.t.} \quad & -x + 1 \leq 0
+\end{align*}
+
+The problem is not convex since the Hessian of the objective function $\hess f_0 = 6x<0$ for $x<0$.
+
+The Slater's condition is not useful in this case.
+
+The primal optimal $p^* = f_0(x^*) = 1$ is obtained when $x^* = 1$.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_x \ x^3 + \lambda (-x + 1)
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = -\infty$ is not attained.
+
+The strong duality does not hold since $d^* \neq p^*$.
+
+(f) $\mathcal{G} = \{(t, u) \mid t = (1-u)^3, u \leq 1\}$
+
+The primal problem is
+\begin{align*}
+  \min_{x\geq 0} \quad & x^3\\
+  \text{s.t.} \quad & -x + 1 \leq 0
+\end{align*}
+
+The problem is convex since the Hessian of the objective function $\hess f_0 = 6x\geq 0$ for $x\geq 0$, and the constraint is affine over a convex domain.
+
+The Slater's condition is satisfied since there exists feasible $\bar x\in\real_+ \subseteq \intr \mathcal{D}$ which satisfies strict inequality constraint $f_1(\bar x) <0 $.
+
+The primal optimal $p^* = f_0(x^*) = 1$ is obtained when $x^* = 1$.
+
+The dual problem is
+\begin{align*}
+  &\max_{\lambda\geq 0}\ \min_{x\geq 0} \ x^3 + \lambda (-x + 1)\\
+  =&\max_{\lambda\geq 0}\ -\frac{2}{3^{3/2}} \lambda^{3/2} + \lambda
+\end{align*}
+where dual optimal $d^* = g(\lambda^*) = 1$ is obtained when $\lambda^* = 3$.
+
+The strong duality holds since $d^* = p^*$.
 \end{solution}
 
 
@@ -249,6 +341,56 @@ where $A\in\real^{m\times n}$ with $\Rank A = n$, and $G \in\real^{p\times n}$ w
 
 Give the KKT conditions, and derive expressions for the primal solution $x^*$ and the dual solution $\nu^*$.
 
+\begin{solution}
+Since the problem is convex and the Slater's condition is satisfied, the strong duality holds such that $p^* = d^*$. Next we will find the dual optimal $\nu^*$ and primal optimal $x^*$ respectively.
+
+The Lagrangian is
+\begin{align*}
+  L(x, \nu) &= \|Ax - b\|_2^2 + \nu^\top (Gx - h)
+\end{align*}
+
+The KKT conditions are
+\begin{align*}
+  \grad L(x^*, \nu^*) = 2A\T (Ax^* - b) + G\T \nu^* &= 0\\
+  Gx^* &= h
+\end{align*}
+
+The dual function is
+\begin{align*}
+    g(\nu) 
+    &= \min_x\ L(x, \nu) \\
+    &= \min_x\ \|Ax - b\|_2^2 + \nu^\top (Gx - h) \\
+    &= \min_x\ x^\top A^\top A x + (v^\top G - 2 b^\top A) x + b^\top b - v^\top h\\
+    &= -\frac{1}{4} (G\T \nu - 2A\T b)\T (A\T A)\inv (G\T \nu - 2A\T b) - \nu\T h
+\end{align*}
+where the minimizer is found from its derivative
+\begin{align*}
+2 A^\top A x + (v^\top G - 2 b^\top A)^\top = 0 \\
+x = -\frac{1}{2} (A^\top A)^{-1} (G^\top v - 2 A^\top b)
+\end{align*}
+
+Take the derivative of $g(\nu)$ w.r.t. $\nu$, we have
+\begin{align*}
+    0 &= -\frac{1}{2} G (A\T A)^{-1} G^\top v + G (A\T A)^{-1} A^\top b - h^\top \\
+    v^* &= -2 (G (A\T A)^{-1} G^\top)^{-1} (h - G A^\dagger b)
+\end{align*}
+where $A^\dagger = (A^\top A)^{-1} A^\top$. 
+
+From the first KKT condition, plug in $\nu^*$
+\begin{align*}
+    0 &= 2(A\T A)x - 2A^\top b + G^\top v^* \\
+    0 &= 2(A\T A)x^* - 2A^\top b - 2 G^\top (G (A\T A)^{-1} G^\top)^{-1} (h - G A^\dagger b) \\
+    x^* &= A^\dagger b + (A\T A)^{-1} G^\top (G (A\T A)^{-1} G^\top)^{-1} (h - G A^\dagger b)
+\end{align*}
+
+Verify the second KKT condition, 
+\begin{align*}
+    h &= Gx\\
+    &= G A^\dagger b + G (A\T A)^{-1} G^\top (G (A\T A)^{-1} G^\top)^{-1} (h - G A^\dagger b)\\
+    &= G A^\dagger b - G A^\dagger b + h\\
+    &= h
+\end{align*}
+\end{solution}
 
 
 \clearpage
@@ -265,6 +407,75 @@ Verify that the optimal solution is given by
   X^* = I + yy\T - \frac{1}{s\T s} s s\T.
 \]
 
+\begin{solution}
+The Lagrangian is
+\begin{align*}
+  L(X, \nu) &= \Tr X - \log\det X + \nu^\top (Xs - y)
+\end{align*}
+
+
+The KKT conditions are 
+\begin{align*}
+  0 &= \grad L(X^*, \nu^*) = \nabla (\Tr X^* - \log \det X^*) + (\nu^*)^\top \nabla (X^*s - y)\\
+  0 &= X^*s - y
+\end{align*}
+To find and verify the optimal solution $X^*$, find $(X^*, \nu^*)$ that satisfy the KKT conditions. Since the problem is convex, satisfying the KKT conditions guarantees $X^*$ is optimal. 
+
+From the first KKT condition,
+\begin{align*}
+    0 &= \nabla (\Tr X - \log \det X) + \nu^\top \nabla (Xs - y) \\
+    0 &= \nabla (\Tr X) - \nabla (\log \det X) + \nabla (\nu^\top X s) \\
+    0 &= I - X^{-1} + \frac{1}{2} \nabla (\nu^\top X s + s^\top X \nu) \\
+    0 &= I - X^{-1} + \frac{1}{2} (\nu s^\top + s \nu^\top) \\
+    (X^*)\inv &= I + \frac{1}{2} (\nu s^\top + s \nu^\top)
+\end{align*}
+where $\nabla (\log \det X) = X^{-1}$ is given from the textbook.
+
+Next, substitute $(X^*)\inv$ into the second KKT condition to find $\nu^*$,
+\begin{align*}
+    Xs &= y \\
+    X^{-1} X s &= (I + \frac{1}{2} (\nu s^\top + s \nu^\top)) y \\
+    % s &= y + \frac{1}{2} (\nu s^\top y + s \nu^\top y) \\
+    y^\top s &= y^\top y + \frac{1}{2} (y^\top \nu + (\nu^\top y) y^\top s)  \quad \Leftarrow\text{multiply }y^\top\\
+    % \nu &= 2s - 2y - (\nu^\top y)s \\
+    % y^\top \nu &= 2y^\top s - 2y^\top y - (\nu^\top y)y^\top s\\
+    % \nu^\top y &= 1 - y^\top y\\
+    % \nu^* &= 2s - 2y - (1 - y^\top y)s \\
+    \nu^* &= -2y + (1 + y^\top y) s
+\end{align*}
+
+Plug in $\nu^*$ to find $(X^*)^{-1}$, 
+\begin{align*}
+    X^{-1} &= I + \frac{1}{2} (\nu s^\top + s \nu^\top) \\
+    % X^{-1} &= I + \frac{1}{2} \left((-2y + (1 + y^\top y) s) s^\top + s (-2y + (1 + y^\top y) s)^\top \right) \\
+    X^{-1} &= I + \frac{1}{2} \left(-2y s^\top + (1 + y^\top y) s s^\top - 2s y^\top + (1 + y^\top y) s s^\top \right) \\
+    (X^*)^{-1} &= 
+    I - y s^\top - sy^\top + (1 + y^\top y) s s^\top
+\end{align*}
+To show that 
+\begin{align*}
+    X^* = I + yy^\top - \frac{1}{s^\top s} s s^\top
+\end{align*}
+is the optimal is equivalent to showing $(X^*)^{-1} X^* = I$, 
+\begin{align*}
+    & \left( I + (1 + y^\top y) s s^\top - y s^\top - sy^\top \right) 
+    \left( I - \frac{1}{s^\top s}s s^\top + yy^\top\right) \\
+    % =& I - \frac{1}{s^\top s}s s^\top  + yy^\top 
+    % + (1 + y^\top y) s s^\top \left( I - \frac{1}{s^\top s}s s^\top + yy^\top\right) 
+    % - (y s^\top + sy^\top) \left( I - \frac{1}{s^\top s}s s^\top + yy^\top\right) \\
+    % =& I - \frac{1}{s^\top s}s s^\top  + yy^\top 
+    % + (1 + y^\top y) (s s^\top - s s^\top + s y^\top) 
+    % - (y s^\top - y s^\top + y y^\top)
+    % - (sy^\top - \frac{1}{s^\top s}s s^\top + s y^\top y y^\top) \\
+    =& I + yy^\top 
+    + (1 + y^\top y) (s y^\top) 
+    - y y^\top
+    - (sy^\top + s y^\top y y^\top) \\ 
+    =& I + (1 + y^\top y) (s y^\top) - (1+ y^\top y )(sy^\top) \\ 
+    =& I
+\end{align*}
+
+\end{solution}
 
 \clearpage
 \section*{Problem 5}
@@ -287,6 +498,74 @@ Derive the dual in the following two ways.
 
 (b) Start from the conic formulation of the SOCP and use the conic dual. Use the fact that the second-order cone is self-dual.
 
+\begin{proof}
+Based on $y_i, t_i$, the constraints can be rewritten as 
+\begin{align*}
+    \| y_i \|_2 \leq t_i \\
+    A_i x + b_i &= y_i \\
+    c_i^\top x + d_i &= t_i
+\end{align*}
+The Lagrangian $L(x, y, t, \lambda, \nu, \mu)$ is 
+\begin{align*}
+    L = f^\top x + \sum_{i=1}^m \lambda_i (\|y_i\|_2 - t_i) + \sum_{i=1}^m \nu_i^\top (y_i - A_i x - b_i) + \sum_{i=1}^m \mu_i (t_i - c_i^\top x - d_i)
+\end{align*}
+The dual function is 
+\[
+g(\lambda, \nu, \mu) = \inf_{x, y, t} L(x, y, t, \lambda, \nu, \mu)
+\]
+The minimum over $x$ is 
+\begin{align*}
+    \inf_x \left(  f^\top x - \sum_{i=1}^m \nu_i^\top A_i x - \sum_{i=1}^m \mu_i c_i^\top x \right)
+    = \inf_x \left(f^\top - \sum_{i=1}^m \nu_i^\top A_i + \mu_i c_i^\top \right) x 
+\end{align*}
+which is only bounded and equals $0$ if 
+\begin{align*}
+    f^\top - \sum_{i=1}^m \nu_i^\top A_i + \mu_i c_i^\top &= 0 \\
+    - \sum_{i=1}^m \left( A_i^\top \nu_i + \mu_i c_i \right) + f &= 0
+\end{align*}
+The minimum over each \(y_i\) is 
+\begin{align*}
+    \inf_{y_i} \left( \lambda_i \|y_i\|_2 + \nu_i^\top y_i \right)
+\end{align*}
+which is only bounded and equals $0$ if $\|\nu_i\|_2 \leq \lambda_i$.
+
+The minimum over each \(t_i\) is 
+\begin{align*}
+    \inf_{t_i} -\lambda_i t_i + \mu_i t_i = \inf_{t_i} (\mu_i - \lambda_i) t_i
+\end{align*}
+which is only bounded and equals $0$ if $\mu_i = \lambda_i$.
+
+Plug in above results into the dual function, where all terms that depend on $(x, y, t)$ have been minimized to zero, 
+\begin{align*}
+    g(\lambda, \nu, \mu) &= \inf_{x, y, t} L(x, y, t, \lambda, \nu, \mu) \\
+    &= - \sum_{i=1}^m \nu_i^\top b_i - \sum_{i=1}^m \lambda_i d_i
+\end{align*}
+with the conditions
+\begin{align*}
+    - \sum_{i=1}^m \left( A_i^\top \nu_i + \lambda_i c_i \right) + f &= 0 \\
+    \| \nu_i \|_2 &\leq \lambda_i
+\end{align*}
+Let $u_i = -\nu_i, v_i = \lambda_i$, the dual problem $\max g(u_i, v_i)$ is 
+\begin{align*}
+    \max \quad & \sum_{i=1}^m b_i^\top u_i - d_i v_i\\
+    \text{s.t.} \quad & \sum_{i=1}^m A_i^\top u_i - c_i v_i + f = 0 \\
+    & \left\| u_i \right\|_2 \leq v_i \quad i = 1, \ldots, m
+\end{align*}
+
+(b) 
+The conic formulation is 
+\begin{align*}
+    \min &\quad f^\top x \\
+    \text{s.t.} &\quad -(A_i x + b, c_i^\top x + d_i) \leq_{K_i} 0
+\end{align*}
+
+The conic dual is 
+\begin{align*}
+  \max \quad & \sum_{i=1}^m b_i^\top u_i - d_i v_i\\
+  \text{s.t.} \quad & \sum_{i=1}^m A_i^\top u_i - c_i v_i + f = 0 \\
+  & (u_i, v_i) \geq_{K_i} 0 \quad i = 1, \ldots, m
+\end{align*}
+\end{proof}
 
 
 \clearpage
@@ -307,6 +586,53 @@ Note that we can choose $x^{(0)} = 0$ as our initial point. You can generate ins
 
 (b) Repeat using Newton's method, with stopping criterion based on the Newton decrement $\lambda^2$. Look for quadratic convergence. You do not have to use an efficient method to compute the Newton step; you can use a general purpose dense solver, although it is better to use one that is based on a Cholesky factorization.
 
+\begin{solution}
+(i)
+To generate instances of the problem, we randomly sampled the rows of the matrix $A = \begin{bmatrix} a_1^\top \\ a_2^\top \\ \vdots \\ a_m^\top \end{bmatrix}$ from a uniform distribution over $[-1, 1]^n$, where each row vector $a_i \in \mathbb{R}^n$. For the constraint $a_i^\top x < 1$, we ensured that $a_i$ is scaled such that the constraint bounds are consistent within the domain $|x_i| < 1$ for $i = 1, \ldots, n$. Problem sizes $(m, n)$ were varied to analyze performance for different dimensions.
+
+(ii) {Gradient and Hessian formulations}
+
+The objective function is given as:
+\[
+    f(x) = - \sum_{i=1}^m \log(1 - a_i^\top x) - \sum_{i=1}^n \log(1 - x_i^2).
+\]
+
+The gradient of $f(x)$ is:
+\[
+    \nabla f(x) = \sum_{i=1}^m \frac{a_i}{1 - a_i^\top x} + \sum_{i=1}^n \frac{2x_i}{1 - x_i^2}.
+\]
+
+The Hessian of $f(x)$ is:
+\[
+    \nabla^2 f(x) = \sum_{i=1}^m \frac{a_i a_i^\top}{(1 - a_i^\top x)^2} + 2 \text{diag}\left( \frac{1 + x_i^2}{(1 - x_i^2)^2} \right).
+\]
+
+(iii) {Parameter choices in implementation}
+
+\begin{itemize}
+    \item Backtracking parameters: $\alpha = 0.25$, $\beta = 0.5$.
+    \item Gradient method stopping criterion: $\|\nabla f(x)\|_2 \leq \eta$, with $\eta = 10^{-6}$.
+    \item Newton's method stopping criterion: $\lambda^2 / 2 \leq \eta$, with $\eta = 10^{-9}$.
+\end{itemize}
+
+(iv) {Summary of observations and results}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{"HW5_P6.png"}
+  \caption{Comparisons of Gradient method and Newton's method}
+  \label{fig:p6}
+\end{figure}
+
+As shown in Fig.~\ref{fig:p6},
+\begin{itemize}
+    \item The gradient method converged linearly. Increasing the backtracking parameters $\alpha$ or $\beta$ reduced the total number of iterations but required longer computation per iteration due to larger step size.
+    \item Newton's method exhibited quadratic convergence near the solution. It was significantly faster in terms of iteration count, although each iteration was more computationally intensive due to Hessian inversion.
+    \item The step size $t_k$ for the gradient method decreased rapidly in early iterations but stabilized near the optimal solution.
+\end{itemize}
+
+
+\end{solution}
 
 
 \end{document}
