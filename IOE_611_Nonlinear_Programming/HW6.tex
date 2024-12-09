@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{mathtools}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{Homework of IOE 611 Nonlinear Programming\hfill Yulun Zhuang \hfill}
+
+\input{611defs}
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[\textbf{Solution}]}
+  {\end{proof}}
+\renewcommand{\proofname}{\textbf{Proof}}
+
+% Colors
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+
+% Handy math notations
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}} % 1/2
+\newcommand{\inv}{^{-1}}        % inverse
+\newcommand{\T}{^\top}          % transpose
+
+\begin{document}
+\title{IOE 611: Homework 6}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Problem 1}
+% Exercise 9.12
+\textit{Trust region Newton method}.
+If $\hess f(x)$ is singular (or very ill-conditioned), the Newton step $\Delta x_{\text{nt}} = -\hess f(x)\inv \grad f(x)$ is not well defined. Instead we can define a search direction $\Delta x_{\text{tr}}$ as the solution of
+\begin{align*}
+    \text{minimize}\quad & \half v\T H v + g\T v\\
+    \text{subject to}\quad & \|v\|_2 \leq \gamma,
+\end{align*}
+where $H = \hess f(x), g = \grad f(x)$, and $\gamma$ is a positive constant. The point $x + \Delta x_{\text{tr}}$ minimizes the second-order approximation of $f$ at $x$, subject to the constraint that $\| (x + \Delta x_{\text{tr}}) - x\|_2 \leq \gamma$. The set $\{v \mid \|v\|_2\leq \gamma\}$ is called the \textit{trust region}. The parameter $\gamma$, the size of the trust region, reflects our confidence in the second-order model.
+
+Show that $\Delta x_{\text{tr}}$ minimizes
+\[
+    \half v\T H v + g\T v + \hat \beta \|v\|_2^2,
+\]
+for some $\hat \beta$. THis quadratic function can be interpreted as a regularized quadratic model for $f$ around $x$.
+
+
+
+\clearpage
+\section*{Problem 2}
+% Exercise 10.15
+\textit{Equality constrained entropy maximization}. Consider the equality constrained entropy maximization problem
+\begin{align*}
+    \text{minimize}\quad & f(x) = \sum_{n}^{i=1} x_i \log x_i\\
+    \text{subject to}\quad & Ax = b,
+\end{align*}
+with $\dom f = \real^n_{++}$ and $A\in\real^{p\times n}$, with $p < n$.
+
+Generate a problem instance with $n = 100$ and $p = 30$ by choosing $A$ randomly (checking that it has full rank), choosing $\hat x$ as a random positive vector (e.g., with entries uniformly distributed on [0, 1]) and then setting $b = A\hat x$. (Thus, $\hat x$ is feasible.)
+
+Compute the solution of the problem using the following methods.
+
+(a) \textit{Standard Newton method}. You can use initial point $x^{(0)} = \hat x$.
+
+(b) \textit{Infeasible start Newton method}. You can use initial point $x^{(0)} = \hat x$ (to compare with the standard Newton method), and also the initial point $x^{(0)} = \ones$.
+
+(c) \textit{Dual Newton method}, i.e. the standard Newton method applied to the dual problem.
+
+Verify that the three methods compute the same optimal point (and Lagrange multiplier).
+Compare the computational effort per step for the three methods, assuming relevant
+structure is exploited. 
+(Your implementation, however, does not need to exploit structure to compute the Newton step.)
+
+\clearpage
+\section*{Problem 3}
+% Exercise 11.7
+\textit{Tangent to central path}. This problem concerns $dx^*(t)/dt$, which gives the tangent to the central path at the point $x^*(t)$. For simplicity, we consider a problem without equality constraints; the results readily generalize to problems with equality constraints.
+
+(a) Find an explicit expression for $dx^*(t)/dt$.
+
+(b) Show that $f_0(x^*(t))$ decreases as $t$ increases. Thus the objective value in the barrier method decreases, as the parameter $t$ is increased. (We already know that the duality gap, which is $m/t$ decreases as t increases.)
+
+
+\end{document}
