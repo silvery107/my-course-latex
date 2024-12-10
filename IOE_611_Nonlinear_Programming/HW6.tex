@@ -69,8 +69,50 @@ Show that $\Delta x_{\text{tr}}$ minimizes
 \[
     \half v\T H v + g\T v + \hat \beta \|v\|_2^2,
 \]
-for some $\hat \beta$. THis quadratic function can be interpreted as a regularized quadratic model for $f$ around $x$.
+for some $\hat \beta$. This quadratic function can be interpreted as a regularized quadratic model for $f$ around $x$.
 
+\begin{proof}
+    The Lagrangian of the original optimization is
+    \[
+        \mathcal{L}(v, \lambda) = \half v\T H v + g\T v + \lambda (\|v\|_2 - \gamma)
+    \]
+
+    The KKT conditions are
+    \begin{align}
+        & \lambda \geq \zeros\label{eq:dual-ineq}\\
+        & \|v\|_2 \leq \gamma\label{eq:primal-ineq}\\
+        & \lambda (\|v\|_2 - \gamma) = \zeros\label{eq:comp-slack}\\
+        & \grad \mathcal{L} = (H + 2\lambda I) v - g = \zeros\label{eq:lag-grad}
+    \end{align}
+
+    Case 1: $H \succ 0$.
+    
+    Given $H+2 \lambda I>0$ for all $\lambda \succ 0$, we can solve for $v^* = (H + 2\lambda I)\inv g$.
+
+    Note that $\left\|v^*\right\|_2$ is decreasing with respect to $\lambda$, we know that $\min _{\lambda \geq 0}\left\|v^*\right\|_2=\left\|H^{-1} g\right\|_2$.
+    
+    If $\left\|H^{-1} g\right\|_2 > \gamma$, we must have $\lambda^*>0$ to satisfy \eqref{eq:primal-ineq}, therefore by \eqref{eq:comp-slack} we have $\left\|\left(H+2 \lambda^* I\right)^{-1} g\right\|_2=\gamma$. 
+    
+    Let $\hat{\beta}=\lambda^*$, we know that $v^*$ minimizes $\frac{1}{2} v^{\top} H v+g^{\top} v+\hat{\beta}\|v\|^2$ since
+    $$
+    \frac{\partial}{\partial v}\left(\frac{1}{2} v^{\top} H v+g^{\top} v+\hat{\beta}\|v\|^2\right)=(H+2 \beta I) v+g=\left(H+2 \lambda^* I\right) v+g .
+    $$
+
+
+    If $\left\|H^{-1} g\right\| \leqslant \gamma$, then \eqref{eq:comp-slack} will be satisfied if and only if $\lambda=0$. Similarly we know that $v^*$ minimizes $\frac{1}{2} v^{\top} H v+g^{\top} v$.
+
+    Case 2: $H$ is singular.
+
+    If $\lambda^*>0$, then $\left(H+2 \lambda^* I\right) \succ 0$, and $\gamma=\left\|\left(H+2 \lambda^* I\right)^{-1} g\right\|_2$.
+
+    Let $\hat{\beta}$ be the solution of the above equation, then $v^*$ minimizes $\frac{1}{2} v^{\top} H v+g^{\top} v+\hat{\beta}\|v\|^2$.
+
+    If $\lambda^*=0$, then by \eqref{eq:lag-grad} we have $H v^*=g$, i.e. $g \in \operatorname{Range}(H), v^*=H^{\dagger} g$ and by \eqref{eq:primal-ineq} we have $r \geq \| v^*\|_2=\| H^{\dagger} g \|_2$.
+
+    Therefore, $v^*$ minimizes $\frac{1}{2} v^{\top} H v+g^{\top} v$.
+
+
+\end{proof}
 
 
 \clearpage
@@ -107,5 +149,38 @@ structure is exploited.
 
 (b) Show that $f_0(x^*(t))$ decreases as $t$ increases. Thus the objective value in the barrier method decreases, as the parameter $t$ is increased. (We already know that the duality gap, which is $m/t$ decreases as t increases.)
 
+\begin{solution}
+    (a) Given the centrality equation
+    $$
+    0=t \nabla f_0\left(x^*\right)+\sum_{i=1}^m \frac{1}{-f_i\left(x^*\right)} \nabla f_i\left(x^*\right)+A^{\top} \hat{v},
+    $$
+    
+    Differentiate it with respect to $t$, we have    
+    $$
+    \begin{aligned}
+    0 = &\nabla f_0\left(x^*\right) + t \nabla^2 f_0\left(x^*\right) \frac{d x^*}{d t} \\
+    &+ \sum_{i=1}^m\left[\frac{1}{f_i^2\left(x^*\right)} \nabla f_i\left(x^*\right) \nabla f_i\left(x^*\right)^{\top} \frac{d x^*}{d t}\right. \\
+    & \left.-\frac{1}{f_i\left(x^*\right)} \nabla^2 f_i\left(x^*\right) \frac{d x^*}{d t}\right],
+    \end{aligned}
+    $$
+    
+    which gives the explicit expression    
+    $$
+    \frac{d x^*}{d t}=-\left[t \nabla^2 f_0\left(x^*\right)-\sum_{i=1}^m\left(\frac{1}{f_i\left(x^*\right)} \nabla^2 f_i\left(x^*\right)-\frac{1}{f_i^2\left(x^*\right)} \nabla f_i\left(x^*\right) \nabla f_i\left(x^*\right)^{\top}\right)\right]^{-1} \nabla f_0\left(x^*\right) .
+    $$
+    
+    (b) To show that $f_0(x^*)$ is monotonically decreasing, we can show that $\frac{d}{d t} f_0\left(x^*\right) < 0$.
+    
+    From (a), we know that $ \frac{d x^*}{d t} = - \mathcal{G}\inv \grad f_0(x^*)$, where $\mathcal{G}\succ 0$.
+    
+    Therefore    
+    $$
+    \begin{aligned}
+    \frac{d}{d t} f_0\left(x^*\right) & =\nabla f_0\left(x^*\right)^{\top} \frac{d x^*}{d t} \\
+    & =-\nabla f_0\left(x^*\right)^{\top} \mathcal{G}^{-1} \nabla f_0\left(x^*\right) \\
+    & < 0 .
+    \end{aligned}
+    $$
+\end{solution}
 
 \end{document}
