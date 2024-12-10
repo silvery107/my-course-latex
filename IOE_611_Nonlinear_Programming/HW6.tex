@@ -140,6 +140,34 @@ Compare the computational effort per step for the three methods, assuming releva
 structure is exploited. 
 (Your implementation, however, does not need to exploit structure to compute the Newton step.)
 
+\begin{solution}
+    \begin{figure}[htb]
+        \includegraphics[width=0.6\columnwidth]{"hw6p2.png"}
+        \centering
+        \caption{Comparisons of three Newton's methods}
+        \label{fig:p2}
+    \end{figure}
+
+
+    The computational effort is identical across all three methods. In both standard and infeasible start Newton methods, we solve equations with the coefficient matrix 
+    \[
+        \begin{bmatrix}
+            \hess f(x) & A^\top \\
+            A & \zeros
+        \end{bmatrix},
+    \]
+    where $\hess f(x) = \diag(x)^{-1}$.    
+    Using block elimination, these equations reduce to a system with the coefficient matrix $A \diag(x) A^\top$.
+    
+    In the dual method, the equations involve a coefficient matrix of the form $-\hess g(\lambda) = A D A^\top$, where $D = \diag(\exp(-A^\top \lambda - 1))$.
+    
+    Thus, in all three methods, the primary computational task in each iteration is solving a linear system of the form $A^\top D A z = -g$, where $D$ is a diagonal matrix with positive diagonal elements.
+    
+\end{solution}
+
+
+
+
 \clearpage
 \section*{Problem 3}
 % Exercise 11.7
