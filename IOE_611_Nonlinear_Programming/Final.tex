@@ -56,19 +56,384 @@
 \maketitle
 %**********************************
 \section*{Problem 1}
+(a)
+Let $B(0, 1) = \{x\in\real^n \mid \|x\|^2_2\leq 1\}$, we have
+\begin{align*}
+  E &= \{x\in\real^n \mid\|Q^{-\half}x\|^2_2 = x\T Q^{-1}x \leq 1\}\\
+  &= Q^{\half} B(0, 1)\\
+  &= \{Q^{\half} x \mid \|x\|^2_2\leq 1\}
+\end{align*}
+
+Hence, $E\subseteq S$ is equivalent to $B(0, 1) \subseteq Q^{-\half}S = \{Q^{-\half}x \mid |a\T_ix|\leq 1, i=1, \dots, k\}$.
+
+Note that $Q^{-\frac{1}{2}} S=\{y \in \mathbb{R}^n:|a_i^{\top} Q^{\frac{1}{2}} y|^2 \leq 1, i=1, \ldots, k\}$
+
+If $B(0,1) \subseteq Q^{\frac{1}{2}} S$, let $y_i=\frac{Q^{\frac{1}{2}} a_i}{\|Q^{\frac{1}{2}} a_i\|_2}$, then we have
+$$
+\begin{aligned}
+& a_i^{\top} Q^{\frac{1}{2}} y_i=a_i^{\top} Q a_i / \sqrt{a_i^{\top} Q a_i}=\left(a_i^{\top} Q a_i\right)^{\frac{1}{2}} \leq 1, \quad \forall 1 \leq i \leq k .
+\end{aligned}
+$$
+
+If $a_i^{\top} Q a_i \leq 1, \forall 1 \leq i \leq k$, by Cauchy-Schwarz inequality, for any $y \in B(0,1), 1 \leq i \leq k$
+$$
+\begin{aligned}
+a_i^{\top} Q^{\frac{1}{2}} y & =\left\langle Q^{\frac{1}{2}} a_i, y\right\rangle \\
+& \leq\left\|Q^{\frac{1}{2}} a_i\right\|_2 \cdot\|y\|_2 \\
+& =\sqrt{a_i^{\top} Q a_i} \cdot\|y\|_2 \\
+& \leq 1 .
+\end{aligned}
+$$
+
+Therefore, $B(0,1) \leq Q^{-\frac{1}{2}} S$.
+
+(b)
+Recall that the volume of $E = C_n\sqrt{\det Q}$, where $C_n > 0$ is a constant w.r.t. $Q$. Since $y=\log x$ is increasing in $x>0$, maximizing the volume of $E$ given $E\subseteq S$ is equivalent to
+\begin{align*}
+  \max\quad & \log\det Q\\
+  \text{s.t.}\quad & a_i\T Q a_i \leq 1, \forall 1\leq i \leq k.
+\end{align*}
+
+The Lagrange is
+$$
+\begin{aligned}
+L(Q, \lambda) & =\log \operatorname{det} Q+\sum_{i=1}^k \lambda_i(1-a_i^{\top} Q a_i) \\
+& =\log \operatorname{det} Q+\sum_{i=1}^k \lambda_i-\operatorname{tr}((\sum_{i=1}^k \lambda_i a_i a_i^{\top}) Q),
+\end{aligned}
+$$
+
+
+Therefore, since $\frac{\partial}{\partial Q} \log \operatorname{det} Q=Q^{-\top}=Q^{-1}, \frac{\partial}{\partial Q} \operatorname{tr}\left(A^{\top} Q\right)=A$,
+$$
+\frac{\partial}{\partial Q} L(Q, \lambda)=Q^{-1}-\sum_{i=1}^k \lambda_i a_i a_i^{\top},
+$$
+
+
+The dual problem is:
+\begin{align*}
+  \min_{\lambda\in\real^n} \quad & -\log \operatorname{det}(\sum_{i=1}^k \lambda_i a_i a_i^{\top})+\sum_{i=1}^k \lambda_i-n\\
+  \text{s.t.}\quad & \lambda \geq 0.
+\end{align*}
+
 
 
 \clearpage
 \section*{Problem 2}
 
+Let $y=0$, we have $Ay = 0, y\T \hess f(\bar{x})y = 1 < 1$, so the Slater's condition is satisfied.
+
+The Lagrangian is
+\[
+  L(y, \lambda, \nu) = \grad f(\bar{x})\T y - \lambda(1 - y\T \hess f(\bar{x})y) + \nu\T Ay,
+\]
+
+The KKT conditions at the optimal solution $\bar{y}$ are
+\begin{align}
+  & \grad f(\bar{x}) + 2\lambda\hess f(\bar{x})\bar{y} + A\T \nu = 0\label{eq:lag-grad}\\
+  & \bar{y}\T\hess f(\bar{x})\bar{y}\leq 1\label{eq:primal-ineq}\\
+  & A\bar{y} = 0\\
+  & \lambda \geq 0\label{eq:dual-ineq}\\
+  & \lambda (\bar{y}\T\hess f(\bar{x})\bar{y} - 1) = 0\label{eq:comp-slack}
+\end{align}
+
+From \eqref{eq:comp-slack} we know that
+\begin{align*}
+  &\grad f(\bar{x}) + \hess f(\bar{x}) \Delta x + A\T w = 0\\
+  &A\T \Delta x = 0
+\end{align*}
+
+Let $\bar{y} = \frac{\Delta x}{2\lambda}, w=\nu$, we have $A\bar{y} = 0$ and \eqref{eq:lag-grad} is satisfied.
+
+Let $\lambda = \half \sqrt{\Delta x\T \hess f(\bar{x})\Delta x} = \half \lambda (\bar{x})$, we have \eqref{eq:dual-ineq}, \eqref{eq:primal-ineq} and \eqref{eq:comp-slack} are satisfied, given that
+$$\bar{y}\T\hess f(x)y = \frac{\Delta x\T \hess f(\bar{x})\Delta x}{\Delta x\T \hess f(\bar{x})\Delta x} = 1$$
+
+Therefore, $\bar{y} = \frac{\Delta x}{\lambda(\bar{x})}$.
+
 
 \clearpage
 \section*{Problem 3}
+
+(a)
+Since (P1) is convex, $f_i(x)$ is convex for all $0 \leq i \leq m$.
+
+Since the maximum of convex functions is convex, we have
+\begin{align*}
+  &f_i^{+}(x) =\max \{0, f_i(x)\}\\
+  \Rightarrow\quad &\max _{1 \leq i \leq m} f_i^{+}(x) \text{ is convex.}
+\end{align*}
+
+Since $y=|x|$ is convex and $a_j^{\top} x-b_j$ is affine, we have
+$$
+\begin{aligned}
+& \left|a_j^{\top} x-b_j\right| \text { is convex} \\
+\Rightarrow \quad & \max _{1\leq j\leq p}\left|a_j^{\top} x-b_j\right| \text { is convex. }
+\end{aligned}
+$$
+
+Given $t_1, t_2>0$, the sum of convex functions is also convex.
+
+Thus, $f(x):=f_0(x)+t_1 \max_{1 \leq i \leq m} f_1^{+}(x)+t_2 \max _{1 \leq j \leq p} |a_j^{\top} x-t_j|$ is convex.
+
+(b)
+
+$"\Rightarrow"$
+
+Let $x^*$ be the optimal solution of (P1-relaxed), we can define
+$$
+\begin{aligned}
+& y^*=\max _{1 \leq i \leq m} f^{+}\left(x^*\right), \ z^*=\max _{1 \leq j \leq p}\left|a_j^{\top} x^*-b_j\right|,
+\end{aligned}
+$$
+such that $\left(x^*, y^*, z^*\right)$ is a feasible solution of (P2).
+
+First we show the objectives are equivalent at $\left(x^*, y^*, z^*\right)$
+$$v_2\left(x^*, y^*, z^*\right) = f_0\left(x^*\right) + t_1 y^* + t_2 z^* = f\left(x^*\right) = v_1\left(x^*\right).$$
+
+Note that for any feasible $(x, y, z)$ of (P2),
+$$
+\begin{aligned}
+& y \geq \max \left\{0, f_i(x), \dots, f_m(x)\right\}=\max _{1 \leq i \leq m} f_i^{+}(x), \\
+& z \geq \max _{1 \leq j \leq p}\left|a_j^{\top} x-b_j\right|\\
+\Rightarrow \quad & v_2(x, y, z) \geq v_1(x).
+\end{aligned}
+$$
+
+
+Since $x^*$ is the minima of (P1-relaxed) $\forall x$, we have $v_1(x) \geq v_1\left(x^*\right)$.
+
+For any feasible $(x, y, z)$ of (P2), $v_2(x, y, z) \geq v_1(x) \geq v_1\left(x^*\right)=v_2\left(x^*, y^*, z^*\right)$.
+
+Thus, $\left(x^*, y^*, z^*\right)$ is the optimal of (P2).
+
+$"\Leftarrow"$
+
+If $\left(x^*, y^*, z^*\right)$ is the optimal of (P2), we must have
+$$y^*=\max _{1 \leq i \leq m} f_i^{+}\left(x^*\right), \quad z^*=\max _{1 \leq j \leq p}\left|a_j^{\top} x^*-b_j\right|.$$
+
+Otherwise, we can find
+$$\bar{y}=\max _{1 \leq i \leq m} f_i^{+}\left(x^*\right),\quad \bar{z}=\max _{1 \leq j \leq p}\left|a_j^{\top} x^*-b_j\right|,$$ 
+such that $\left(x^*, \bar{y}, \bar{z}\right)$ is feasible in
+(P2), and $y^*-\bar{y} \geq 0, z^*-\bar{z} \geq 0$.
+
+However, the objective value is $v_2\left(x^*, \bar{y}, \bar{z}\right)<v_2\left(x^*, y^*, z^*\right)$, which leads to the contradiction.
+
+For any $x$,
+$$
+\begin{aligned}
+v_1(x) 
+& =v_2(x, \max _{1 \leq i \leq m} f_i^{+}(x), \max _{1 \leq j \leq p}\left|a_j^{\top} x-b_j\right|) \\
+& \geq v_2\left(x^*, y^*, z^*\right)\\
+& =v_1\left(x^*\right)
+\end{aligned}
+$$
+
+Thus, $x^*$ is the optimal solution of (P1-relaxed) and the objective value $v_1^*=v_2^*$.
+
+Finally we can conclude that (P1-relaxed) is equivalent to (P2).
+
+(c)
+The Lagrangian of (P2) is
+\begin{align*}
+  L\left(x, y, z, \lambda^{(1)}, \lambda^{(2)}, \lambda^{(3)}\right)= & f_0(x)+t_1 y+t_2 z+\sum_{i=1}^m \lambda_i^{(1)}\left(f_i(x)-y\right) \\
+  & +\sum_{j=1}^m \lambda_j^{(2)}\left(a_j^{\top} x-b_j-z\right)+\sum_{j=1}^m \lambda_{j+p}^{(2)}\left(b_j-a_j^{\top} x-z\right) \\
+  & -\lambda_{1}^{(3)} y - \lambda_{2}^{(3)} z,
+\end{align*}
+
+The partial derivatives are
+\begin{align*}
+  &\frac{\partial L}{\partial x}=\nabla f_0(x)+\sum_{i=1}^m \lambda_i^{(m)} \nabla f_i(x)+\sum_{j=1}^m\left(\lambda_j^{(2)}-\lambda_{j+m}^{(2)}\right) a_j\\
+  & \frac{\partial L}{\partial y}=t_1-\sum_{i=1}^m \lambda_i^{(1)}-\lambda_{1}^{(3)} \\
+  & \frac{\partial L}{\partial z}=t_2-\sum_{j=1}^{2 p} \lambda_j^{(2)}-\lambda_2^{(3)}
+\end{align*}
+
+The dual problem of (P2) can be formulated as (D2)
+\begin{alignat*}{3}
+  &\max \quad &\bar{g}(\lambda^{(1)}, \lambda^{(2)}, \lambda^{(3)}) = & -(f_0+\sum_{i=1}^m \lambda_i^{(1)} f_i)^{*}(-\sum_{j=1}^m(\lambda_j^{(2)}-\lambda_{j+p}^{(2)}) a_j) +\sum_{j=1}^m(\lambda_{j+p}^{(2)}-\lambda_j^{(2)}) b_j\\
+  & \text { s.t.} \quad 
+  & t_1=&\sum_{i=1}^m \lambda_i^{(1)}+\lambda_1^{(3)}, \\
+  && t_2=&\sum_{j=1}^{2 p} \lambda_j^{(2)}+\lambda_2^{(3)}, \\
+  && \lambda^{(1)}, &\lambda^{(2)}, \lambda^{(3)} \geq 0
+\end{alignat*}
+
+For any $x$, we can let $y, z$ to be sufficiently large, then the inequality constraints are strict, and the Slater's condition will be satisfied.
+Therefore, (P2) and (D2) have strong duality.
+
+Note that for the optimal solution $x^*$ in (P1), $(x^*, 0, 0)$ is feasible in (P2) and $f_0(x^*) = v_2(x^*, 0, 0)$. By the strong duality,
+\[
+  d_1^* = f_0(x^*) = v_2(x^*, 0, 0) \geq v_2^* = d_2^*
+\]
+
+(d)
+The KKT conditions of (P1) are
+\begin{align}
+  & \nabla f_0\left(x^*\right)+\sum_{i=1}^m \lambda_i^* \nabla f_i\left(x^*\right)+\sum_{j=1}^p \nu_j^* a_j=0\label{eq:lag-grad-p3}\\
+  & f_i\left(x^*\right) \leq 0, \  1 \leq i \leq m \label{eq:primal-ineq-p3}\\
+  & a_j^{\top} x-b_j=0, \  1 \leq j \leq p \label{eq:primal-eq-p3}\\
+  & \lambda_i^* f_i\left(x^*\right)=0, \  1 \leq i \leq m \label{eq:comp-slack-p3}\\
+  & \lambda^* \geq 0 \label{eq:dual-ineq-p3}
+\end{align}
+
+If $(x^*, \lambda^*, \nu^*)$ is the primal-dual pair of (P1) with $\sum_{i=1}^{m} < t_1, \sum_{j=1}^{n} |\nu_j^*| < t_2$, we can define the followings to satisfy the KKT conditions of (P2)
+\begin{align*}
+  & \bar{x} = x^*, \bar y = 0, \bar z=0\\
+  & \bar{\lambda}_i^{(1)} = \lambda_i^*,\  1\leq i\leq m\\
+  & \bar{\lambda}_j^{(2)} = (\nu_j^*)^+,\  \bar{\lambda}_{j+p}^{(2)} = (\nu_j^*)^-, \ 1\leq j\leq p\\
+  & \bar{\lambda}_1^{(3)} = t_1 - \sum_{i=1}^{m}\lambda_i^*>0\\
+  & \bar{\lambda}_2^{(3)} = t_2 - \sum_{j=1}^{p} |\nu_j^*| >0,
+\end{align*}
+
+such that $(x^*, 0, 0, \bar{\lambda}^{(1)}, \bar{\lambda}^{(2)}, \bar{\lambda}^{(3)})$ forms a primal-dual pair of (P2) and (D2), and $(\bar{\lambda}^{(1)}, \bar{\lambda}^{(2)}, \bar{\lambda}^{(3)})$ is the optimal solution of (D2). 
+
+Note that $\bar{\lambda}^{(3)} > 0$, if $(\bar x, \bar{y}, \bar{z})$ is the optimal solution of (P2), we must have $\bar{\lambda}_1^{(3)} \bar{y} = 0, \bar{\lambda}_2^{(3)} \bar{z} =0\  \Rightarrow\ \bar{y} = \bar{z} = 0$, indicating that all optimal solution of (P2) must satisfy 
+\begin{align}
+  y = z = 0. \tag{$*$}
+\end{align}
+
+From part (b), if $\bar{x}$ is the optimal solution of (P1-relax), then $(\bar{x}, \bar{y}, \bar{z})$ is the optimal solution to (P2).
+
+However, by conclusion ($*$), we know that every solution to (P2) must have the form $(x, 0,0)$, so we have
+$$
+\left\{\begin{array}{l}
+0=\bar{y}=\max _i f_i^{+}(\bar{x})\ \Leftrightarrow\  \forall 1 \leq i \leq m,\  f_i(\bar{x})=0, \\
+0=\bar{z}=\max _j\left|a_j^{\top} \bar{x}-b_j\right|\  \Leftrightarrow\  \forall 1 \leq j \leq p, \  a_j^{\top} \bar{x}-b_j=0,
+\end{array}\right.
+$$
+which shows that $\bar{x}$ is feasible in (P1), and the objective value $f(\bar{x}) = f_0(\bar{x})$.
+
+However, for any feasible solution $x$ of (P1), $x$ is also feasible in (P1-relax), and $f(x) = f_0(x)$, so the optimal value of (P1-relax) $v_1^*$ is smaller them that of (P1) $v_0^*$.
+
+Consequently, $f_0(\bar{x})=v_1^* \leq v_0^*$, but $\bar{x}$ is feasible in (P1) $\Rightarrow\ f_0(\bar{x}) \geq v_0^*$, so $f_0(\bar{x})=v_0^*$, showing that $\bar{x}$ is the optimal solution of (P1).
 
 
 \clearpage
 \section*{Problem 4}
 
+(a)
+Given the positive definite and tridiagonal matrix $M\in\symm^n$,
+\begin{align*}
+  M = 
+  \begin{bmatrix}
+    a_1 & b_1 &     &   & \\
+    b_1 & a_2 & b_2 &   & \\
+        & b_2 & a_3 &\ddots&\\
+        &     &\ddots&\ddots& b_{n-1}\\
+        &     &     & b_{n-1} & a_n
+  \end{bmatrix}
+  = LL\T, \ 
+  L = 
+  \begin{bmatrix}
+    u_1 &     &     & \\
+    v_1 & u_2 &     & \\
+        & v_2 & u_3 & \\
+        &     & \ddots & \ddots \\
+        &     & & v_{n-1} & u_n
+  \end{bmatrix}
+\end{align*}
+
+and by the Cholesky factorization, we have
+\begin{align*}
+  & u_1^2 = a_1\\
+  & u_i v_i = b_i, \ 1\leq i\leq n-1\\
+  & v_i^2 + u_{i+1}^2 = a_{i+1}, \ 1 \leq i\leq n-1
+\end{align*}
+
+Then we can calculate $u, v$ in the following order
+\begin{itemize}
+  \item $u_1 = \sqrt{a_1}$
+  \item $v_1 = \frac{b_1}{u_1}, u_2 = \sqrt{a_2 - v_1^2}$
+  \item $v_2 = \frac{b_2}{u_2}, u_3 = \sqrt{a_3 - v_2^2}$
+  \item \dots
+  \item $v_{n-1} = \frac{b_{n-1}}{u_{n-1}}, u_n = \sqrt{a_n - v_{n-1}^2}$
+\end{itemize}
+
+Thus, the time complexity becomes $O(n)$.
+
+(b)
+Given that $\alpha, \beta > 0, y=x^2$ is convex, and $a_i\T x - b_i \text{ for }i=1, \dots, k, x_{j+1} - x_j \text{ for } j = 1, \dots, n-1$ are affine, we know the objective function $f(x)$ is convex.
+
+Since $f(x)$ is differentiable, $x^*$ is optimal if and only if $\grad f(x^*)=0$.
+Note that
+$$
+\begin{aligned}
+& \frac{\partial}{\partial x_1} \sum_{j=1}^{n-1}\left(x_j-x_{j+1}\right)^2=2\left(x_l-x_2\right) \\
+& \frac{\partial}{\partial x_l} \sum_{j=1}^{n-1}\left(x_j-x_{j+1}\right)^2=2\left(2 x_l-x_{l-1}-x_{l+1}\right),\ 2 \leq l \leq n-1 \\
+& \frac{\partial}{\partial x_n} \sum_{j=1}^{n-1}\left(x_j-x_{j+1}\right)^2=2\left(x_n-x_{n-1}\right),
+\end{aligned}
+$$
+
+We can pick $C$ to be
+\begin{align*}
+  C =
+  \begin{bmatrix}
+     1 & -1 &    & & & \\
+    -1 &  2 & -1 & & & \\
+       & -1 & 2 & \ddots &&\\
+       &    & \ddots &\ddots & -1\\
+       &    &   & -1 & 2
+  \end{bmatrix}
+\end{align*}
+such that $\grad \sum_{j=1}^{n-1}(x_j - x_{j+1})^2 = 2 C x$.
+Therefore,
+$$
+\begin{aligned}
+\nabla f(x) 
+& =\sum_{i=1}^k a_i(a_i^{\top} x-b_i)+2 \alpha x+2 \beta C x \\
+& =(\sum_{i=1}^k a_i a_i^{\top}+2 \alpha I+2 \beta C) x-\sum_{i=1}^k a_i b_i \\
+\Rightarrow \quad x^* 
+& =(\sum_{i=1}^k a_i a_i^{\top}+2 \alpha I+2 \beta C)^{-1}(\sum_{i=1}^k a_i b_i)
+\end{aligned}
+$$
+
+(c)
+We can now calculate $x^*$ in the following order
+\begin{itemize}
+  \item Apply Cholesky factorization to $2\alpha I + 2\beta C = LL\T$, since the LHS is tridiagonal $\Leftarrow O(n)$;
+  \item Calculate $B\inv = (LL\T)\inv$. Since $L$ is in lower tridiagonal form, let $L\inv$ be
+  \begin{align*}
+    L\inv = 
+    \begin{bmatrix}
+      s_1 &     &     & \\
+      t_1 & s_2 &     & \\
+          & t_2 & s_3 & \\
+          &     & \ddots & \ddots \\
+          &     & & t_{n-1} & s_n
+    \end{bmatrix}
+    \Rightarrow 
+    \begin{cases}
+      s_i = u_i\inv & 1\leq i \leq n\\
+      t_i = -\frac{v_i s_i}{u_{i+1}} & 1\leq i\leq n-1
+    \end{cases}
+  \end{align*}
+
+  Thus, the cost of inverting $L$ is $O(n)$. 
+
+  Since $B\inv$ should also be tridiagonal, the cost of inverting it is also $O(n)$.
+  \item Calculate $\bar{b} = \sum_{i=1}^{k} a_i b_i \Leftarrow O(kn)$
+  \item Let $A = [a_1\ \cdots \ a_k] \in\real^{n\times k}$, we can write $x^*$ into the following form
+  \begin{align*}
+    (B + AA\T) x^* = \bar{b} \quad \Leftrightarrow \quad
+    \begin{bmatrix}
+      B & A\\ A\T & -I
+    \end{bmatrix}
+    \begin{bmatrix}
+      x^*\\ y^*
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+      \bar{b}\\ 0
+    \end{bmatrix},
+  \end{align*}
+  
+  We can solve the linear system via block elimination
+  \begin{align*}
+    \begin{cases}
+      (I + A\T B\inv A) y^* = A\T B\inv \bar{b}\\      
+      x^* = B\inv \bar{b} - B\inv A y^* = L\inv L^{-\top} \bar{b} - L\inv L^{-\top} Ay^*
+    \end{cases}
+  \end{align*}
+\end{itemize}
+  
+Therefore, the total time complexity is $O(k^2n + k^3)$.
 
 \clearpage
 \section*{Problem 5}
