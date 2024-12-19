@@ -438,5 +438,86 @@ Therefore, the total time complexity is $O(k^2n + k^3)$.
 \clearpage
 \section*{Problem 5}
 
+(a) 
+% To solve the centering problem using Newton's method, we first compute the gradient and Hessian of the objective function. 
+The gradient and Hessian of \(f(x)\) are
+\begin{align*}
+  \nabla f(x) &= c - \frac{1}{x}\\
+  \nabla^2 f(x) &= \text{diag}\left(\frac{1}{x^2}\right),
+\end{align*}
+where \(\frac{1}{x}\) and \(\frac{1}{x^2}\) are element-wise, i.e., \(\left[\frac{1}{x}\right]_j = \frac{1}{x_j}\), \(\left[\frac{1}{x^2}\right]_j = \frac{1}{x_j^2}\).
+The equality constraint Newton system is derived from the Karush-Kuhn-Tucker (KKT) conditions
+\[
+\begin{aligned}
+    \nabla f(x) + A^\top \lambda &= 0 \\
+    Ax - b &= 0,
+\end{aligned}
+\]
+where \(\lambda \in \mathbb{R}^m\) are the Lagrange multipliers.
+Rewriting in matrix form
+\[
+\begin{bmatrix}
+    \nabla^2 f(x) & A^\top \\
+    A & 0
+\end{bmatrix}
+\begin{bmatrix}
+    \Delta x \\
+    \Delta \lambda
+\end{bmatrix}
+=
+\begin{bmatrix}
+    -\nabla f(x) \\
+    b - Ax
+\end{bmatrix},
+\]
+where \(\Delta x\) is the Newton step, and \(\Delta \lambda\) is the Newton decrement.
+
+To solve the KKT system efficiently, we exploit the structure of the equations. The Schur complement can be used to eliminate \(\Delta \lambda\) and solve for \(\Delta x\) directly
+\[
+\Delta x = -H^{-1}(\nabla f(x) + A^\top \Delta \lambda),
+\]
+where \(H = \nabla^2 f(x)\).
+Substituting back, we solve
+\[
+(AH^{-1}A^\top)\Delta \lambda = A H^{-1} \nabla f(x) - (b - Ax).
+\]
+
+This approach avoids directly inverting the full KKT matrix, improving the computational efficiency.
+At each iteration:
+\begin{itemize}
+  \item Solve the Newton system to obtain \(\Delta x\) and \(\Delta \lambda\).
+  \item Perform a backtracking line search to ensure feasibility, reducing the step size \(\alpha\) until \(x + \alpha \Delta x > 0\).
+  \item Update the primal and dual variables:
+  \(
+  x \gets x + \alpha \Delta x, \  \lambda \gets \lambda + \alpha \Delta \lambda.
+  \)
+\end{itemize}
+
+The stopping criterion is:
+\(
+{\|\Delta x\|^2}/2 \leq \epsilon,
+\)
+where \(\epsilon\) is a small tolerance.
+
+As shown in Fig.~\ref{fig:centering}, the implemented method converges quadratically on the generated instance.
+
+
+\begin{figure}[htb]
+  \includegraphics[width=0.7\columnwidth]{"final_p5_a"}
+  \centering
+  \caption{Convergence of Newton Method}
+  \label{fig:centering}
+\end{figure}
+
+
+(b)
+As shown in Fig.~\ref{fig:barrier}, smaller \(\mu\) leads to more Newton steps and thus slower convergence, while larger \(\mu\) leads to fewer Newton steps but higher duality gap. Based on this observation, we pick \(\mu = 200\) in the implementation.
+
+\begin{figure}[htb]
+  \includegraphics[width=0.7\columnwidth]{"final_p5_b"}
+  \centering
+  \caption{Convergence of Barrier Method}
+  \label{fig:barrier}
+\end{figure}
 
 \end{document}
