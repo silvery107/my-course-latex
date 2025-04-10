@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                
+\geometry{letterpaper,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in} 
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amsmath, amsfonts, amsthm, amssymb} 
+\usepackage[shortlabels]{enumitem}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{bm}
+
+\parskip = 0.1in
+
+\pagestyle{myheadings}
+\markright{ARCAD Lab Typings\hfill Yulun Zhuang \hfill}
+
+
+\newcommand{\oh}{\frac12}
+\newcommand{\st}{\text{subject to}}
+\newcommand{\gfb}{\nabla f(\bar x)}
+\newcommand{\hfb}{H(\bar x)}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{proposition}[theorem]{Proposition}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\newtheorem{exam}{Example}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\square$}\begin{proof}[\textbf{Solution}]}
+  {\end{proof}}
+\renewcommand{\proofname}{\textbf{Proof}}
+
+% Colors
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+
+% Handy math notations
+\newcommand{\grad}{\nabla}
+\newcommand{\hess}{\nabla^2}
+\newcommand{\tr}{\text{tr}}
+\newcommand{\pd}[2][]{ \frac{\partial #1}{\partial #2}} % Partial derivatives
+\renewcommand{\d}{{\rm d}}
+\newcommand{\ddt}{\frac{\d}{\d t}}
+\newcommand{\half}{\frac{1}{2}} % 1/2
+\newcommand{\inv}{^{-1}}        % inverse
+\newcommand{\T}{^\top}          % transpose
+
+% std math stuff
+\newcommand{\ones}{\mathbf 1}
+\newcommand{\zeros}{\mathbf 0}
+\newcommand{\real}{{{\mathbb{R}}}}
+\newcommand{\integer}{{{\mathbb{Z}}}}
+\newcommand{\complex}{{{\mathbb{C}}}}
+\newcommand{\symm}{{{\mathbb{S}}}}  % symmetric matrices
+
+\begin{document}
+\title{ARCAD Lab Typings}
+\author{Yulun Zhuang}
+\maketitle
+%**********************************
+\section*{Slides}
+
+
+\[
+\bm x = 
+\begin{bmatrix}
+    \bm q \\ \bm v
+\end{bmatrix}
+\]
+
+\[
+L(\bm z, \bm \gamma, \bm \alpha) = \half \bm z\T \bm W\bm z + \bm g\T \bm z + \bm \alpha (\bm A\bm z - \bm b) + \bm \gamma (\bm M\bm z - \bm f)
+\]
+    
+\begin{align*}
+    & \grad_{\bm z} L = \bm W \bm z + \bm g +\bm A\T\bm \alpha+ \Sigma_{i\in\mathcal{A}}\gamma_i \bm m_i = 0\\
+    & \grad_{\bm \gamma} L = \bm A\bm z - \bm b = 0\\
+    & \grad_{\bm \alpha} L = \bm M\bm z - \bm f = 0\\
+\end{align*}
+
+\clearpage
+
+\[
+\bm{q} = [\bm{q}_f\T,\ \bm{q}_j\T]\T
+\]
+
+\begin{align*}
+  \min_{\ddot{\bm{q}}, \mathbf{f}, \bm{\tau}} \quad
+  & \|\ddot{\mathbf{x}} - \ddot{\mathbf{x}}^{\text{cmd}}\|^2\\
+  \text{s.t.} \quad
+  & A \ddot{\bm{q}} + \bm{b} + \bm{g} = S \bm{\tau} + J\T \mathbf{f}\\
+  & \ddot{\mathbf{x}}^{\text{cmd}} = K_p (\mathbf{x} - \mathbf{x}^{\text{cmd}}) + K_d (\dot{\mathbf{x}} - \dot{\mathbf{x}}^{\text{cmd}})\\
+  & \ddot{\mathbf{x}} = J\ddot{\bm{q}} + \dot{J} \dot{\bm{q}}\\
+  & |\mathbf{f}_{x}| \leq \mu \mathbf{f}_{z}, \ 
+  |\mathbf{f}_{y}| \leq \mu \mathbf{f}_{z}\\
+  & 0 \leq \mathbf{f}_{z} \leq  \mathbf{c} \ \mathbf{f}_{z}^{\text{max}}
+\end{align*}
+
+\[
+\mathbf{x} = [\bm{q}_f\T,\ \dot{\bm{q}}_f\T]\T
+\]
+
+\begin{align*}
+  \min_{\mathbf{x}_k, \mathbf{f}_k} \quad
+  & \sum_{k=0}^{N}\|\mathbf{x}_{k+1} - \mathbf{x}^{\text{cmd}}_{k+1}\|^2_{Q} + \|\mathbf{f}_k\|^2_{R}\\
+  \text{s.t.} \quad
+  & \mathbf{x}_{k+1} = \mathbf{x}_k + \dot{\mathbf{x}}_k \ \Delta t\\
+  & |\mathbf{f}_{k, x}| \leq \mu \mathbf{f}_{k, z}, \ 
+  |\mathbf{f}_{k, y}| \leq \mu \mathbf{f}_{k, z}\\
+  & 0 \leq \mathbf{f}_{k, z} \leq  \mathbf{c} \ \mathbf{f}_{z}^{\text{max}}
+\end{align*}
+
+
+\[
+\in\mathbb{R}^{6}
+\]
+
+\begin{align*}
+  & \mathbf{x} = \text{FK}(\bm{q}) \in\mathbb{R}^{n_\mathbf{x}}\\
+  & \dot{\mathbf{x}} = \underbrace{\pd{\bm{q}}FK(\bm{q})}_{J\in\mathbb{R}^{n_{\mathbf{x}}\times n_{\bm{q}}}} \ \dot{\bm{q}}\\
+  & \ddot{\mathbf{x}} = J\ddot{\bm{q}} + \dot{J} \dot{\bm{q}}
+\end{align*}
+
+\end{document}
