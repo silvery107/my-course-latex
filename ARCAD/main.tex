@@ -63,7 +63,7 @@
 \author{Yulun Zhuang}
 \maketitle
 %**********************************
-\section*{Slides}
+\section*{Lagrangian and KKT}
 
 
 \[
@@ -85,13 +85,16 @@ L(\bm z, \bm \gamma, \bm \alpha) = \half \bm z\T \bm W\bm z + \bm g\T \bm z + \b
 
 \clearpage
 
+\section*{MPC and WBC}
+
 \[
 \bm{q} = [\bm{q}_f\T,\ \bm{q}_j\T]\T
 \]
 
 \begin{align*}
   \min_{\ddot{\bm{q}}, \mathbf{f}, \bm{\tau}} \quad
-  & \|\ddot{\mathbf{x}} - \ddot{\mathbf{x}}^{\text{cmd}}\|^2\\
+  & \|\ddot{\mathbf{x}} - \ddot{\mathbf{x}}^{\text{cmd}}\|^2 + 
+  \|\mathbf{f} - \mathbf{f}^{\text{cmd}}\|\\
   \text{s.t.} \quad
   & A \ddot{\bm{q}} + \bm{b} + \bm{g} = S \bm{\tau} + J\T \mathbf{f}\\
   & \ddot{\mathbf{x}}^{\text{cmd}} = K_p (\mathbf{x} - \mathbf{x}^{\text{cmd}}) + K_d (\dot{\mathbf{x}} - \dot{\mathbf{x}}^{\text{cmd}})\\
@@ -112,9 +115,13 @@ L(\bm z, \bm \gamma, \bm \alpha) = \half \bm z\T \bm W\bm z + \bm g\T \bm z + \b
   & \mathbf{x}_{k+1} = \mathbf{x}_k + \dot{\mathbf{x}}_k \ \Delta t\\
   & |\mathbf{f}_{k, x}| \leq \mu \mathbf{f}_{k, z}, \ 
   |\mathbf{f}_{k, y}| \leq \mu \mathbf{f}_{k, z}\\
-  & 0 \leq \mathbf{f}_{k, z} \leq  \mathbf{c} \ \mathbf{f}_{z}^{\text{max}}
+  & 0 \leq \mathbf{f}_{k, z} \leq  \mathbf{c} \ \mathbf{f}_{z}^{\text{max}}\\
+  & \mathbf{x}_0 = \mathbf{x}_{\text{init}}
 \end{align*}
 
+\[
+\Rightarrow \dot{\mathbf{x}}_{k} = f(\mathbf{x}_k, \mathbf{u}_k)
+\]
 
 \[
 \in\mathbb{R}^{6}
@@ -125,5 +132,42 @@ L(\bm z, \bm \gamma, \bm \alpha) = \half \bm z\T \bm W\bm z + \bm g\T \bm z + \b
   & \dot{\mathbf{x}} = \underbrace{\pd{\bm{q}}FK(\bm{q})}_{J\in\mathbb{R}^{n_{\mathbf{x}}\times n_{\bm{q}}}} \ \dot{\bm{q}}\\
   & \ddot{\mathbf{x}} = J\ddot{\bm{q}} + \dot{J} \dot{\bm{q}}
 \end{align*}
+
+\clearpage
+
+\section*{3 DOF Inverse Kinematics}
+
+\begin{align*}
+  p_{\text{foot}} = 
+  \begin{bmatrix}
+    -l_1 -l_3 \,\sin \left(\theta_2 +\theta_3 \right)-l_2 \,\sin \theta_2\\
+    \sin \theta_1\,{\left(l_3 \,\cos \left(\theta_2 +\theta_3 \right)+l_2 \,\cos \theta_2\right)}\\
+    -\cos \theta_1\,{\left(l_3 \,\cos \left(\theta_2 +\theta_3 \right)+l_2 \,\cos \theta_2\right)}    
+  \end{bmatrix}
+\end{align*}
+
+
+\begin{align*}
+  a &= \|p_{\text{foot}} - p_{\text{hip}}\|\\
+  b &= \|p_{\text{foot}} - p_{\text{abad}}\|\\
+  a^2&=l_2^2+l_3^2-2 l_2 l_3 \cos \red{\theta_3} \\
+  l_3^2&=a^2+l_2^2-2 a l_2 \cos \beta_1 \\
+  b^2&=a^2+l_1^2-2 a l_1 \cos \beta_2 \\
+  \red{\theta_2}&=\beta_1+\beta_2 \\
+  \frac{p_{\text{foot}, y}}{p_{\text{foot}, z}} &= -\tan \red{\theta_1}
+\end{align*}
+
+\section*{Momentum Observer}
+
+\begin{align*}
+  p &= M \dot{q}\\
+  \hat{\tau} &= B^{-\top} K_O(p - \hat{p})\\
+  \dot{\hat{p}} &= C\T \dot{q} - G - A\T \lambda + B\T \tau_{\text{motor}} + B\T \hat{\tau}\\
+  \hat{p} &= \hat{p} + \hat{\dot{p}} \ \Delta t
+\end{align*}
+
+\[
+\mathrm{f}_{\text{est}} = ({J}\T)^\dagger \hat{\tau}
+\]
 
 \end{document}
