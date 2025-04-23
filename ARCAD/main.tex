@@ -170,4 +170,81 @@ L(\bm z, \bm \gamma, \bm \alpha) = \half \bm z\T \bm W\bm z + \bm g\T \bm z + \b
 \mathrm{f}_{\text{est}} = ({J}\T)^\dagger \hat{\tau}
 \]
 
+\clearpage
+
+\section*{Floating Body Kalman Filter}
+
+Every variable is in the world frame
+\[
+x = 
+\begin{bmatrix}
+  p\\v
+\end{bmatrix},
+\quad u = a,
+\quad y = 
+\begin{bmatrix}
+  p_z\\v
+\end{bmatrix}
+\]
+
+Linear system dynamics
+\begin{align*}
+\dot{x} &=
+\begin{bmatrix}
+  v \\ a
+\end{bmatrix} 
+= 
+\underbrace{
+  \begin{bmatrix}
+    \zeros & \bm I\\
+    \zeros & \zeros
+  \end{bmatrix}
+}_{A}
+x +
+\underbrace{
+\begin{bmatrix}
+  \zeros\\ \bm I
+\end{bmatrix}  
+}_{B}
+u
+= A x + B u\\
+y &= 
+\begin{bmatrix}
+  p_z\\v
+\end{bmatrix}
+= 
+\underbrace{
+\begin{bmatrix}
+  \zeros & \bm I
+\end{bmatrix}
+}_{C}
+x
+= C x
+\end{align*}
+
+Measurements
+\begin{align*}
+  p_{foot}^\mathcal{W} &= 
+  p_{com}^\mathcal{W} 
+  + R_\mathcal{B}^\mathcal{W}\text{FK}(q)^\mathcal{B}\\
+  v_{foot}^\mathcal{W} &= 
+  v_{com}^\mathcal{W} 
+  + R_\mathcal{B}^\mathcal{W}[\omega_{com}^\mathcal{B}]_\times \text{FK}(q)^\mathcal{B} 
+  + R_\mathcal{B}^\mathcal{W} J(q)^\mathcal{B} \dot{q}\\
+  % &= v_{com}^\mathcal{W} 
+  % + R_\mathcal{B}^\mathcal{W}(\omega_{com}^\mathcal{B} \times \text{FK}(q)^\mathcal{B} + J(q)^\mathcal{B} \dot{q})
+\end{align*}
+
+When any foot is in contact with ground, \(p_{foot}^\mathcal{W}=v_{foot}^\mathcal{W}=0\), so that the height and velocity of CoM can be measured.
+
+Prediction from IMU
+\[
+x_{k+1} = x_k + \Delta t\ \dot{x}_k =( I + \Delta t\ A) x_k +\Delta t\ B u_k
+\]
+
+Correction from joint encoders
+\[
+y_k = Cx_k
+\]
+
 \end{document}
